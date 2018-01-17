@@ -1,0 +1,197 @@
+#adminmenu #toplevel_page_dfrps.menu-top div.wp-menu-image:before {
+	font-family: datafeedr !important;
+	content: "\e600" !important;
+	font-size: 1.3em !important;
+}
+
+.dfrps_help_text { }
+
+.dfrps_valign_middle { vertical-align: middle; }
+
+.dfrps_label
+{
+	display: inline;
+	padding: .25em .6em;
+	font-size: 90%;
+	font-weight: 500;
+	line-height: 1;
+	color: #ffffff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	background-color: #999999;
+	border-radius: .25em;
+}
+
+.dfrps_label-danger { background-color: #d9534f; }
+.dfrps_label-danger[href]:hover,
+.dfrps_label-danger[href]:focus { background-color: #c9302c; }
+.dfrps_label-success { background-color: #5cb85c; }
+.dfrps_label-success[href]:hover,
+.dfrps_label-success[href]:focus { background-color: #449d44; }
+.dfrps_label-warning { background-color: #f0ad4e; }
+.dfrps_label-warning[href]:hover,
+.dfrps_label-warning[href]:focus { background-color: #ec971f; }
+.dfrps_label-info { background-color: #5bc0de; }
+.dfrps_label-info[href]:hover,
+.dfrps_label-info[href]:focus { background-color: #31b0d5; }
+.dfrps_warning { color: red; }
+
+.dfrps_alert
+{
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.dfrps_alert h4
+{
+	margin-top: 0;
+	color: inherit;
+}
+
+.dfrps_alert .dfrps_alert-link { font-weight: bold; }
+.dfrps_alert > p,
+.dfrps_alert > ul { margin-bottom: 0; }
+.dfrps_alert > p + p { margin-top: 5px; }
+.dfrps_alert-dismissable { padding-right: 35px; }
+
+.dfrps_alert-dismissable .close
+{
+	position: relative;
+	top: -2px;
+	right: -21px;
+	color: inherit;
+}
+
+.dfrps_alert-success
+{
+	color: #468847;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+}
+
+.dfrps_alert-success hr { border-top-color: #c9e2b3; }
+.dfrps_alert-success .dfrps_alert-link { color: #356635; }
+
+.dfrps_alert-info
+{
+	color: #3a87ad;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+
+.dfrps_alert-info hr { border-top-color: #a6e1ec; }
+.dfrps_alert-info .dfrps_alert-link { color: #2d6987; }
+
+.dfrps_alert-warning
+{
+	color: #c09853;
+	background-color: #fcf8e3;
+	border-color: #fbeed5;
+}
+
+.dfrps_alert-warning hr { border-top-color: #f8e5be; }
+.dfrps_alert-warning .dfrps_alert-link { color: #a47e3c; }
+
+.dfrps_alert-danger
+{
+	color: #b94a48;
+	background-color: #f2dede;
+	border-color: #eed3d7;
+}
+
+.dfrps_alert-danger hr { border-top-color: #e6c1c7; }
+.dfrps_alert-danger .dfrps_alert-link { color: #953b39; }
+
+.dfrps_loading
+{
+	display: block;
+	background-color: Transparent;
+	background-image: url('../../../../wp-admin/images/spinner.gif');
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 20px;
+}
+
+
+.dfrps_api_info
+{
+	padding: 0px;
+	margin-top: 10px;
+	margin-right: 0;
+	margin-bottom: 10px;
+	border: 1px solid #5bc0de;
+}
+
+.dfrps_api_info .dfrps_head
+{
+	background: #5bc0de;
+	color: #FFF;
+	padding: 10px 0 10px 5px;
+	font-weight: bold;
+}
+
+.dfrps_api_info div
+{
+	display: block;
+	padding: 5px;
+}
+
+.dfrps_api_info .dfrps_query
+{
+	background-color: #FFF;
+	padding: 10px;
+}
+.dfrps_api_info .dfrps_query strong {display: block;}
+.dfrps_api_info .dfrps_query span
+{
+	color: #6C6C6C;
+	font-family: monospace;
+}
+
+.dfrps_force_wrap {
+	word-wrap: break-word;
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
+}
+
+.dfrps_highlight_row
+{
+	background-color: #ffebe8;
+	border: 3px solid #C00;
+}
+
+.dfrps_highlight_row > th { text-indent: 10px; }
+
+.dfrps_cpt_type {
+    font-size: 11px;
+    color: #999;
+    line-height: 1em;
+    margin-bottom: 3px;
+}
+
+.dfrps_cpt_active {
+    font-size: 11px;
+    color: #5cb85c;
+    line-height: 1em;
+    font-weight: bold;
+}
+
+.dfrps_cpt_inactive {
+    font-size: 11px;
+    color: #d9534f;
+    line-height: 1em;
+    font-weight: bold;
+}
+
+.clearfix:after {clear:both; content:'.'; display:block; visibility:hidden; height:0;}
+.clearfix {display:inline-block; }
+* html .clearfix {height:1%; }
+.clearfix {display:block; }
+.clearingdiv {clear:left; font-size:0; line-height:0; margin:0; padding:0; }
