@@ -793,8 +793,7 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	 * If we have already attempted to import an image for this product
 	 * since the last Product Set update, return false.
 	 */
-	$image_check = intval( get_post_meta( $post->ID, '_dfrps_product_check_image', true ) );
-	if ( 0 === $image_check ) {
+	if ( dfrps_image_import_attempted( $post->ID, '_dfrps_product_check_image' ) ) {
 		return false;
 	}
 
@@ -934,4 +933,43 @@ function dfrps_post_is_registered_cpt( $post_id ) {
 	}
 
 	return false;
+}
+
+/**
+ * If we have already attempted to import an image for this $post_id
+ * with this key, return true. Otherwise return false.
+ *
+ * @since 1.2.27
+ *
+ * @param integer $post_id
+ * @param string $key The meta_key to check.
+ *
+ * @return bool
+ */
+function dfrps_image_import_attempted( $post_id, $key ) {
+
+	$result = get_post_meta( $post_id, $key, true );
+
+	/**
+	 * If $key is not found, the result will be an empty string meaning
+	 * no attempt has been made to import an image for this key.
+	 */
+	if ( '' == $result ) {
+		return false;
+	}
+
+	/**
+	 * If the $result is 1, this means we may have attempted to import this image previously
+	 * but for some reason it failed or the value was overwritten (ie. by the WooCommerce Importer plugin)
+	 * and therefore we should check again.
+	 */
+	if ( '1' == $result ) {
+		return false;
+	}
+
+	/**
+	 * If we made it this far, we return true indicating that we HAVE attempted
+	 * to import the image for this key and we should not try again.
+	 */
+	return true;
 }
