@@ -777,8 +777,7 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	/**
 	 * If $post->post_type is not a registered CPT, return false.
 	 */
-	$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
-	if ( ! array_key_exists( $post->post_type, $registered_cpts ) ) {
+	if ( ! dfrps_post_is_registered_cpt( $post->ID ) ) {
 		return false;
 	}
 
@@ -912,4 +911,27 @@ function dfrps_import_post_thumbnail( $post_id ) {
 	update_post_meta( $post->ID, '_dfrps_product_check_image', 0 );
 
 	return $image_importer;
+}
+
+/**
+ * Checks whether or not the $post->post_type is in the registered Custom Post Types array.
+ *
+ * Returns true if $post is a registered CPT, otherwise returns false.
+ *
+ * If $post->post_type is not a registered CPT, return false.
+ *
+ * @since 1.2.27
+ *
+ * @param int $post_id
+ *
+ * @return bool
+ */
+function dfrps_post_is_registered_cpt( $post_id ) {
+	$post            = get_post( $post_id );
+	$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
+	if ( array_key_exists( $post->post_type, $registered_cpts ) ) {
+		return true;
+	}
+
+	return false;
 }
