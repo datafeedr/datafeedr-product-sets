@@ -192,7 +192,7 @@ function dfrps_ajax_batch_import_images() {
 			$error = array(
 				'function' => __FUNCTION__,
 				'$post'    => $post,
-				'WP_Error' => $result->wp_error(),
+				'WP_Error' => $result,
 			);
 
 			$msg = sprintf(

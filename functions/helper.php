@@ -873,6 +873,7 @@ function dfrps_import_post_thumbnail( $post_id ) {
 	$url = dfrps_featured_image_url( $post->ID );
 
 	if ( empty( $url ) ) {
+		dfrps_set_product_check_image( $post->ID, 0 );
 		return new WP_Error(
 			'dfrps_url_empty',
 			__( '$url is empty.', 'datafeedr-product-sets' ),
@@ -907,7 +908,7 @@ function dfrps_import_post_thumbnail( $post_id ) {
 
 	$image_importer = datafeedr_import_image( $url, $args );
 
-	update_post_meta( $post->ID, '_dfrps_product_check_image', 0 );
+	dfrps_set_product_check_image( $post->ID, 0 );
 
 	return $image_importer;
 }
@@ -972,4 +973,17 @@ function dfrps_image_import_attempted( $post_id, $key ) {
 	 * to import the image for this key and we should not try again.
 	 */
 	return true;
+}
+
+/**
+ * Update "_dfrps_product_check_image" post_meta value.
+ *
+ * @since 1.2.29
+ *
+ * @param integer $post_id ID of the Product we are updating
+ * @param integer $value Either 1 or 0. 1 if product's image should be checked else 0 if it should not be checked.
+ */
+function dfrps_set_product_check_image( $post_id, $value ) {
+	$value = ( 1 == $value ) ? 1 : 0;
+	update_post_meta( $post_id, '_dfrps_product_check_image', $value );
 }
