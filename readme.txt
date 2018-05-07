@@ -5,8 +5,8 @@ Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, impor
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
-Tested up to: 4.9.5
-Stable tag: 1.2.29
+Tested up to: 4.9.6
+Stable tag: 1.2.30
 
 Build sets of products to import into your website.
 
@@ -78,6 +78,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.30 - 2018/05/07 =
+* Fixed bug where unserializing the $product array in update class failed.
 
 = 1.2.29 - 2018/04/09 =
 * Fixed bug related to bulk import tool unable to move forward if an image URL was missing.

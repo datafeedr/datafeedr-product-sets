@@ -517,6 +517,14 @@ class Dfrps_Update {
 		foreach ( $products as $product_data ) {
 
 			$product = unserialize( $product_data['data'] );
+			
+			// @since 1.2.30
+			if ( ! $product ) {
+                $this->delete_product_from_table( $product_data['product_id'] );
+                $this->defer_counting( false );
+
+                return 'repeat';
+            }
 
 			// Let the integration plugin handle the group of products for this set.
 			do_action( "dfrps_action_do_products_{$this->get_cpt_type()}", array( 'products' => array( $product ) ), $this->set );
@@ -526,7 +534,7 @@ class Dfrps_Update {
 		}
 
 		// Reactivate term counting.
-		$this->defer_counting( FALSE );
+		$this->defer_counting( false );
 
 		return 'repeat';
 
