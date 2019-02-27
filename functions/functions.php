@@ -21,3 +21,13 @@ require_once( DFRPS_PATH . 'functions/cron.php' );
  * Load integration functions. This loads on all page loads.
  */
 require_once( DFRPS_PATH . 'functions/integration.php' );
+
+/**
+ * Load action hooks.
+ */
+require_once( DFRPS_PATH . 'functions/actions.php' );
+
+/**
+ * Load filter hooks.
+ */
+require_once( DFRPS_PATH . 'functions/filters.php' );

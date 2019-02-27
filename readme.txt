@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.1
-Stable tag: 1.2.32
+Stable tag: 1.2.33
 
 Build sets of products to import into your website.
 
@@ -48,9 +48,10 @@ We currently have one importer which imports products from your Product Sets int
 **Requirements**
 
 * WordPress Cron enabled.
-* 64MB of memory ([instructions](http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP)).
-* PHP 5.4 (or greater)
+* [WordPress memory limit of 128 MB or greater](https://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP).
+* PHP 7.3 or greater
 * PHP's `CURL` support must be enabled.
+* MySQL version 5.6 or greater
 * An [importer plugin](http://wordpress.org/plugins/datafeedr-woocommerce-importer/) to handle importing products from your Product Sets into your website.
 
 == Installation ==
@@ -78,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.33 - 2019/02/27 =
+* Added 2 new Bulk Actions for Product Sets: Bump and Bump (with priority)
 
 = 1.2.32 - 2019/02/19 =
 * Updated readme
