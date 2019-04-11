@@ -190,9 +190,12 @@ function dfrps_ajax_batch_import_images() {
 		if ( is_wp_error( $result ) ) {
 
 			$error = array(
-				'function' => __FUNCTION__,
-				'$post'    => $post,
-				'WP_Error' => $result,
+				'function'           => __FUNCTION__ . '()',
+				'WP_Error'           => $result,
+				'$post->ID'          => $post->ID,
+				'$post->post_title'  => esc_html( $post->post_title ),
+				'$post->post_type'   => esc_html( $post->post_type ),
+				'$post->post_status' => esc_html( $post->post_status ),
 			);
 
 			$msg = sprintf(
@@ -209,11 +212,15 @@ function dfrps_ajax_batch_import_images() {
 		if ( $result->has_error() ) {
 
 			$error = array(
-				'function' => __FUNCTION__,
-				'$url'     => $result->url(),
-				'$args'    => $result->args(),
-				'$post'    => $post,
-				'WP_Error' => $result->wp_error(),
+				'function'           => __FUNCTION__ . '()',
+				'Image URL'          => '<a href="' . esc_url( $result->url() ) . '" target="_blank">' . esc_html( $result->url() ) . '</a>',
+				'WP_Error'           => $result->wp_error(),
+				'$args->timeout'     => $result->args( 'timeout' ),
+				'$args->user_agent'  => $result->args( 'user_agent' ),
+				'$post->ID'          => $post->ID,
+				'$post->post_title'  => esc_html( $post->post_title ),
+				'$post->post_type'   => esc_html( $post->post_type ),
+				'$post->post_status' => esc_html( $post->post_status ),
 			);
 
 			$msg = sprintf(
