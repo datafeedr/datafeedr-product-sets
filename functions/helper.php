@@ -891,6 +891,7 @@ function dfrps_import_post_thumbnail( $post_id ) {
 		'user_id'           => $post->post_author,
 		'is_post_thumbnail' => true,
 		'timeout'           => 20,
+        '_source_plugin'    => 'dfrps',
 	);
 
 	/**

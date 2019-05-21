@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.2
-Stable tag: 1.2.35
+Stable tag: 1.2.36
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.36 - 2019/05/21 =
+* Added `dfrps` as the meta_value to the new `_owner_datafeedr` meta_key for images imported by the Datafeedr Product Sets plugin.
 
 = 1.2.35 - 2019/05/06 =
 * Updated readme.

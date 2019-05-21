@@ -8,7 +8,7 @@ Author URI: https://www.datafeedr.com
 License: GPL v3
 Requires at least: 3.8
 Tested up to: 5.2
-Version: 1.2.35
+Version: 1.2.36
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2019, Datafeedr - help@datafeedr.com
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', 	'1.2.35' );
+define( 'DFRPS_VERSION', 	'1.2.36' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION','1.2.0' );
 define( 'DFRPS_URL', 		plugin_dir_url( __FILE__ ) );
