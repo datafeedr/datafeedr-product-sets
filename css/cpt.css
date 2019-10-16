@@ -13,7 +13,7 @@
 #dfrps_cpt_dashboard_metabox
 {
 	background-color: #F7FCFE;
-	border: 0px solid white;
+	border: 0 solid white;
 	border-top: 4px #2EA2CC solid;
 	}
 #dfrps_cpt_dashboard_metabox .inside
@@ -117,7 +117,7 @@
 #div_dfrps_update_status > .inside > h4
 {
 	font-size: 14px;
-	margin: 0px 0 8px 0px;
+	margin: 0 0 8px 0;
 	padding-top: 5px;
 }
 
@@ -249,7 +249,7 @@
 {
 	margin-top: 20px;
 	margin-bottom: 20px;
-	padding: 0px;
+	padding: 0;
 	border: 1px solid #dfdfdf;
 	background-color: #EFEFEF;
 }
@@ -283,7 +283,7 @@
 	-o-transform: rotate(90deg);
 	text-transform: uppercase;
 	font-weight: bold;
-	padding: 0px 0px 0px 5px;
+	padding: 0 0 0 5px;
 }
 
 .datafeedr-productset_admin .dfrps_pager_links
@@ -321,7 +321,7 @@
 .datafeedr-productset_admin table.dfrps_product_table
 {
 	border-width: 1px;
-	border-spacing: 0px;
+	border-spacing: 0;
 	border-style: solid;
 	border-collapse: collapse;
 	background-color: white;
@@ -338,12 +338,12 @@
 
 .datafeedr-productset_admin table.dfrps_product_table td
 {
-	border-width: 0px;
+	border-width: 0;
 	padding: 0;
 	border-style: none;
 	border-color: white;
 	background-color: white;
-	-moz-border-radius: ;
+	-moz-border-radius: 0;
 }
 
 .datafeedr-productset_admin .dfrps_product_table td.image
@@ -413,8 +413,8 @@ font-size: 90%;
 .datafeedr-productset_admin .dfrps_product_table td.info .details .brand,
 .datafeedr-productset_admin .dfrps_product_table td.info .details .network
 {
-	margin: 0px 5px 0px 0;
-	padding: 0px 4px 3px 4px;
+	margin: 0 5px 0 0;
+	padding: 0 4px 3px 4px;
 	font-size: 11.5px;
 	font-family: sans-serif;
 	float: left;
@@ -435,14 +435,14 @@ font-size: 90%;
 	height: 10px;
 	font-weight: bold;
 	vertical-align: middle;
-	padding-right: 0px;
+	padding-right: 0;
 }
 
 .datafeedr-productset_admin .dfrps_product_table td .action_links
 {
 	float: right;
 	border: 1px #E6E6E6 solid;
-	padding: 3px 2px 0px 2px;
+	padding: 3px 2px 0 2px;
 	margin: 0 4px 4px 0;
 	display: block;
 	font-size: 18px;
@@ -499,7 +499,7 @@ font-size: 90%;
 
 .datafeedr-productset_admin .dfrps_product_table table.product_values
 {
-	border-spacing: 0px;
+	border-spacing: 0;
 	border-collapse: collapse;
 	background-color: white;
 	border: 1px #C3C3C3 solid;
@@ -514,7 +514,7 @@ font-size: 90%;
 	border-style: inset;
 	border-color: #C3C3C3;
 	background-color: white;
-	-moz-border-radius: ;
+	-moz-border-radius: 0;
 	font-family: monaco, monospace;
 	text-align: left;
 	vertical-align: top;
@@ -616,7 +616,7 @@ font-size: 90%;
 	margin-top: 10px;
 }
 
-#div_dfrps_tab_search #dfrapi_search_form { margin-left: 0px; }
+#div_dfrps_tab_search #dfrapi_search_form { margin-left: 0; }
 
 
 
@@ -637,7 +637,6 @@ font-size: 90%;
 			{
 				border: 0 none;
 				background: transparent;
-				border: 0;
 				-webkit-box-shadow: none;
 				box-shadow: none;
 			}
@@ -671,8 +670,8 @@ font-size: 90%;
 {
 	background-color: #FFF;
 	padding-bottom: 10px;
-	padding-left: 0px;
-	padding-right: 0px;
+	padding-left: 0;
+	padding-right: 0;
 }
 
 #dfrps_search_form_wrapper .instructions
