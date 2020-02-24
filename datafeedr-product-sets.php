@@ -8,10 +8,10 @@ Author URI: https://www.datafeedr.com
 License: GPL v3
 Requires at least: 3.8
 Tested up to: 5.3
-Version: 1.2.38
+Version: 1.2.39
 
 Datafeedr Product Sets Plugin
-Copyright (C) 2019, Datafeedr - help@datafeedr.com
+Copyright (C) 2020, Datafeedr - help@datafeedr.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,20 +27,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
 
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', 	'1.2.38' );
+define( 'DFRPS_VERSION', '1.2.39' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
-define( 'DFRPS_SET_VERSION','1.2.0' );
-define( 'DFRPS_URL', 		plugin_dir_url( __FILE__ ) );
-define( 'DFRPS_PATH', 		plugin_dir_path( __FILE__ ) );
-define( 'DFRPS_BASENAME', 	plugin_basename( __FILE__ ) );
-define( 'DFRPS_DOMAIN', 	'datafeedr-product-sets' );
-define( 'DFRPS_CPT', 		'datafeedr-productset' );
-define( 'DFRPS_PREFIX', 	'dfrps' );
+define( 'DFRPS_SET_VERSION', '1.2.0' );
+define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
+define( 'DFRPS_PATH', plugin_dir_path( __FILE__ ) );
+define( 'DFRPS_BASENAME', plugin_basename( __FILE__ ) );
+define( 'DFRPS_DOMAIN', 'datafeedr-product-sets' );
+define( 'DFRPS_CPT', 'datafeedr-productset' );
+define( 'DFRPS_PREFIX', 'dfrps' );
 
 /**
  * Loads required function files.
@@ -55,9 +57,10 @@ require_once( DFRPS_PATH . 'classes/class-datafeedr-plugin-dependency.php' );
  * for image processing. This loads on all page loads so that images
  * will be uploaded even when on the frontend of the site.
  *
+ * @param object $post A $post object for the post we want to import an image for.
+ *
  * @since 1.1.10
  *
- * @param object $post A $post object for the post we want to import an image for.
  */
 add_action( 'the_post', 'dfrps_import_image' );
 function dfrps_import_image( $post ) {
@@ -115,11 +118,11 @@ function dfrps_import_image( $post ) {
  */
 add_action( 'admin_notices', 'dfrps_missing_importer' );
 function dfrps_missing_importer() {
-	if ( !dfrps_registered_cpt_exists() ) {
+	if ( ! dfrps_registered_cpt_exists() ) {
 		echo '<div class="update-nag" style="border-color: red;">' . __( 'The <strong>Datafeedr Product Sets</strong> plugin requires an importer plugin.', DFRPS_DOMAIN );
 		echo ' <a href="http://wordpress.org/plugins/tags/dfrpsimporter">';
-		echo  __( 'Download an Importer Plugin', DFRPS_DOMAIN );
-		echo '</a></div>';		
+		echo __( 'Download an Importer Plugin', DFRPS_DOMAIN );
+		echo '</a></div>';
 	}
 }
 
@@ -128,11 +131,11 @@ function dfrps_missing_importer() {
  */
 add_action( 'admin_notices', 'dfrps_default_cpt_not_selected' );
 function dfrps_default_cpt_not_selected() {
-	if ( !dfrps_default_cpt_is_selected() ) {
+	if ( ! dfrps_default_cpt_is_selected() ) {
 		echo '<div class="update-nag" style="border-color: red;">' . __( 'The <strong>Datafeedr Product Sets</strong> plugin requires you to', DFRPS_DOMAIN );
 		echo ' <a href="' . admin_url( 'admin.php?page=dfrps_configuration' ) . '">';
-		echo  __( 'select a Default Custom Post Type', DFRPS_DOMAIN );
-		echo '</a>.</div>';		
+		echo __( 'select a Default Custom Post Type', DFRPS_DOMAIN );
+		echo '</a>.</div>';
 	}
 }
 
@@ -145,8 +148,8 @@ function dfrps_updates_disabled() {
 	if ( isset( $options['updates_enabled'] ) && $options['updates_enabled'] == 'disabled' ) {
 		echo '<div class="update-nag" style="border-color: red;">' . __( 'The <strong>Datafeedr Product Sets</strong> plugin has disabled Product Set updates. Enable Product Set updates ', DFRPS_DOMAIN );
 		echo ' <a href="' . admin_url( 'admin.php?page=dfrps_configuration' ) . '">';
-		echo  __( 'here', DFRPS_DOMAIN );
-		echo '</a>.</div>';		
+		echo __( 'here', DFRPS_DOMAIN );
+		echo '</a>.</div>';
 	}
 }
 
@@ -216,7 +219,7 @@ function dfrps_wp_cron_disabled() {
 register_activation_hook( __FILE__, 'dfrps_activate' );
 function dfrps_activate() {
 	dfrps_add_capabilities();
-	
+
 	// Add default options if they do not already exist. @since 1.2.1
 	$dfrps_configuration = get_option( 'dfrps_configuration', false );
 	if ( ! $dfrps_configuration ) {
@@ -252,43 +255,43 @@ function dfrps_add_capabilities() {
  */
 add_action( 'init', 'dfrps_create_post_type' );
 function dfrps_create_post_type() {
-	
+
 	$labels = array(
-		'name' 					=> _x( 'Product Sets', DFRPS_DOMAIN ),
-		'singular_name' 		=> _x( 'Product Set', DFRPS_DOMAIN ),
-		'add_new' 				=> _x( 'Add New Product Set', DFRPS_DOMAIN ),
-		'all_items' 			=> _x( 'All Product Sets', DFRPS_DOMAIN ),
-		'add_new_item' 			=> _x( 'Add New Product Set', DFRPS_DOMAIN ),
-		'edit_item' 			=> _x( 'Edit Product Set', DFRPS_DOMAIN ),
-		'new_item' 				=> _x( 'New Product Set', DFRPS_DOMAIN ),
-		'view_item' 			=> _x( 'View Product Set', DFRPS_DOMAIN ),
-		'search_items' 			=> _x( 'Search Product Sets', DFRPS_DOMAIN ),
-		'not_found' 			=> _x( 'No Product Sets found', DFRPS_DOMAIN ),
-		'not_found_in_trash' 	=> _x( 'No Product Sets found in trash', DFRPS_DOMAIN ),
-		'parent_item_colon' 	=> _x( 'Parent Product Set:', DFRPS_DOMAIN ),
-		'menu_name' 			=> _x( 'Product Sets', DFRPS_DOMAIN )
+		'name'               => _x( 'Product Sets', DFRPS_DOMAIN ),
+		'singular_name'      => _x( 'Product Set', DFRPS_DOMAIN ),
+		'add_new'            => _x( 'Add New Product Set', DFRPS_DOMAIN ),
+		'all_items'          => _x( 'All Product Sets', DFRPS_DOMAIN ),
+		'add_new_item'       => _x( 'Add New Product Set', DFRPS_DOMAIN ),
+		'edit_item'          => _x( 'Edit Product Set', DFRPS_DOMAIN ),
+		'new_item'           => _x( 'New Product Set', DFRPS_DOMAIN ),
+		'view_item'          => _x( 'View Product Set', DFRPS_DOMAIN ),
+		'search_items'       => _x( 'Search Product Sets', DFRPS_DOMAIN ),
+		'not_found'          => _x( 'No Product Sets found', DFRPS_DOMAIN ),
+		'not_found_in_trash' => _x( 'No Product Sets found in trash', DFRPS_DOMAIN ),
+		'parent_item_colon'  => _x( 'Parent Product Set:', DFRPS_DOMAIN ),
+		'menu_name'          => _x( 'Product Sets', DFRPS_DOMAIN )
 	);
-	
+
 	$args = array(
-		'labels' 				=> $labels,
-		'description' 			=> "These store saved searches and individual products as product sets.",
-		'public' 				=> true,
-		'exclude_from_search'	=> true,
-		'publicly_queryable' 	=> false,
-		'show_ui' 				=> true, 
-		'show_in_nav_menus' 	=> false, 
-		'show_in_menu' 			=> 'dfrps',
-		'show_in_admin_bar' 	=> true,
-		'menu_position' 		=> 20,
-		'menu_icon' 			=> null,
-		'capability_type' 		=> 'product_set',
-		'map_meta_cap'			=> true,
-		'hierarchical' 			=> true,
-		'supports' 				=> array( 'title' ),
-		'has_archive' 			=> false,
-		'rewrite' 				=> false,
-		'query_var' 			=> false,
-		'can_export' 			=> true
+		'labels'              => $labels,
+		'description'         => "These store saved searches and individual products as product sets.",
+		'public'              => true,
+		'exclude_from_search' => true,
+		'publicly_queryable'  => false,
+		'show_ui'             => true,
+		'show_in_nav_menus'   => false,
+		'show_in_menu'        => 'dfrps',
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 20,
+		'menu_icon'           => null,
+		'capability_type'     => 'product_set',
+		'map_meta_cap'        => true,
+		'hierarchical'        => true,
+		'supports'            => array( 'title' ),
+		'has_archive'         => false,
+		'rewrite'             => false,
+		'query_var'           => false,
+		'can_export'          => true
 	);
 
 	register_post_type( DFRPS_CPT, $args );
@@ -299,7 +302,7 @@ function dfrps_create_post_type() {
  */
 if ( is_admin() ) {
 	if ( defined( 'DFRAPI_BASENAME' ) ) {
-		require_once ( DFRPS_PATH . 'classes/class-dfrps-initialize.php' );
+		require_once( DFRPS_PATH . 'classes/class-dfrps-initialize.php' );
 	}
 }
 

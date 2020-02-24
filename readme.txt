@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.3
-Stable tag: 1.2.38
+Stable tag: 1.2.39
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.39 - 2020/02/24 =
+* Added more checks to prevent the same product from being imported more than one time (race conditions... fun!)
 
 = 1.2.38 - 2019/11/12 =
 * Updated readme
