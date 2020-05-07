@@ -5,8 +5,8 @@ Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, impor
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
-Tested up to: 5.4
-Stable tag: 1.2.40
+Tested up to: 5.5-alpha
+Stable tag: 1.2.41
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.41 - 2020/05/07 =
+* Added new hook just before Product Set query is handled by Datafeedr API.
 
 = 1.2.40 - 2020/03/11 =
 * Updated readme to support WordPress 5.4.

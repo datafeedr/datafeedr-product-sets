@@ -23,12 +23,12 @@ class Dfrps_Update {
 		$this->set['postmeta'] = $this->meta;
 		$this->update();
 	}
-	
+
 	// Get user's configuration settings.
 	function get_configuration() {
 		return get_option( 'dfrps_configuration' );
 	}
-	
+
 	// Load post meta.
 	function get_postmeta() {
 		return get_post_custom( $this->set['ID'] );
@@ -387,6 +387,7 @@ class Dfrps_Update {
 
 		// Run query.
 		//$data = dfrapi_api_get_products_by_query( $query, $this->config['num_products_per_update'], $this->meta['_dfrps_cpt_offset'][0], $manually_blocked );
+		$query = apply_filters( 'dfrps_update_phase2_query', $query, $this );
 		$data = dfrapi_api_get_products_by_query( $query, $this->config['num_products_per_api_request'], $this->meta['_dfrps_cpt_offset'][0], $manually_blocked );
 
 		// Update number of API requests.
@@ -517,7 +518,7 @@ class Dfrps_Update {
 		foreach ( $products as $product_data ) {
 
 			$product = unserialize( $product_data['data'] );
-			
+
 			// @since 1.2.30
 			if ( ! $product ) {
                 $this->delete_product_from_table( $product_data['product_id'] );
@@ -567,12 +568,12 @@ class Dfrps_Update {
 			$this->drop_temp_product_table();
 			return 'complete';
 		}
-		
+
 		return 'repeat';
-		
+
 	}
 
-		
+
 } // class Dfrps_Update
 
 } // class_exists check
