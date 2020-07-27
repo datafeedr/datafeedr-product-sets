@@ -891,7 +891,7 @@ class Dfrps_Cpt {
 		// Add the tabs meta box.
 		add_meta_box(
 			'div_dfrps_tabs', 
-			'These are tabs', 
+			'Product Selections',
 			array( $this, 'tabs' ), 
 			DFRPS_CPT, 
 			'normal', 
@@ -902,7 +902,7 @@ class Dfrps_Cpt {
 		// Add the search form meta box.
 		add_meta_box(
 			'div_dfrps_tab_search', 
-			'Product Search Form', 
+			'Product Search Form',
 			array( $this, 'search_form' ), 
 			DFRPS_CPT, 
 			'normal', 
@@ -913,7 +913,7 @@ class Dfrps_Cpt {
 		// Add the saved search meta box.
 		add_meta_box(
 			'div_dfrps_tab_saved_search', 
-			'Saved Search Products Tabbed Area', 
+			'Products Added by Saved Search',
 			array( $this, 'saved_search_products' ), 
 			DFRPS_CPT, 
 			'normal', 
@@ -924,7 +924,7 @@ class Dfrps_Cpt {
 		// Add the included products meta box.
 		add_meta_box(
 			'div_dfrps_tab_included', 
-			'Included Products Tabbed Area', 
+			'Products Added Manually',
 			array( $this, 'included_products' ), 
 			DFRPS_CPT, 
 			'normal', 
@@ -935,7 +935,7 @@ class Dfrps_Cpt {
 		// Add the blocked products meta box.
 		add_meta_box(
 			'div_dfrps_tab_blocked', 
-			'Blocked Products Tabbed Area', 
+			'Products Blocked from Product Set',
 			array( $this, 'blocked_products' ), 
 			DFRPS_CPT, 
 			'normal', 
