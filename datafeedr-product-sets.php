@@ -8,7 +8,7 @@ Author URI: https://www.datafeedr.com
 License: GPL v3
 Requires at least: 3.8
 Tested up to: 5.6-alpha
-Version: 1.2.43
+Version: 1.2.44
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2020, Datafeedr - help@datafeedr.com
@@ -27,14 +27,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.2.43' );
+define( 'DFRPS_VERSION', '1.2.44' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
@@ -62,7 +63,6 @@ require_once( DFRPS_PATH . 'classes/class-datafeedr-plugin-dependency.php' );
  * @since 1.1.10
  *
  */
-add_action( 'the_post', 'dfrps_import_image' );
 function dfrps_import_image( $post ) {
 
 //	_deprecated_function(
@@ -113,45 +113,53 @@ function dfrps_import_image( $post ) {
 	new Dfrps_Image_Importer( $post );
 }
 
+add_action( 'the_post', 'dfrps_import_image' );
+
 /**
  * Notify user that an Importer plugin is missing and is required.
  */
-add_action( 'admin_notices', 'dfrps_missing_importer' );
 function dfrps_missing_importer() {
 	if ( ! dfrps_registered_cpt_exists() ) {
-		echo '<div class="update-nag" style="border-color: red;">' . __( 'The <strong>Datafeedr Product Sets</strong> plugin requires an importer plugin.', DFRPS_DOMAIN );
+		echo '<div class="notice notice-error"><p>';
+		echo __( 'The <strong>Datafeedr Product Sets</strong> plugin requires an importer plugin.', 'datafeedr-product-sets' );
 		echo ' <a href="http://wordpress.org/plugins/tags/dfrpsimporter">';
-		echo __( 'Download an Importer Plugin', DFRPS_DOMAIN );
-		echo '</a></div>';
+		echo __( 'Download an Importer Plugin', 'datafeedr-product-sets' );
+		echo '</a>.</p></div>';
 	}
 }
+
+add_action( 'admin_notices', 'dfrps_missing_importer' );
 
 /**
  * Notify user if a default CPT hasn't been selected.
  */
-add_action( 'admin_notices', 'dfrps_default_cpt_not_selected' );
 function dfrps_default_cpt_not_selected() {
 	if ( ! dfrps_default_cpt_is_selected() ) {
-		echo '<div class="update-nag" style="border-color: red;">' . __( 'The <strong>Datafeedr Product Sets</strong> plugin requires you to', DFRPS_DOMAIN );
+		echo '<div class="notice notice-error"><p>';
+		echo __( 'The <strong>Datafeedr Product Sets</strong> plugin requires you to', 'datafeedr-product-sets' );
 		echo ' <a href="' . admin_url( 'admin.php?page=dfrps_configuration' ) . '">';
-		echo __( 'select a Default Custom Post Type', DFRPS_DOMAIN );
-		echo '</a>.</div>';
+		echo __( 'select a Default Custom Post Type', 'datafeedr-product-sets' );
+		echo '</a>.</p></div>';
 	}
 }
+
+add_action( 'admin_notices', 'dfrps_default_cpt_not_selected' );
 
 /**
  * Notify user that updates are disabled.
  */
-add_action( 'admin_notices', 'dfrps_updates_disabled' );
 function dfrps_updates_disabled() {
 	$options = get_option( 'dfrps_configuration', array() );
 	if ( isset( $options['updates_enabled'] ) && $options['updates_enabled'] == 'disabled' ) {
-		echo '<div class="update-nag" style="border-color: red;">' . __( 'The <strong>Datafeedr Product Sets</strong> plugin has disabled Product Set updates. Enable Product Set updates ', DFRPS_DOMAIN );
+		echo '<div class="notice notice-error"><p>';
+		echo __( 'The <strong>Datafeedr Product Sets</strong> plugin has disabled Product Set updates. Enable Product Set updates ', 'datafeedr-product-sets' );
 		echo ' <a href="' . admin_url( 'admin.php?page=dfrps_configuration' ) . '">';
-		echo __( 'here', DFRPS_DOMAIN );
-		echo '</a>.</div>';
+		echo __( 'here', 'datafeedr-product-sets' );
+		echo '</a>.</p></div>';
 	}
 }
+
+add_action( 'admin_notices', 'dfrps_updates_disabled' );
 
 /**
  * Display admin notices for each required plugin that needs to be
@@ -194,7 +202,6 @@ add_action( 'admin_notices', 'dfrps_admin_notice_plugin_dependencies' );
  *
  * @since 1.2.14
  */
-add_action( 'admin_notices', 'dfrps_wp_cron_disabled' );
 function dfrps_wp_cron_disabled() {
 
 	if ( ! defined( 'DISABLE_WP_CRON' ) ) {
@@ -212,6 +219,8 @@ function dfrps_wp_cron_disabled() {
 	echo __( $msg, DFRPS_DOMAIN );
 	echo '</p></div>';
 }
+
+add_action( 'admin_notices', 'dfrps_wp_cron_disabled' );
 
 /**
  * Upon plugin activation.
