@@ -25,10 +25,14 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 	
 		// Product type
 		$coupon_networks = get_option( 'dfrapi_coupon_networks' );
-		$type = ( array_key_exists( $product['source_id'], $coupon_networks ) ) ? 'coupon' : 'product';
-		
+		if ( isset( $product['source_id'] ) ) {
+			$type = ( array_key_exists( $product['source_id'], $coupon_networks ) ) ? 'coupon' : 'product';
+		} else {
+			$type = 'product';
+		}
+
 		// Has this product already been included?
-		$already_included = ( in_array( $product['_id'], $args['manually_included_ids'] ) ) ? true : false;	
+		$already_included = in_array( $product['_id'], $args['manually_included_ids'] );
 
 		?>
 		<div id="product_<?php echo $product['_id']; ?>_<?php echo $args['context']; ?>" class="product_block product_<?php echo $product['_id']; ?>">
