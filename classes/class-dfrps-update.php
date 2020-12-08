@@ -250,18 +250,26 @@ class Dfrps_Update {
 
 		// Regarding Ticket #8262
 		$class = $data['dfrapi_api_error']['class'];
+		$msg   = isset( $data['dfrapi_api_error']['msg'] ) ? trim( $data['dfrapi_api_error']['msg'] ) : '';
 
 		// These are the ERROR classes that trigger updates to be disabled.
-		$error_classes = array(
+		$error_classes = apply_filters( 'dfrps_disable_updates_error_classes', array(
 			'DatafeedrBadRequestError',
 			'DatafeedrAuthenticationError',
 			'DatafeedrLimitExceededError',
 			'DatafeedrQueryError',
-		);
+		) );
 
-		$error_classes = apply_filters( 'dfrps_disable_updates_error_classes', $error_classes );
+		// These are the ERROR messages that trigger updates to be disabled.
+		$error_messages = apply_filters( 'dfrps_disable_updates_error_messages', array(
+			'No merchants selected',
+		) );
 
 		if ( in_array( $class, $error_classes ) ) {
+			$this->config['updates_enabled'] = 'disabled';
+			update_option( 'dfrps_configuration', $this->config );
+			$this->updates_disabled_email_user( $data );
+		} elseif ( in_array( $msg, $error_messages ) ) {
 			$this->config['updates_enabled'] = 'disabled';
 			update_option( 'dfrps_configuration', $this->config );
 			$this->updates_disabled_email_user( $data );

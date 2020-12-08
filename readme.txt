@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.6
-Stable tag: 1.2.45
+Stable tag: 1.2.46
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.46 - 2020/12/08 =
+* Configured Product Set updates to become disabled if a Product Set returned a "No merchants selected" error message.
 
 = 1.2.45 - 2020/12/01 =
 * Fixed "PHP Notice:  Undefined index: source_id"
