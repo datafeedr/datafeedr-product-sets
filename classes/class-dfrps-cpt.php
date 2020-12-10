@@ -52,33 +52,33 @@ class Dfrps_Cpt {
 	 */
 	function sort_posts_by_next_update( $query ) {
 		global $pagenow;
-		if ( is_admin() && $query->query['post_type'] == DFRPS_CPT && $pagenow == 'edit.php' ) {
-			if ( !isset( $_GET['orderby'] ) && !isset( $_GET['post_status'] ) ) {
+		if ( is_admin() && isset( $query->query['post_type'] ) && $query->query['post_type'] == DFRPS_CPT && $pagenow == 'edit.php' ) {
+			if ( ! isset( $_GET['orderby'] ) && ! isset( $_GET['post_status'] ) ) {
 				$query->query_vars['post_status'] = 'publish';
-				$query->query_vars['order'] = 'asc';
-				$query->query_vars['orderby'] = 'meta_value';
-				$query->query_vars['meta_key'] = '_dfrps_cpt_next_update_time';
+				$query->query_vars['order']       = 'asc';
+				$query->query_vars['orderby']     = 'meta_value';
+				$query->query_vars['meta_key']    = '_dfrps_cpt_next_update_time';
 			}
 		}
 	}
-	
+
 	/**
 	 * Filters Product Sets by type (ie. product, coupon, etc...).
-	 * 
+	 *
 	 * @link http://wordpress.stackexchange.com/questions/137168/programmatically-set-meta-query-for-filter
 	 * @link http://www.smashingmagazine.com/2013/12/05/modifying-admin-post-lists-in-wordpress/
 	 */
 	function filter_sets_by_type( $query ) {
 		global $pagenow;
-		if ( is_admin() && $query->query['post_type'] == DFRPS_CPT && $pagenow == 'edit.php' ) {
-			if ( isset( $_GET['_dfrps_cpt_type'] ) && !empty( $_GET['_dfrps_cpt_type'] ) ) {
-				$qv = &$query->query_vars;
-				$qv['meta_query'] = array();
+		if ( is_admin() && isset( $query->query['post_type'] ) && $query->query['post_type'] == DFRPS_CPT && $pagenow == 'edit.php' ) {
+			if ( isset( $_GET['_dfrps_cpt_type'] ) && ! empty( $_GET['_dfrps_cpt_type'] ) ) {
+				$qv                 = &$query->query_vars;
+				$qv['meta_query']   = array();
 				$qv['meta_query'][] = array(
-					'field' 	=> '_dfrps_cpt_type',
-					'value' 	=> $_GET['_dfrps_cpt_type'],
-					'compare' 	=> '=',
-					'type' 		=> 'CHAR',
+					'field'   => '_dfrps_cpt_type',
+					'value'   => $_GET['_dfrps_cpt_type'],
+					'compare' => '=',
+					'type'    => 'CHAR',
 				);
 			}
 		}
@@ -1020,7 +1020,7 @@ class Dfrps_Cpt {
 					</tr>
 					<tr>
 						<td class="row-title">' . __( 'Products Deleted', DFRPS_DOMAIN ) . '</td>
-						<td class="desc">' . number_format( $meta['_dfrps_cpt_last_update_num_products_deleted'][0] ) . '</td>
+						<td class="desc">' . number_format( isset( $meta['_dfrps_cpt_last_update_num_products_deleted'][0] ) ? $meta['_dfrps_cpt_last_update_num_products_deleted'][0] : 0 ) . '</td>
 					</tr>
 				</tbody>
 			</table>

@@ -5,8 +5,8 @@ Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, impor
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
-Tested up to: 5.6
-Stable tag: 1.2.46
+Tested up to: 5.7-alpha
+Stable tag: 1.2.47
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.47 - 2020/12/10 =
+* Fixed some undefined index notices.
 
 = 1.2.46 - 2020/12/08 =
 * Configured Product Set updates to become disabled if a Product Set returned a "No merchants selected" error message.
