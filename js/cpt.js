@@ -1,7 +1,7 @@
 jQuery(function($) {
 
 	// Tabs on add/edit Product Set page (Search, Included Products & Excluded Products)
-	$("#dfrps_cpt_tabs a").click(function (e) {
+	$("#dfrps_cpt_tabs a").on("click", function (e) {
 		var id = $(this).attr('id');
 		$(".nav-tab")
 			.removeClass("nav-tab-active")			// Remove "active" class from all tabs.
