@@ -4,25 +4,32 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
  * This is responsible for displaying a list of products in the admin section.
- * The list of products could be generated from a search query, 
+ * The list of products could be generated from a search query,
  * a list of manually included products or a list of blocked products.
  */
 if ( !function_exists( 'dfrps_html_product_list' ) ) {
 
 	function dfrps_html_product_list( $product, $args=array() ) {
-	
+
 		// Image	
 		if ( @$product['image'] != '' ) {
 			$image = @$product['image'];
 		} elseif ( @$product['thumbnail'] != '' ) {
 			$image = @$product['thumbnail'];
 		} else {
-			$image = plugins_url( 'images/icons/no-image.jpg', dirname(__FILE__) );					
+			$image = plugins_url( 'images/icons/no-image.jpg', dirname(__FILE__) );
 		}
-		
-		// Currency 
-		$currency = isset( $product['currency'] ) ? $product['currency'] : '';
-	
+
+		$currency = isset( $product['currency'] ) ? $product['currency'] : 'USD';
+
+		if ( function_exists( 'dfrapi_get_price' ) ) {
+			$regularprice = isset( $product['price'] ) ? dfrapi_get_price( $product['price'], $currency, 'product-set-search-results' ) : '';
+			$saleprice    = isset( $product['saleprice'] ) ? dfrapi_get_price( $product['saleprice'], $currency, 'product-set-search-results' ) : '';
+		} else {
+			$regularprice = isset( $product['price'] ) ? dfrapi_currency_code_to_sign( $currency ) . dfrapi_int_to_price( $product['price'] ) : '';
+			$saleprice    = isset( $product['saleprice'] ) ? dfrapi_currency_code_to_sign( $currency ) . dfrapi_int_to_price( $product['saleprice'] ) : '';
+		}
+
 		// Product type
 		$coupon_networks = get_option( 'dfrapi_coupon_networks' );
 		if ( isset( $product['source_id'] ) ) {
@@ -52,7 +59,7 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 					</td>
 					<td class="links">
 						<div class="action_links">
-						
+
 							<?php if ( $already_included ) : ?>
 								<div class="dfrps_product_already_included" title="<?php echo __('This product has already been manually added to this Product Set.', DFRPS_DOMAIN ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/checkmark.png', dirname(__FILE__) ); ?>" />
@@ -64,13 +71,13 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 									</a>
 								</div>
 							<?php endif; ?>
-							
+
 							<div class="dfrps_remove_individual_product">
 								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Remove this product from the individually added list for this Product Set.', DFRPS_DOMAIN ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/minus.png', dirname(__FILE__) ); ?>" />
 								</a>
 							</div>
-						
+
 							<div class="dfrps_unblock_individual_product">
 								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Unblock this product and allow it to show up in product searches for this Product Set.', DFRPS_DOMAIN ); ?>">
 									<img src="<?php echo plugins_url( "images/icons/unblock.png", dirname(__FILE__) ); ?>" />
@@ -91,14 +98,14 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 				</tr>
 				<tr>
 					<td class="info" colspan="2">
-				
+
 						<div class="description">
 							<?php if ( isset( $product['description'] ) ) : ?>
 								<?php echo strip_tags( $product['description'] ); ?>
 							<?php endif; ?>
 						</div>
-				
-						<div class="details">				
+
+						<div class="details">
 							<div class="network" title="<?php echo __('Network', DFRPS_DOMAIN ) . ': ' . esc_attr( $product['source'] ); ?>">
 								<span class="bullet">&bull;</span>
 								<span class="label"><?php echo $product['source']; ?></span>
@@ -114,19 +121,21 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 								</div>
 							<?php endif; ?>
 							<?php if ( isset( $product['price'] ) ) : ?>
-								<div class="price" title="<?php echo __('Price', DFRPS_DOMAIN ) . ': ' . esc_attr( dfrapi_currency_code_to_sign( $currency ) . dfrapi_int_to_price( $product['price'] ) . ' ' . $currency ); ?>">
-									<span class="bullet">&bull;</span>
-									<span class="label"><?php echo dfrapi_currency_code_to_sign( $currency ); ?><?php echo dfrapi_int_to_price( $product['price'] ); ?></span>
-								</div>
+                                <div class="price"
+                                     title="<?php echo __( 'Price', DFRPS_DOMAIN ) . ': ' . esc_attr( $regularprice ) . ' ' . $currency; ?>">
+                                    <span class="bullet">&bull;</span>
+                                    <span class="label"><?php echo $regularprice; ?></span>
+                                </div>
 							<?php endif; ?>
 							<?php if ( isset( $product['saleprice'] ) ) : ?>
-								<div class="saleprice" title="<?php echo __('Sale Price', DFRPS_DOMAIN ) . ': ' . esc_attr( dfrapi_currency_code_to_sign( $currency ) . dfrapi_int_to_price( $product['saleprice'] ) . ' ' . $currency ); ?>">
-									<span class="bullet">&bull;</span>
-									<span class="label"><?php echo dfrapi_currency_code_to_sign( $currency ); ?><?php echo dfrapi_int_to_price( $product['saleprice'] ); ?></span>
-								</div>
+                                <div class="saleprice"
+                                     title="<?php echo __( 'Sale Price', DFRPS_DOMAIN ) . ': ' . esc_attr( $saleprice ) . ' ' . $currency; ?>">
+                                    <span class="bullet">&bull;</span>
+                                    <span class="label"><?php echo $saleprice; ?></span>
+                                </div>
 							<?php endif; ?>
 						</div>
-			
+
 					</td>
 				</tr>
 				<tr>
