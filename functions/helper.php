@@ -757,6 +757,31 @@ function dfrps_product( $post_id ) {
 }
 
 /**
+ * Returns a value from a $field from the '_dfrps_product' array if it exists.
+ * Otherwise, returns the $default value.
+ *
+ * @param int $post_id
+ * @param string $field
+ * @param mixed $default
+ *
+ * @return mixed
+ */
+function dfrps_get_product_field( $post_id, $field, $default = false ) {
+
+	$fields = dfrps_product( $post_id );
+
+	if ( ! is_array( $fields ) ) {
+		return $default;
+	}
+
+	if ( ! isset( $fields[ $field ] ) ) {
+		return $default;
+	}
+
+	return $fields[ $field ];
+}
+
+/**
  * Returns true if we should try to import an image for the Post.
  *
  * @param int $post_id
