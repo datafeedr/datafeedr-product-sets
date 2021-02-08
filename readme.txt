@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.7-alpha
-Stable tag: 1.2.50
+Stable tag: 1.2.51
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.2.51 - 2021/02/08 =
+* Added Site Health Info.
 
 = 1.2.50 - 2021/01/22 =
 * Added `dfrps_get_product_field()` helper function.
