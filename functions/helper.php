@@ -1,50 +1,55 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Links to other related or required plugins.
  */
 function dfrps_plugin_links( $plugin ) {
 	$map = array(
-		'dfrapi' => 'http://wordpress.org/plugins/datafeedr-api/',
+		'dfrapi'    => 'http://wordpress.org/plugins/datafeedr-api/',
 		'importers' => admin_url( 'plugins.php' ),
 	);
-	return $map[$plugin];
-} 
+
+	return $map[ $plugin ];
+}
 
 /**
- * Gets the next update time for a PS. 
+ * Gets the next update time for a PS.
  */
 function dfrps_get_next_update_time() {
-	$configuration = (array) get_option( DFRPS_PREFIX.'_configuration' );	
-	if ( $configuration['update_interval'] == -1 ) {
+	$configuration = (array) get_option( DFRPS_PREFIX . '_configuration' );
+	if ( $configuration['update_interval'] == - 1 ) {
 		$time = date_i18n( 'U' );
 	} else {
 		$time = ( ( $configuration['update_interval'] * DAY_IN_SECONDS ) + date_i18n( 'U' ) );
 	}
+
 	return $time;
 }
 
 function dfrps_pagination( $data, $context ) {
-		
+
 	// Initialize $html variable.
 	$html = '';
-	
+
 	// Return nothing if there are no products.
 	if ( empty( $data['products'] ) ) {
 		return $html;
 	}
-	
+
 	// Begin pagination class.
 	$html .= '<div class="dfrps_pagination">';
-	
-	$current_page 	= $data['page'];
-	$limit 			= $data['limit'];
-	$offset 		= $data['offset'];
-	$found_count 	= $data['found_count'];
-	$query 			= ( isset( $data['query'] ) ) ? $data['query'] : array();
-	$hard_limit 	= dfrapi_get_query_param( $query, 'limit' );
+
+	$current_page = $data['page'];
+	$limit        = $data['limit'];
+	$offset       = $data['offset'];
+	$found_count  = $data['found_count'];
+	$query        = ( isset( $data['query'] ) ) ? $data['query'] : array();
+	$hard_limit   = dfrapi_get_query_param( $query, 'limit' );
 
 	// Limit Found Count to hard limit if hard limit exists.
 	if ( $hard_limit ) {
@@ -52,23 +57,23 @@ function dfrps_pagination( $data, $context ) {
 			$found_count = $hard_limit['value'];
 		}
 	}
-	
+
 	// Maximum number of products.
 	$max_num_products = ( ( $offset + count( $data['products'] ) ) > $found_count ) ? $found_count : ( $offset + count( $data['products'] ) );
-			
+
 	// Set total possible page.
 	$total_possible_pages = ceil( $found_count / $limit );
-	
+
 	// Maximum number of pages.
-	$max_total = 10000;
-	$max_possible_pages = ceil ( $max_total / $limit );
-	
+	$max_total          = 10000;
+	$max_possible_pages = ceil( $max_total / $limit );
+
 	// Set total pages (if more pages that max_total value allows, adjust total).
 	$total_pages = ( $max_possible_pages < $total_possible_pages ) ? $max_possible_pages : $total_possible_pages;
-	
+
 	// Number of relevant products.
 	$relevant_results = ( $found_count > 10000 ) ? 10000 : $found_count;
-	
+
 	// "Showing 1 - 100 of 10,000 total relevant products found."
 	$html .= '<div class="dfrps_pager_info">';
 	$html .= __( 'Showing ', DFRPS_DOMAIN );
@@ -86,21 +91,22 @@ function dfrps_pagination( $data, $context ) {
 	$html .= __( ' total products.', DFRPS_DOMAIN );
 	$html .= '<span style="float:right"><a class="dfrps_delete_saved_search" href="#">' . __( 'Delete Saved Search', DFRPS_DOMAIN ) . '</a></span>';
 	$html .= '</div>';
-	
+
 	// Return nothing if there are less than 2 pages.
-	if ( $total_pages < 2 )  {
+	if ( $total_pages < 2 ) {
 		$html .= '<div class="clearfix"></div>';
 		$html .= '</div>'; // .dfrps_pagination
+
 		return $html;
 	}
-	
+
 	// There is more than 1 page. Start pager classes.
 	$html .= '<div class="dfrps_pager_label_wrapper">';
 	$html .= '<div class="dfrps_pager_label">' . __( 'Page', DFRPS_DOMAIN ) . '</div>';
 	$html .= '</div>'; // .dfrps_pager_label_wrapper
-	
+
 	$html .= '<div class="dfrps_pager_links">';
-	for ( $i=1; $i<=$total_pages; $i++ ) {
+	for ( $i = 1; $i <= $total_pages; $i ++ ) {
 		if ( $i == $current_page ) {
 			$html .= '<span><strong>' . $i . '</strong></span>';
 		} else {
@@ -110,113 +116,113 @@ function dfrps_pagination( $data, $context ) {
 	$html .= '<div class="clearfix"></div></div>'; // .dfrps_pager_links
 
 	$html .= '</div>'; // .dfrps_pagination
-	
+
 	return $html;
 }
 
 function dfrps_format_product_list( $data, $context ) {
 
 	$msg = '';
-	
+
 	// Get manually included product IDs.
 	$manually_included_ids = get_post_meta( $data['postid'], '_dfrps_cpt_manually_added_ids', true );
-	if ( !is_array( $manually_included_ids ) ) {
+	if ( ! is_array( $manually_included_ids ) ) {
 		$manually_included_ids = array();
 	}
 	$manually_included_ids = array_filter( $manually_included_ids );
-	
+
 	// Get manually blocked product IDs.
 	$manually_blocked_ids = get_post_meta( $data['postid'], '_dfrps_cpt_manually_blocked_ids', true );
-	if ( !is_array( $manually_blocked_ids ) ) {
+	if ( ! is_array( $manually_blocked_ids ) ) {
 		$manually_blocked_ids = array();
 	}
 	$manually_blocked_ids = array_filter( $manually_blocked_ids );
-	
+
 	//Get pagination.
 	$pagination = dfrps_pagination( $data, $context );
-	
+
 	// Message on "Search" tab.
 	if ( empty( $data ) ) {
-		
+
 		if ( $context == 'div_dfrps_tab_search' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
 			$msg .= __( 'Click the [Search] button to view products that match your search.', DFRPS_DOMAIN );
 			$msg .= '</div>';
 		}
-			
+
 	} elseif ( empty( $data['products'] ) ) {
-			
+
 		if ( $context == 'div_dfrps_tab_search' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
 			$msg .= __( 'No products matched your search.', DFRPS_DOMAIN );
-			$msg .= '</div>';		
+			$msg .= '</div>';
 		}
 	}
-	
-	
+
+
 	if ( empty( $data ) || empty( $data['products'] ) ) {
-	
+
 		if ( $context == 'div_dfrps_tab_saved_search' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
 			$msg .= __( 'You have not saved a search.', DFRPS_DOMAIN );
-			$msg .= '</div>';		
+			$msg .= '</div>';
 		} elseif ( $context == 'div_dfrps_tab_included' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
 			$msg .= __( 'You have not added any individual products to this Product Set.', DFRPS_DOMAIN );
-			$msg .= '</div>';		
+			$msg .= '</div>';
 		} elseif ( $context == 'div_dfrps_tab_blocked' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
 			$msg .= __( 'You have not blocked any products from this Product Set.', DFRPS_DOMAIN );
-			$msg .= '</div>';		
+			$msg .= '</div>';
 		}
-		
+
 	} else {
-	
+
 		$args = array(
 			'manually_included_ids' => $manually_included_ids,
-			'manually_blocked_ids' => $manually_blocked_ids,
-			'context' => $context,
+			'manually_blocked_ids'  => $manually_blocked_ids,
+			'context'               => $context,
 		);
-		
+
 		if ( $context == 'div_dfrps_tab_search' ) {
 			$msg .= '';
 		} elseif ( $context == 'div_dfrps_tab_saved_search' ) {
-			$msg .= '';			
+			$msg .= '';
 		} elseif ( $context == 'div_dfrps_tab_included' ) {
-			$msg .= '';		
+			$msg .= '';
 		} elseif ( $context == 'div_dfrps_tab_blocked' ) {
-			$msg .= '';			
+			$msg .= '';
 		}
 	}
-		
+
 	// Loop through products and display them.
 	echo $msg;
-	
+
 	// Query info
-	if ( isset( $data['params'] ) && !empty( $data['params'] ) ) { ?>
-		<div class="dfrps_api_info" id="dfrps_raw_api_query">
-			<div class="dfrps_head"><?php _e( 'API Request', DFRPS_DOMAIN ); ?></div>
-			<div class="dfrps_query"><span><?php echo dfrapi_display_api_request( $data['params'] ); ?></span></div>
-		</div>
+	if ( isset( $data['params'] ) && ! empty( $data['params'] ) ) { ?>
+        <div class="dfrps_api_info" id="dfrps_raw_api_query">
+            <div class="dfrps_head"><?php _e( 'API Request', DFRPS_DOMAIN ); ?></div>
+            <div class="dfrps_query"><span><?php echo dfrapi_display_api_request( $data['params'] ); ?></span></div>
+        </div>
 	<?php }
-	
-	echo $pagination;	
+
+	echo $pagination;
 	echo '<div class="product_list">';
-	if ( isset( $data['products'] ) && !empty( $data['products'] ) ) {
+	if ( isset( $data['products'] ) && ! empty( $data['products'] ) ) {
 		foreach ( $data['products'] as $product ) {
 			dfrps_html_product_list( $product, $args );
 		}
 	}
 	echo '</div>';
 	echo $pagination;
-	
+
 }
 
 function dfrps_more_info_rows( $product ) {
 
 	$dfr_fields = array(
 		'_id',
-		'onsale', 
+		'onsale',
 		'merchant_id',
 		'time_updated',
 		'time_created',
@@ -225,49 +231,49 @@ function dfrps_more_info_rows( $product ) {
 		'ref_url',
 	);
 
-	ksort($product);
-	$f=1;
-	foreach ($product as $k => $v) {
+	ksort( $product );
+	$f = 1;
+	foreach ( $product as $k => $v ) {
 		$class1 = ( $f % 2 ) ? 'even' : 'odd';
 		$class2 = ( in_array( $k, $dfr_fields ) ) ? ' dfrps_data' : '';
-		echo '<tr class="'.$class1.$class2.'">';
-		echo '<td class="count">'.$f.'</td>';
-		echo '<td class="field">'.str_replace( array("<",">"), array("&lt;","&gt;"), $k).'</td>';
+		echo '<tr class="' . $class1 . $class2 . '">';
+		echo '<td class="count">' . $f . '</td>';
+		echo '<td class="field">' . str_replace( array( "<", ">" ), array( "&lt;", "&gt;" ), $k ) . '</td>';
 		if ( $k == 'image' || $k == 'thumbnail' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="'.$v.'" target="_blank" title="'.__('Open image in new window.', DFRPS_DOMAIN).'">'.esc_attr( $v ).'</a>
+				<a href="' . $v . '" target="_blank" title="' . __( 'Open image in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( $v ) . '</a>
 				<br />
-				<img src="'.$v.'" />
+				<img src="' . $v . '" />
 			</td>';
 		} elseif ( $k == '_wc_url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="'.$v.'" target="_blank" title="'.__('Search for product in store.', DFRPS_DOMAIN).'">'.esc_attr( $v ).'</a>
+				<a href="' . $v . '" target="_blank" title="' . __( 'Search for product in store.', DFRPS_DOMAIN ) . '">' . esc_attr( $v ) . '</a>
 			</td>';
 		} elseif ( $k == 'url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="'.dfrapi_url( $product ).'" target="_blank" title="'.__('Open affiliate link in new window.', DFRPS_DOMAIN).'">'.esc_attr( dfrapi_url( $product ) ).'</a>
-			</td>';	
+				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
+			</td>';
 		} elseif ( $k == 'ref_url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="'.dfrapi_url( $product ).'" target="_blank" title="'.__('Open affiliate link in new window.', DFRPS_DOMAIN).'">'.esc_attr( dfrapi_url( $product ) ).'</a>
-			</td>';	
+				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
+			</td>';
 		} elseif ( $k == 'impressionurl' && function_exists( 'dfrapi_impression_url' ) ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="'.dfrapi_impression_url( $product ).'" target="_blank" title="'.__('Open impression URL in new window.', DFRPS_DOMAIN).'">'.esc_attr( dfrapi_impression_url( $product ) ).'</a>
+				<a href="' . dfrapi_impression_url( $product ) . '" target="_blank" title="' . __( 'Open impression URL in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( dfrapi_impression_url( $product ) ) . '</a>
 			</td>';
 		} else {
-			echo '<td class="value dfrps_force_wrap">'.esc_attr( $v ).'</td>';		
+			echo '<td class="value dfrps_force_wrap">' . esc_attr( $v ) . '</td>';
 		}
 		echo '</tr>';
-		$f++;
+		$f ++;
 	}
 }
- 
+
 /**
  * This *estimates* the percentage of completion
  * of a product set.  It's just an estimate.
@@ -275,43 +281,45 @@ function dfrps_more_info_rows( $product ) {
 function dfrps_percent_complete( $set_id ) {
 
 	$meta = get_post_custom( $set_id );
-	
-	$update_phase 	= intval( $meta['_dfrps_cpt_update_phase'][0] );
-	$last_update 	= maybe_unserialize( $meta['_dfrps_cpt_previous_update_info'][0] );
-	
+
+	$update_phase = intval( $meta['_dfrps_cpt_update_phase'][0] );
+	$last_update  = maybe_unserialize( $meta['_dfrps_cpt_previous_update_info'][0] );
+
 	if ( $update_phase < 1 ) {
-		return FALSE;
+		return false;
 	}
-	
+
 	if ( $last_update['_dfrps_cpt_last_update_time_completed'][0] == 0 ) {
 		// There is no last update info (no iterations). Return percentage based on update phase.
 		$percent = round( ( $update_phase / 5 ) * 100 );
+
 		return $percent;
 	}
-	
-	$current_iteration 	= intval( $meta['_dfrps_cpt_update_iteration'][0] );
-	$total_iterations 	= intval( $last_update['_dfrps_cpt_update_iteration'][0] );
-	
+
+	$current_iteration = intval( $meta['_dfrps_cpt_update_iteration'][0] );
+	$total_iterations  = intval( $last_update['_dfrps_cpt_update_iteration'][0] );
+
 	if ( $total_iterations > 0 ) {
 		if ( $current_iteration <= $total_iterations ) {
 			$percent = round( ( $current_iteration / $total_iterations ) * 100 );
+
 			return $percent;
 		} else {
 			return 101;
 		}
 	}
-	
-	return FALSE;
+
+	return false;
 }
 
-function dfrps_progress_bar( $percent ) {	
-	
-	if ( !$percent ) {
+function dfrps_progress_bar( $percent ) {
+
+	if ( ! $percent ) {
 		return '';
 	}
-		
+
 	if ( $percent <= 100 ) {
-	
+
 		return '
 		<div id="dfrps_dynamic_progress_bar">
 			<div><small>' . $percent . '% ' . __( 'complete', DFRPS_DOMAIN ) . '</small></div>
@@ -322,15 +330,15 @@ function dfrps_progress_bar( $percent ) {
 			</div>
 		</div>
 		';
-		
+
 	} else {
-	
+
 		return '
 		<div id="dfrps_dynamic_progress_bar">
 			<div><small><em>' . __( 'Unknown % complete', DFRPS_DOMAIN ) . '</em></small></div>
 		</div>
 		';
-	
+
 	}
 }
 
@@ -338,20 +346,20 @@ function dfrps_progress_bar( $percent ) {
  * Adds a Product ID to an existing or new postmeta value.
  */
 function dfrps_helper_add_id_to_postmeta( $product_id, $post_id, $meta_key ) {
-	
+
 	// Get all Product IDs already stored for this $meta_key.
 	$product_ids = get_post_meta( $post_id, $meta_key, true );
-	
+
 	// Add new $product_id to array of Product IDs.
-	if ( !empty( $product_ids ) ) {
+	if ( ! empty( $product_ids ) ) {
 		array_unshift( $product_ids, $product_id );
 	} else {
-		$product_ids = array( $product_id ); 
+		$product_ids = array( $product_id );
 	}
-	
+
 	// Remove any empty array values.
 	$product_ids = array_filter( $product_ids );
-	
+
 	// Update post meta.
 	update_post_meta( $post_id, $meta_key, $product_ids );
 }
@@ -360,18 +368,20 @@ function dfrps_helper_add_id_to_postmeta( $product_id, $post_id, $meta_key ) {
  * Removes a Product ID from an existing postmeta value.
  */
 function dfrps_helper_remove_id_from_postmeta( $product_id, $post_id, $meta_key ) {
-	
+
 	// Get all Product IDs already stored for this $meta_key.
 	$product_ids = get_post_meta( $post_id, $meta_key, true );
-	
-	if ( !is_array( $product_ids ) ) { return; }
-	
+
+	if ( ! is_array( $product_ids ) ) {
+		return;
+	}
+
 	// Remove Product ID from $product_ids array.
-   	$product_ids = array_diff( $product_ids, array( $product_id ) );
-	
+	$product_ids = array_diff( $product_ids, array( $product_id ) );
+
 	// Remove any empty array values.
 	$product_ids = array_filter( $product_ids );
-	
+
 	// Update post meta.
 	update_post_meta( $post_id, $meta_key, $product_ids );
 }
@@ -381,106 +391,110 @@ function dfrps_helper_remove_id_from_postmeta( $product_id, $post_id, $meta_key 
  */
 function dfrps_helper_js_text( $str ) {
 	if ( $str == 'saving' ) {
-		return __("Saving...", DFRPS_DOMAIN);
+		return __( "Saving...", DFRPS_DOMAIN );
 	} elseif ( $str == 'searching' ) {
-		return __("Searching...", DFRPS_DOMAIN);
+		return __( "Searching...", DFRPS_DOMAIN );
 	} elseif ( $str == 'search' ) {
-		return __("Search", DFRPS_DOMAIN);
+		return __( "Search", DFRPS_DOMAIN );
 	} elseif ( $str == 'deleting' ) {
-		return __("Deleting...", DFRPS_DOMAIN);
+		return __( "Deleting...", DFRPS_DOMAIN );
 	}
 }
 
 function dfrps_helper_include_product( $pid, $args ) {
-	
+
 	// Product has already been included?
 	if ( in_array( $pid, $args['manually_included_ids'] ) ) {
-		
+
 		// What's the context of this page?
 		if ( $args['context'] == 'div_dfrps_tab_search' ) {
-			dfrps_html_included_product_icon();	// Search page, display "checkmark" icon.
+			dfrps_html_included_product_icon();    // Search page, display "checkmark" icon.
 		} elseif ( $args['context'] == 'div_dfrps_tab_included' ) {
 			dfrps_html_remove_included_product_link( $pid ); // Included page, display "minus" icon/link.		
 		}
-		
-	// Product has NOT already been included?
+
+		// Product has NOT already been included?
 	} else {
 		if ( $args['context'] != 'blocked' && $args['context'] != 'saved_search' ) {
 			dfrps_html_include_product_link( $pid ); // Not already included and we're not in the "blocked" context, display "add" icon/link.
 		}
 	}
-	
+
 }
 
 function dfrps_helper_block_product( $pid, $args ) {
-	
+
 	// Product has already been blocked?
 	if ( in_array( $pid, $args['manually_blocked_ids'] ) ) {
-	
+
 		// What's the context of this page?
 		if ( $args['context'] == 'div_dfrps_tab_blocked' ) {
 			dfrps_html_unblock_product_link( $pid ); // Product is blocked, display "unblock" icon/link.
 		}
-		
-	// Product has NOT already been blocked?
+
+		// Product has NOT already been blocked?
 	} else {
 		if ( $args['context'] != 'div_dfrps_tab_included' ) {
 			dfrps_html_block_product_link( $pid ); // Not already blocked, display "block" icon/link.
 		}
 	}
-	
+
 }
 
 function dfrps_date_in_two_rows( $date ) {
 	if ( is_numeric( $date ) ) {
 		//$html  = date('M d, G:i', $date );
-		$html  = '<div>' . date('M j', $date ) . ' ' . date('g:ia', $date ) . '</div>';
+		$html = '<div>' . date( 'M j', $date ) . ' ' . date( 'g:ia', $date ) . '</div>';
 	} else {
 		//$html  = date('M d, G:i', strtotime( $date ) );
-		$html  = '<div>' . date('M j', strtotime( $date ) ) . ' ' . date('g:ia', strtotime( $date ) ) . '</div>';
+		$html = '<div>' . date( 'M j', strtotime( $date ) ) . ' ' . date( 'g:ia', strtotime( $date ) ) . '</div>';
 	}
+
 	return $html;
 }
 
 function dfrps_registered_cpt_exists() {
-	$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
+	$registered_cpts     = get_option( 'dfrps_registered_cpts', array() );
 	$num_registered_cpts = count( $registered_cpts );
 	if ( $num_registered_cpts > 0 ) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 function dfrps_default_cpt_is_selected() {
-	$config = get_option( 'dfrps_configuration', array() );
+	$config      = get_option( 'dfrps_configuration', array() );
 	$default_cpt = $config['default_cpt'];
-	if ( !is_array( $default_cpt ) ) {
+	if ( ! is_array( $default_cpt ) ) {
 		$default_cpt = array( $default_cpt );
 	}
 	$default_cpt = array_filter( $default_cpt );
-	
-	if ( !empty( $default_cpt ) ) {
-		return TRUE;
+
+	if ( ! empty( $default_cpt ) ) {
+		return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 /**
  * Returns the default CPT to import into. Returns FALSE if not set.
  */
 function dfrps_get_default_cpt_type() {
-	$configuration = (array) get_option( DFRPS_PREFIX.'_configuration' );
-	$default_cpt = ( !empty( $configuration['default_cpt'] ) ) ? $configuration['default_cpt'] : FALSE;
+	$configuration = (array) get_option( DFRPS_PREFIX . '_configuration' );
+	$default_cpt   = ( ! empty( $configuration['default_cpt'] ) ) ? $configuration['default_cpt'] : false;
+
 	return $default_cpt;
 }
 
 /**
  * Set Product sets CPT type to the default CPT type.
  */
-function dfrps_set_cpt_type_to_default( $post_id) {
+function dfrps_set_cpt_type_to_default( $post_id ) {
 	$default = dfrps_get_default_cpt_type();
 	if ( $default ) {
-		add_post_meta( $post_id, '_dfrps_cpt_type', $default, TRUE );
+		add_post_meta( $post_id, '_dfrps_cpt_type', $default, true );
 	}
 }
 
@@ -489,45 +503,48 @@ function dfrps_set_html_content_type() {
 }
 
 function dfrps_reset_product_set_update( $set_id ) {
-	
+
 	// Update phase/added/deleted.
 	update_post_meta( $set_id, '_dfrps_cpt_update_phase', 0 );
-	
+
 	// Delete first passes.
-	for( $i=1; $i<=10; $i++ ) {
+	for ( $i = 1; $i <= 10; $i ++ ) {
 		delete_post_meta( $set_id, '_dfrps_cpt_update_phase' . $i . '_first_pass' );
 	}
 }
 
 /**
  * Return array of term IDs that a product set is importing into.
- * 
+ *
  * $set_id: Product Set ID
  */
-function dfrps_get_cpt_terms( $set_id, $default=array() ) {
+function dfrps_get_cpt_terms( $set_id, $default = array() ) {
 	// Related to Ticket: 9167
-	$term_ids = get_post_meta( $set_id, '_dfrps_cpt_terms', TRUE );
-	if ( !empty( $term_ids ) ) {
+	$term_ids = get_post_meta( $set_id, '_dfrps_cpt_terms', true );
+	if ( ! empty( $term_ids ) ) {
 		$term_ids = array_map( 'intval', $term_ids );
+
 		return $term_ids;
 	}
+
 	return $default;
 }
 
 /**
  * Returns current DB version if database is out of date.
  * Returns FALSE if DB is up to date.
- * 
+ *
  * The constant DFRPS_DB_VERSION was added in version 1.2.0.
- * 
+ *
  * @since 1.2.0
  */
 function dfrps_db_is_outdated() {
-	$current_db_version = get_option( 'dfrps_db_version', '1.0.0' );	
+	$current_db_version = get_option( 'dfrps_db_version', '1.0.0' );
 	if ( version_compare( $current_db_version, DFRPS_DB_VERSION, '<' ) ) {
 		return $current_db_version;
 	}
-	return FALSE;
+
+	return false;
 }
 
 /**
@@ -538,11 +555,11 @@ function dfrps_db_is_outdated() {
  * corresponding importer plugin. For example, if the Datafeedr WooCommerce Importer plugin is not active, then passing
  * 'product' into this function will return false.
  *
- * @since 1.2.0
- *
  * @param string $set_type The 'post_type' to check registered_cpts against.
  *
  * @return boolean Return true if type is active, false if inactive.
+ * @since 1.2.0
+ *
  */
 function dfrps_set_is_active( $set_type ) {
 	$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
@@ -565,9 +582,10 @@ function dfrps_set_is_active( $set_type ) {
  *
  * This is related to ticket #9167.
  *
+ * @param mixed $post Should be a full Post Object, Full Post Array or a Post ID.
+ *
  * @since 1.2.0
  *
- * @param mixed $post Should be a full Post Object, Full Post Array or a Post ID.
  */
 add_action( 'the_post', 'dfrps_upgrade_product_set_to_120', 20, 1 );
 function dfrps_upgrade_product_set_to_120( $post ) {
@@ -638,13 +656,13 @@ function dfrps_upgrade_product_set_to_120( $post ) {
  *
  *      $post = dfrps_get_post_obj_by_meta_value( $meta_key, $meta_value, $compare );
  *
- * @since 1.2.6
- *
- * @param string       $meta_key The post_meta key.
+ * @param string $meta_key The post_meta key.
  * @param string|array $meta_value The post_meta value.
- * @param string       $compare The operator to use in the query.
+ * @param string $compare The operator to use in the query.
  *
  * @return bool|WP_Post Return Post Object or false if nothing found.
+ * @since 1.2.6
+ *
  */
 function dfrps_get_post_obj_by_postmeta( $meta_key, $meta_value, $compare ) {
 
@@ -693,11 +711,11 @@ function dfrps_get_post_obj_by_postmeta( $meta_key, $meta_value, $compare ) {
 /**
  * Returns a URL for installing a plugin.
  *
- * @since 1.2.18
- *
  * @param string $plugin_file Plugin file name formatted like: woocommerce/woocommerce.php
  *
  * @return string URL or empty string if user is not allowed.
+ * @since 1.2.18
+ *
  */
 function dfrps_plugin_installation_url( $plugin_file ) {
 
@@ -719,11 +737,11 @@ function dfrps_plugin_installation_url( $plugin_file ) {
 /**
  * Returns a URL for activating a plugin.
  *
- * @since 1.2.18
- *
  * @param string $plugin_file Plugin file name formatted like: woocommerce/woocommerce.php
  *
  * @return string URL or empty string if user is not allowed.
+ * @since 1.2.18
+ *
  */
 function dfrps_plugin_activation_url( $plugin_file ) {
 
@@ -827,11 +845,12 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	/**
 	 * Allow user to override returning true.
 	 *
-	 * @since 1.2.22
-	 *
 	 * @param bool $do_import true
 	 * @param WP_Post $post
 	 * @param array $product A Datafeedr Product array.
+	 *
+	 * @since 1.2.22
+	 *
 	 */
 	$do_import = apply_filters( 'dfrps_do_import_product_thumbnail/do_import', $do_import, $post, $product );
 
@@ -841,11 +860,11 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 /**
  * Returns the feature image URL for this $post_id or an empty string if none exists.
  *
- * @since 1.2.22
- *
  * @param int $post_id Post ID
  *
  * @return string
+ * @since 1.2.22
+ *
  */
 function dfrps_featured_image_url( $post_id ) {
 
@@ -854,10 +873,11 @@ function dfrps_featured_image_url( $post_id ) {
 	/**
 	 * Allows the $url string to be modified before returning.
 	 *
-	 * @since 1.2.22
-	 *
 	 * @param string $url URL of image to send to Datafeedr_Image_Importer constructor.
 	 * @param int $post_id Post ID
+	 *
+	 * @since 1.2.22
+	 *
 	 */
 	return apply_filters( 'dfrps_featured_image_url/url', $url, $post_id );
 }
@@ -869,11 +889,11 @@ function dfrps_featured_image_url( $post_id ) {
  * Returns an instance of Datafeedr_Image_Importer if the import was successful, otherwise
  * returns an instance of WP_Error.
  *
- * @since 1.2.22
- *
  * @param int $post_id
  *
  * @return Datafeedr_Image_Importer|WP_Error
+ * @since 1.2.22
+ *
  */
 function dfrps_import_post_thumbnail( $post_id ) {
 
@@ -899,6 +919,7 @@ function dfrps_import_post_thumbnail( $post_id ) {
 
 	if ( empty( $url ) ) {
 		dfrps_set_product_check_image( $post->ID, 0 );
+
 		return new WP_Error(
 			'dfrps_url_empty',
 			__( '$url is empty.', 'datafeedr-product-sets' ),
@@ -916,7 +937,7 @@ function dfrps_import_post_thumbnail( $post_id ) {
 		'user_id'           => $post->post_author,
 		'is_post_thumbnail' => true,
 		'timeout'           => 20,
-        '_source_plugin'    => 'dfrps',
+		'_source_plugin'    => 'dfrps',
 	);
 
 	/**
@@ -924,11 +945,12 @@ function dfrps_import_post_thumbnail( $post_id ) {
 	 *
 	 * See Datafeedr_Image_Importer::default_args() for possible values.
 	 *
-	 * @since 1.2.22
-	 *
 	 * @param array $args Array of args to send to Datafeedr_Image_Importer constructor.
 	 * @param string $url URL of image to send to Datafeedr_Image_Importer constructor.
 	 * @param WP_Post $post
+	 *
+	 * @since 1.2.22
+	 *
 	 */
 	$args = apply_filters( 'dfrps_import_post_thumbnail/args', $args, $url, $post );
 
@@ -946,11 +968,11 @@ function dfrps_import_post_thumbnail( $post_id ) {
  *
  * If $post->post_type is not a registered CPT, return false.
  *
- * @since 1.2.27
- *
  * @param int $post_id
  *
  * @return bool
+ * @since 1.2.27
+ *
  */
 function dfrps_post_is_registered_cpt( $post_id ) {
 	$post            = get_post( $post_id );
@@ -966,12 +988,12 @@ function dfrps_post_is_registered_cpt( $post_id ) {
  * If we have already attempted to import an image for this $post_id
  * with this key, return true. Otherwise return false.
  *
- * @since 1.2.27
- *
  * @param integer $post_id
  * @param string $key The meta_key to check.
  *
  * @return bool
+ * @since 1.2.27
+ *
  */
 function dfrps_image_import_attempted( $post_id, $key ) {
 
@@ -1004,12 +1026,25 @@ function dfrps_image_import_attempted( $post_id, $key ) {
 /**
  * Update "_dfrps_product_check_image" post_meta value.
  *
- * @since 1.2.29
- *
  * @param integer $post_id ID of the Product we are updating
  * @param integer $value Either 1 or 0. 1 if product's image should be checked else 0 if it should not be checked.
+ *
+ * @since 1.2.29
+ *
  */
 function dfrps_set_product_check_image( $post_id, $value ) {
 	$value = ( 1 == $value ) ? 1 : 0;
 	update_post_meta( $post_id, '_dfrps_product_check_image', $value );
+}
+
+/**
+ * @param string $message
+ * @param null $message_type
+ * @param null $destination
+ * @param null $additional_headers
+ */
+function dfrps_error_log( $message, $message_type = null, $destination = null, $additional_headers = null ) {
+	if ( apply_filters( 'dfrps_log_errors', false ) ) {
+		error_log( $message, $message_type, $destination, $additional_headers );
+	}
 }

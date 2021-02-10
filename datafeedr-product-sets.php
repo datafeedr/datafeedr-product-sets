@@ -8,7 +8,7 @@ Author URI: https://www.datafeedr.com
 License: GPL v3
 Requires at least: 3.8
 Tested up to: 5.7-alpha
-Version: 1.2.51
+Version: 1.2.52
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2021, Datafeedr - help@datafeedr.com
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.2.51' );
+define( 'DFRPS_VERSION', '1.2.52' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
@@ -88,7 +88,7 @@ function dfrps_import_image( $post ) {
 				'WP_Error' => $result->wp_error(),
 			);
 
-			error_log( 'Error importing image' . ': ' . print_r( $error, true ) );
+			dfrps_error_log( 'Error importing image' . ': ' . print_r( $error, true ) );
 		}
 
 		return;

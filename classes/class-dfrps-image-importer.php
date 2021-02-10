@@ -266,7 +266,7 @@ class Dfrps_Image_Importer {
 
 		// If error storing permanently, unlink and return false.
 		if ( is_wp_error( $id ) ) {
-			error_log( '[DFRPS Image Importer] WP_Error for $id' . ': ' . print_r( $id, true ) );
+			dfrps_error_log( '[DFRPS Image Importer] WP_Error for $id' . ': ' . print_r( $id, true ) );
 			@unlink( $file_array['tmp_name'] );
 
 			return false;
