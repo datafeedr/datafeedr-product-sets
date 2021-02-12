@@ -804,40 +804,58 @@ function dfrps_get_product_field( $post_id, $field, $default = false ) {
  *
  * @param int $post_id
  *
- * @return bool True if we should try to import an image for this $post_id. Otherwise returns false.
+ * @return true|WP_Error True if we should try to import an image for this $post_id. Otherwise returns WP_Error.
  */
 function dfrps_do_import_product_thumbnail( $post_id ) {
 
 	$post = get_post( $post_id );
 
 	/**
-	 * If $post already has a thumbnail, return false.
+	 * If $post already has a thumbnail, return WP_Error.
 	 */
 	if ( has_post_thumbnail( $post ) ) {
-		return false;
+		$thumbnail_id = absint( get_post_thumbnail_id( $post ) );
+
+		return new WP_Error(
+			'dfrps_post_already_has_thumbnail',
+			__( 'This $post already has a thumbnail with an ID of ' . $thumbnail_id, 'datafeedr-product-sets' ),
+			[ 'function' => __FUNCTION__, '$post' => $post ]
+		);
 	}
 
 	/**
-	 * If $post->post_type is not a registered CPT, return false.
+	 * If $post->post_type is not a registered CPT, return WP_Error.
 	 */
 	if ( ! dfrps_post_is_registered_cpt( $post->ID ) ) {
-		return false;
+		return new WP_Error(
+			'dfrps_post_type_is_not_registered_cpt',
+			__( 'The $post->post_type "' . esc_html( $post->post_type ) . '" is not a registered CPT.', 'datafeedr-product-sets' ),
+			[ 'function' => __FUNCTION__, '$post' => $post ]
+		);
 	}
 
 	/**
-	 * If this $post is not associated with any Datafeedr product, return false.
+	 * If this $post is not associated with any Datafeedr product, return WP_Error.
 	 */
 	$product = dfrps_product( $post->ID );
 	if ( empty( $product ) ) {
-		return false;
+		return new WP_Error(
+			'dfrps_post_not_associated_with_datafeedr_product',
+			__( 'This $post is not associated with any product imported by the Datafeedr Product Sets plugin.', 'datafeedr-product-sets' ),
+			[ 'function' => __FUNCTION__, '$post' => $post ]
+		);
 	}
 
 	/**
 	 * If we have already attempted to import an image for this product
-	 * since the last Product Set update, return false.
+	 * since the last Product Set update, return WP_Error.
 	 */
 	if ( dfrps_image_import_attempted( $post->ID, '_dfrps_product_check_image' ) ) {
-		return false;
+		return new WP_Error(
+			'dfrps_image_import_already_attempted',
+			__( 'The image import for this $post was already attempted since the product\'s Product Set\'s last update. No additional attempts will be made until after this product\'s Product Set\'s next update.', 'datafeedr-product-sets' ),
+			[ 'function' => __FUNCTION__, '$post' => $post ]
+		);
 	}
 
 	$do_import = true;
@@ -907,12 +925,10 @@ function dfrps_import_post_thumbnail( $post_id ) {
 		);
 	}
 
-	if ( ! dfrps_do_import_product_thumbnail( $post->ID ) ) {
-		return new WP_Error(
-			'dfrps_do_not_import_product_thumbnail',
-			__( 'Post should not have a thumbnail imported.', 'datafeedr-product-sets' ),
-			array( 'function' => __FUNCTION__, '$post' => $post )
-		);
+	$do_import_thumbnail = dfrps_do_import_product_thumbnail( $post->ID );
+
+	if ( is_wp_error( $do_import_thumbnail ) ) {
+		return $do_import_thumbnail;
 	}
 
 	$url = dfrps_featured_image_url( $post->ID );
