@@ -811,10 +811,21 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	$post = get_post( $post_id );
 
 	/**
+	 * If post is of the type "attachment", return WP_Error.
+	 */
+	if ( $post->post_type == 'attachment' ) {
+		return new WP_Error(
+			'dfrps_cannot_import_attachment_of_attachment',
+			__( 'Invalid $post->post_type.', 'datafeedr-product-sets' ),
+			array( 'function' => __FUNCTION__, '$post' => $post )
+		);
+	}
+
+	/**
 	 * If $post already has a thumbnail, return WP_Error.
 	 */
 	if ( has_post_thumbnail( $post ) ) {
-		$thumbnail_id = absint( get_post_thumbnail_id( $post ) );
+		$thumbnail_id = absint( get_post_thumbnail_id( $post->ID ) );
 
 		return new WP_Error(
 			'dfrps_post_already_has_thumbnail',
@@ -917,6 +928,9 @@ function dfrps_import_post_thumbnail( $post_id ) {
 
 	$post = get_post( $post_id );
 
+	/**
+	 * If no $post found, return WP_Error.
+	 */
 	if ( ! $post ) {
 		return new WP_Error(
 			'dfrps_post_not_found',
