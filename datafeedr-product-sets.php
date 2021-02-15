@@ -113,7 +113,7 @@ function dfrps_import_image( $post ) {
 	new Dfrps_Image_Importer( $post );
 }
 
-add_action( 'the_post', 'dfrps_import_image' );
+//add_action( 'the_post', 'dfrps_import_image' );
 
 /**
  * Notify user that an Importer plugin is missing and is required.
