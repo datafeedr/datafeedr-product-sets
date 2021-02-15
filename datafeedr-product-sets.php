@@ -8,7 +8,7 @@ Author URI: https://www.datafeedr.com
 License: GPL v3
 Requires at least: 3.8
 Tested up to: 5.7-beta2
-Version: 1.2.53
+Version: 1.3.0
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2021, Datafeedr - help@datafeedr.com
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.2.53' );
+define( 'DFRPS_VERSION', '1.3.0' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
@@ -173,7 +173,7 @@ function dfrps_admin_notice_plugin_dependencies() {
 	 * @var Dfrps_Plugin_Dependency[] $dependencies
 	 */
 	$dependencies = array(
-		new Dfrps_Plugin_Dependency( 'Datafeedr API', 'datafeedr-api/datafeedr-api.php', '1.0.75' ),
+		new Dfrps_Plugin_Dependency( 'Datafeedr API', 'datafeedr-api/datafeedr-api.php', '1.2.0' ),
 		new Dfrps_Plugin_Dependency( 'Datafeedr WooCommerce Importer', 'datafeedr-woocommerce-importer/datafeedr-woocommerce-importer.php', '1.1.17', false ),
 	);
 

@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.7-beta2
-Stable tag: 1.2.53
+Stable tag: 1.3.0
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,11 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.0 - 2021/02/15 =
+* REQUIRES Datafeedr API plugin version 1.2.0 (or greater).
+* Fixes issue with latest Yoast SEO plugin version 15.8.
+* Transfers image importing responsibility to ActionScheduler library.
 
 = 1.2.53 - 2021/02/12 =
 * Added more useful errors to `dfrps_do_import_product_thumbnail()` function.
