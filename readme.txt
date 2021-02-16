@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.7-beta2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,10 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.1 - 2021/02/16 =
+* Added logging to ActionScheduler by throwing an Exception if image import fails. Exception is caught and displayed by AS.
+* Reduced timeout time from 20 to 10 when attempting to import an image.
 
 = 1.3.0 - 2021/02/15 =
 * REQUIRES Datafeedr API plugin version 1.2.0 (or greater).
