@@ -79,7 +79,7 @@ function dfrps_schedule_image_import( $post, $product, $set, $action ) {
 		return;
 	}
 
-	dfrapi_schedule_async_action( 'import_product_image', compact( 'post_id' ), 'dfrps' );
+	dfrapi_schedule_async_action( 'dfrps_import_product_image', compact( 'post_id' ), 'dfrps' );
 }
 
 add_action( 'dfrpswc_do_product', 'dfrps_schedule_image_import', 10, 4 );
@@ -88,26 +88,39 @@ add_action( 'dfrpswc_do_product', 'dfrps_schedule_image_import', 10, 4 );
  * The action the ActionScheduler will call in order to import the image for $post_id.
  *
  * @param int $post_id
+ *
+ * @throws Exception
  */
 function dfrps_import_product_image_action( $post_id ) {
 
-	if ( function_exists( 'datafeedr_import_image' ) ) {
+	$result = dfrps_import_post_thumbnail( $post_id );
 
-		$result = dfrps_import_post_thumbnail( $post_id );
+	if ( is_wp_error( $result ) ) {
+		dfrps_error_log( 'Unable to import image' . ': ' . print_r( $result, true ) );
+	}
 
-		if ( ! is_wp_error( $result ) && $result->has_error() ) {
+	if ( ! is_wp_error( $result ) && $result->has_error() ) {
 
-			$error = array(
-				'function' => __FUNCTION__,
-				'$url'     => $result->url(),
-				'$args'    => $result->args(),
-				'$post_id' => $post_id,
-				'WP_Error' => $result->wp_error(),
-			);
+		$error = array(
+			'function' => __FUNCTION__,
+			'$url'     => $result->url(),
+			'$args'    => $result->args(),
+			'$post_id' => $post_id,
+			'WP_Error' => $result->wp_error(),
+		);
 
-			dfrps_error_log( 'Error importing image' . ': ' . print_r( $error, true ) );
-		}
+		dfrps_error_log( 'Error importing image' . ': ' . print_r( $error, true ) );
+
+		$message = sprintf(
+			__( 'Image import failed. PRODUCT: "%s" ID: %d URL: %s ERROR: %s', 'datafeedr-product-sets' ),
+			get_the_title( $post_id ),
+			$post_id,
+			$result->url(),
+			$result->wp_error()->get_error_message()
+		);
+
+		throw new Exception( $message );
 	}
 }
 
-add_action( 'dfrapi_as_import_product_image', 'dfrps_import_product_image_action' );
+add_action( 'dfrapi_as_dfrps_import_product_image', 'dfrps_import_product_image_action' );
