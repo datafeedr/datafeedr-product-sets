@@ -966,7 +966,7 @@ function dfrps_import_post_thumbnail( $post_id ) {
 		'alt_text'          => $post->post_title,
 		'user_id'           => $post->post_author,
 		'is_post_thumbnail' => true,
-		'timeout'           => 20,
+		'timeout'           => 10,
 		'_source_plugin'    => 'dfrps',
 	);
 
