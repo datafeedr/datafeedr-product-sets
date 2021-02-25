@@ -93,47 +93,25 @@ add_action( 'dfrpswc_do_product', 'dfrps_schedule_image_import', 10, 4 );
  */
 function dfrps_import_product_image_action( $post_id ) {
 
-	$url = dfrps_featured_image_url( $post_id );
-
-	$product_id = $post_id;
-
-	$product = wc_get_product( $product_id );
-
-	if ( ! $product ) {
-		return new WP_Error( 'invalid_product_id', 'The WooCommerce Product ID "' . $product_id . '" is invalid.' );
-	}
-
-	$image_data = new Dfrapi_Image_Data( $url );
-
-	$image_data->set_title( $product->get_name() );
-	$image_data->set_filename( $product->get_name() );
-	$image_data->set_description( $product->get_name() );
-	$image_data->set_caption( $product->get_name() );
-	$image_data->set_alternative_text( $product->get_name() );
-	$image_data->set_author_id( get_post_field( 'post_author', $product->get_id() ) );
-	$image_data->set_post_parent_id( $product->get_id() );
-
-	$image_data = apply_filters( 'dfr_import_featured_image_post_data', $image_data, $product );
-
-	$uploader = new Dfrapi_Image_Uploader( $image_data );
-
-	$attachment_id = $uploader->upload();
-
-	if ( is_wp_error( $attachment_id ) ) {
-		return $attachment_id;
-	}
-
-	// Update '_source_plugin' meta field.
-	update_post_meta( $attachment_id, '_owner_datafeedr', 'dfrps' );
-
-	echo '<pre>$attachment_id: ';
-	print_r( $attachment_id );
-	echo '</pre>';
-
-	return $attachment_id;
-
-
 	$result = dfrps_import_post_thumbnail( $post_id );
+
+	if ( ( apply_filters( 'dfrapi_use_legacy_image_importer', false ) === false ) && function_exists( 'dfrapi_image_data' ) ) {
+
+		if ( is_wp_error( $result ) ) {
+			dfrps_error_log( 'Unable to import image' . ': ' . print_r( $result, true ) );
+
+			$message = sprintf(
+				__( 'Image import failed. PRODUCT: "%s" ID: %d ERROR: %s', 'datafeedr-product-sets' ),
+				esc_html( get_the_title( $post_id ) ),
+				absint( $post_id ),
+				esc_html( $result->get_error_message() )
+			);
+
+			throw new Exception( $message );
+		}
+
+		return;
+	}
 
 	if ( is_wp_error( $result ) ) {
 		dfrps_error_log( 'Unable to import image' . ': ' . print_r( $result, true ) );
@@ -164,66 +142,3 @@ function dfrps_import_product_image_action( $post_id ) {
 }
 
 add_action( 'dfrapi_as_dfrps_import_product_image', 'dfrps_import_product_image_action', 200 );
-
-
-//add_action( 'admin_notices', 'test_new_image_import_code' );
-function test_new_image_import_code() {
-
-	$urls = [
-		'https://images.asos-media.com/products/new-look-snake-print-v-shaped-bikini-bottoms-in-bright-yellow/11880433-1-brightyellow?$XXLrmbnrbtm$',
-		'https://www.rei.com/media/3c8c2c5f-5c2c-4319-b536-1a9caefb8514',
-		'https://www.patagonia.com/dw/image/v2/BDJB_PRD/on/demandware.static/-/Sites-patagonia-master/default/dwa72917ec/images/hi-res/11193_950.jpg?sw=1000&sh=1000&sfrm=png&q=95&bgcolor=f6f6f6',
-	];
-
-	$url = $urls[ mt_rand( 0, ( count( $urls ) - 1 ) ) ];
-
-
-	$product_id = 18907;
-
-	$product = wc_get_product( $product_id );
-
-	if ( ! $product ) {
-
-		echo '<pre>$product: ';
-		print_r( $product );
-		echo '</pre>';
-
-		return new WP_Error( 'invalid_product_id', 'The WooCommerce Product ID "' . $product_id . '" is invalid.' );
-	}
-
-	$image_data = new Dfrapi_Image_Data( $url );
-
-	// @todo test empty data.
-	$image_data->set_title( $product->get_name() );
-	$image_data->set_filename( $product->get_name() );
-	$image_data->set_description( $product->get_name() );
-	$image_data->set_caption( $product->get_name() );
-	$image_data->set_alternative_text( $product->get_name() );
-	$image_data->set_author_id( get_post_field( 'post_author', $product->get_id() ) );
-	$image_data->set_post_parent_id( $product->get_id() );
-
-	$image_data = apply_filters( 'dfr_import_featured_image_post_data', $image_data, $product );
-
-	$uploader = new Dfrapi_Image_Uploader( $image_data );
-
-	$attachment_id = $uploader->upload();
-
-	if ( is_wp_error( $attachment_id ) ) {
-
-		echo '<pre>$attachment_id: ';
-		print_r( $attachment_id );
-		echo '</pre>';
-
-		return $attachment_id;
-	}
-
-	// Update '_source_plugin' meta field.
-	update_post_meta( $attachment_id, '_owner_datafeedr', 'dfrps' );
-
-	echo '<pre>$attachment_id: ';
-	print_r( $attachment_id );
-	echo '</pre>';
-}
-
-
-

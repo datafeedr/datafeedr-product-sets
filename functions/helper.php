@@ -936,9 +936,10 @@ function dfrps_featured_image_url( $post_id ) {
  *
  * @param int $post_id
  *
- * @return Datafeedr_Image_Importer|WP_Error
- * @since 1.2.22
+ * @return Datafeedr_Image_Importer|int|WP_Error
+ * @since 1.2.2 Will return either the Attachment ID or WP_Error if there was an error importing the image.
  *
+ * @since 1.0.71
  */
 function dfrps_import_post_thumbnail( $post_id ) {
 
