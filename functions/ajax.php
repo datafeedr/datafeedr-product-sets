@@ -194,6 +194,13 @@ function dfrps_ajax_batch_import_images() {
 
 		$result = dfrps_import_post_thumbnail( $post->ID );
 
+		// This handles the transition from Datafeedr_Image_Importer to Dfrapi_Image_Uploader
+		if ( is_a( $result, 'Datafeedr_Image_Importer' ) ) {
+			if ( $result->wp_error() ) {
+				$result = $result->wp_error();
+			}
+		}
+
 		if ( is_wp_error( $result ) ) {
 
 			$error = [

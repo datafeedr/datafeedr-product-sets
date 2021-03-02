@@ -872,7 +872,7 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	/**
 	 * Don't import images for products which are not valid posts statuses.
 	 */
-	$valid_post_statuses = apply_filters( 'dfrps_do_import_product_thumbnail_for_post_statuses', [
+	$valid_post_statuses = apply_filters( 'dfrps_valid_post_statuses_for_thumbnail_import', [
 		'publish',
 		'draft',
 	], $post );
@@ -937,7 +937,7 @@ function dfrps_featured_image_url( $post_id ) {
  * @param int $post_id
  *
  * @return Datafeedr_Image_Importer|int|WP_Error
- * @since 1.2.2 Will return either the Attachment ID or WP_Error if there was an error importing the image.
+ * @since 1.3.2 Will return either the Attachment ID or WP_Error if there was an error importing the image.
  *
  * @since 1.0.71
  */

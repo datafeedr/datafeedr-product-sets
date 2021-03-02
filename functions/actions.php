@@ -95,7 +95,7 @@ function dfrps_import_product_image_action( $post_id ) {
 
 	$result = dfrps_import_post_thumbnail( $post_id );
 
-	if ( ( apply_filters( 'dfrapi_use_legacy_image_importer', false ) === false ) && function_exists( 'dfrapi_image_data' ) ) {
+	if ( function_exists( 'dfrapi_use_legacy_image_importer' ) && dfrapi_use_legacy_image_importer() === false ) {
 
 		if ( is_wp_error( $result ) ) {
 			dfrps_error_log( 'Unable to import image' . ': ' . print_r( $result, true ) );
@@ -141,4 +141,4 @@ function dfrps_import_product_image_action( $post_id ) {
 	}
 }
 
-add_action( 'dfrapi_as_dfrps_import_product_image', 'dfrps_import_product_image_action', 200 );
+add_action( 'dfrapi_as_dfrps_import_product_image', 'dfrps_import_product_image_action' );
