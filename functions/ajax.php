@@ -1,8 +1,9 @@
 <?php
 
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 if ( is_admin() ) {
 	add_action( 'wp_ajax_dfrps_ajax_add_individual_product', 'dfrps_ajax_add_individual_product' );
@@ -195,14 +196,10 @@ function dfrps_ajax_batch_import_images() {
 
 		if ( is_wp_error( $result ) ) {
 
-			$error = array(
-				'function'           => __FUNCTION__ . '()',
-				'WP_Error'           => $result,
-				'$post->ID'          => $post->ID,
-				'$post->post_title'  => esc_html( $post->post_title ),
-				'$post->post_type'   => esc_html( $post->post_type ),
-				'$post->post_status' => esc_html( $post->post_status ),
-			);
+			$error = [
+				'function' => __FUNCTION__ . '()',
+				'WP_Error' => $result,
+			];
 
 			$msg = sprintf(
 				__( 'There was an error importing the image for <a href="%1$s" target="_blank">%2$s</a>. See below for details.<br /><pre>%3$s</pre>' ),
@@ -214,31 +211,6 @@ function dfrps_ajax_batch_import_images() {
 			echo sprintf( $html, $msg );
 			die;
 		}
-
-//		if ( $result->has_error() ) {
-//
-//			$error = array(
-//				'function'           => __FUNCTION__ . '()',
-//				'Image URL'          => '<a href="' . esc_url( $result->url() ) . '" target="_blank">' . esc_html( $result->url() ) . '</a>',
-//				'WP_Error'           => $result->wp_error(),
-//				'$args->timeout'     => $result->args( 'timeout' ),
-//				'$args->user_agent'  => $result->args( 'user_agent' ),
-//				'$post->ID'          => $post->ID,
-//				'$post->post_title'  => esc_html( $post->post_title ),
-//				'$post->post_type'   => esc_html( $post->post_type ),
-//				'$post->post_status' => esc_html( $post->post_status ),
-//			);
-//
-//			$msg = sprintf(
-//				__( 'There was an error importing the image for <a href="%1$s" target="_blank">%2$s</a>. See below for details.<br /><pre>%3$s</pre>' ),
-//				$url,
-//				$name,
-//				print_r( $error, true )
-//			);
-//
-//			echo sprintf( $html, $msg );
-//			die;
-//		}
 
 		$time_stop = microtime( true );
 
