@@ -95,6 +95,24 @@ function dfrps_import_product_image_action( $post_id ) {
 
 	$result = dfrps_import_post_thumbnail( $post_id );
 
+	if ( function_exists( 'dfrapi_use_legacy_image_importer' ) && dfrapi_use_legacy_image_importer() === false ) {
+
+		if ( is_wp_error( $result ) ) {
+			dfrps_error_log( 'Unable to import image' . ': ' . print_r( $result, true ) );
+
+			$message = sprintf(
+				__( 'Image import failed. PRODUCT: "%s" ID: %d ERROR: %s', 'datafeedr-product-sets' ),
+				esc_html( get_the_title( $post_id ) ),
+				absint( $post_id ),
+				esc_html( $result->get_error_message() )
+			);
+
+			throw new Exception( $message );
+		}
+
+		return;
+	}
+
 	if ( is_wp_error( $result ) ) {
 		dfrps_error_log( 'Unable to import image' . ': ' . print_r( $result, true ) );
 	}

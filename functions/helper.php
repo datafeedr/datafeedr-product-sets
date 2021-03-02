@@ -869,6 +869,22 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 		);
 	}
 
+	/**
+	 * Don't import images for products which are not valid posts statuses.
+	 */
+	$valid_post_statuses = apply_filters( 'dfrps_valid_post_statuses_for_thumbnail_import', [
+		'publish',
+		'draft',
+	], $post );
+
+	if ( ! in_array( $post->post_status, $valid_post_statuses ) ) {
+		return new WP_Error(
+			'dfrps_invalid_post_status_for_importing_images',
+			sprintf( __( 'Products with a post_status of "%s" will not have their images imported.', 'datafeedr-product-sets', esc_html( $post->post_status ) ) ),
+			[ 'function' => __FUNCTION__, '$post' => $post, '$valid_post_statuses' => $valid_post_statuses ]
+		);
+	}
+
 	$do_import = true;
 
 	/**
@@ -920,9 +936,10 @@ function dfrps_featured_image_url( $post_id ) {
  *
  * @param int $post_id
  *
- * @return Datafeedr_Image_Importer|WP_Error
- * @since 1.2.22
+ * @return Datafeedr_Image_Importer|int|WP_Error
+ * @since 1.3.2 Will return either the Attachment ID or WP_Error if there was an error importing the image.
  *
+ * @since 1.0.71
  */
 function dfrps_import_post_thumbnail( $post_id ) {
 
