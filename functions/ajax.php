@@ -203,16 +203,13 @@ function dfrps_ajax_batch_import_images() {
 
 		if ( is_wp_error( $result ) ) {
 
-			$error = [
-				'function' => __FUNCTION__ . '()',
-				'WP_Error' => $result,
-			];
+			$error = [ 'function' => __FUNCTION__ . '()', 'WP_Error' => $result ];
 
 			$msg = sprintf(
 				__( 'There was an error importing the image for <a href="%1$s" target="_blank">%2$s</a>. See below for details.<br /><pre>%3$s</pre>' ),
-				$url,
-				$name,
-				print_r( $error, true )
+				esc_url( $url ),
+				esc_html( $name ),
+				esc_html( print_r( $error, true ) )
 			);
 
 			echo sprintf( $html, $msg );
@@ -225,9 +222,9 @@ function dfrps_ajax_batch_import_images() {
 
 		$msg = sprintf(
 			__( 'Image imported successfully for <a href="%1$s" target="_blank">%2$s</a> in %3$s seconds.' ),
-			$url,
-			$name,
-			$execution_time
+			esc_url( $url ),
+			esc_html( $name ),
+			esc_html( $execution_time )
 		);
 
 		echo sprintf( $html, $msg );
