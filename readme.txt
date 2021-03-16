@@ -5,8 +5,8 @@ Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, impor
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
-Tested up to: 5.7-RC2
-Stable tag: 1.3.2
+Tested up to: 5.8-alpha
+Stable tag: 1.3.3
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.3 - 2021/03/16 =
+* Changed the image importer function to use `dfrapi_schedule_single_action()` instead of `dfrapi_schedule_async_action()` so that the "Scheduled Date" column is set to something more meaningful than "0000-00-00 00:00:00"
 
 = 1.3.2 - 2021/03/03 =
 * Added support the new image import functionality coming soon in the Datafeedr API plugin.

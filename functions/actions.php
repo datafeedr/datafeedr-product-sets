@@ -65,8 +65,8 @@ add_action( 'admin_notices', 'dfrps_bulk_bump_priority_admin_notice' );
  */
 function dfrps_schedule_image_import( $post, $product, $set, $action ) {
 
-	if ( ! function_exists( 'dfrapi_schedule_async_action' ) ) {
-		dfrps_error_log( 'The dfrapi_schedule_async_action() function does not exist. Please upgrade your Datafeedr API plugin to the latest version.' );
+	if ( ! function_exists( 'dfrapi_schedule_single_action' ) ) {
+		dfrps_error_log( 'The dfrapi_schedule_single_action() function does not exist. Please upgrade your Datafeedr API plugin to the latest version.' );
 	}
 
 	$post_id = absint( $post['ID'] );
@@ -79,7 +79,7 @@ function dfrps_schedule_image_import( $post, $product, $set, $action ) {
 		return;
 	}
 
-	dfrapi_schedule_async_action( 'dfrps_import_product_image', compact( 'post_id' ), 'dfrps' );
+	dfrapi_schedule_single_action( date( 'U' ), 'dfrps_import_product_image', compact( 'post_id' ), 'dfrps' );
 }
 
 add_action( 'dfrpswc_do_product', 'dfrps_schedule_image_import', 10, 4 );
