@@ -269,10 +269,12 @@ class Dfrps_Update {
 			$this->config['updates_enabled'] = 'disabled';
 			update_option( 'dfrps_configuration', $this->config );
 			$this->updates_disabled_email_user( $data );
+			do_action( 'dfrps_product_set_updates_disabled', $class, $data, $this );
 		} elseif ( in_array( $msg, $error_messages ) ) {
 			$this->config['updates_enabled'] = 'disabled';
 			update_option( 'dfrps_configuration', $this->config );
 			$this->updates_disabled_email_user( $data );
+			do_action( 'dfrps_product_set_updates_disabled', $msg, $data, $this );
 		}
 	}
 
