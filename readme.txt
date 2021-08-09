@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.9-alpha
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.5 - 2021/08/09 =
+* Fixed Loopback help link and removed another invalid help link.
 
 = 1.3.3 - 2021/03/16 =
 * Changed the image importer function to use `dfrapi_schedule_single_action()` instead of `dfrapi_schedule_async_action()` so that the "Scheduled Date" column is set to something more meaningful than "0000-00-00 00:00:00"

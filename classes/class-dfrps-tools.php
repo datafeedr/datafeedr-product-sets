@@ -170,7 +170,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 		function section_loopback_test_desc() { ?>
 			<p>
 				<?php _e( 'If HTTP Loopbacks are disabled by your web host, Product Sets will not import products into your site. Click the <strong>[Test Loopbacks]</strong> button below to determine if loopbacks are enabled or disabled on your server. ', DFRPS_DOMAIN ); ?>
-				<a href="https://v4.datafeedr.com/documentation/471" target="_blank"><?php _e( 'Learn more about HTTP Loopbacks', DFRPS_DOMAIN ); ?></a>.
+				<a href="https://wordpress.org/support/article/loopbacks/" target="_blank"><?php _e( 'Learn more about HTTP Loopbacks', DFRPS_DOMAIN ); ?></a>.
 			</p>
 			<p><a href="#" id="dfrps_test_loopbacks" class="button"><?php _e("Test Loopbacks", DFRPS_DOMAIN); ?></a></p>
 			<div id="dfrps_test_loopbacks_result" style="padding: 10px; border: 1px solid silver; display: none; background: #FFF;"></div>

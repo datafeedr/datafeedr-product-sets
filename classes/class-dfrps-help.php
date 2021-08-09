@@ -143,7 +143,7 @@ class Dfrps_Admin_Help {
 						'<li><strong>' . __( "Completed", DFRPS_DOMAIN ) . '</strong> - ' 		. __( "Date/time the set’s last update completed.", DFRPS_DOMAIN ) . '</li>' .
 						'<li><strong>' . __( "Added", DFRPS_DOMAIN ) . '</strong> - ' 			. __( "The number of products added or updated during the last update.", DFRPS_DOMAIN ) . '</li>' .
 						'<li><strong>' . __( "Deleted", DFRPS_DOMAIN ) . '</strong> - ' 		. __( "The number of products deleted during the last update.", DFRPS_DOMAIN ) . '</li>' .
-						'<li><strong>' . __( "API Requests", DFRPS_DOMAIN ) . '</strong> - ' 	. __( "The number of <a href=\"https://v4.datafeedr.com/node/373\" target=\"_blank\">API requests</a> required during the last update.", DFRPS_DOMAIN ) . '</li>' .
+						'<li><strong>' . __( "API Requests", DFRPS_DOMAIN ) . '</strong> - ' 	. __( "The number of API requests required during the last update.", DFRPS_DOMAIN ) . '</li>' .
 					'</ul>' . 
 					'<p>' . __( "<strong>TIP!</strong> To hide a column:", DFRPS_DOMAIN ) . '</p>' . 
 					'<ol>' . 
