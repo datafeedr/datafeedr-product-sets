@@ -122,8 +122,8 @@ function dfrps_missing_importer() {
 	if ( ! dfrps_registered_cpt_exists() ) {
 		echo '<div class="notice notice-error"><p>';
 		echo __( 'The <strong>Datafeedr Product Sets</strong> plugin requires an importer plugin.', 'datafeedr-product-sets' );
-		echo ' <a href="http://wordpress.org/plugins/tags/dfrpsimporter">';
-		echo __( 'Download an Importer Plugin', 'datafeedr-product-sets' );
+		echo ' <a href="https://datafeedr.me/dfrpswc">';
+		echo __( 'Download the WooCommerce Importer plugin', 'datafeedr-product-sets' );
 		echo '</a>.</p></div>';
 	}
 }
