@@ -236,6 +236,11 @@ add_filter( 'debug_information', function ( $info ) {
 				'value' => isset( $options['updates_enabled'] ) && ! empty( $options['updates_enabled'] ) ? ucfirst( $options['updates_enabled'] ) : '—',
 				'debug' => isset( $options['updates_enabled'] ) && ! empty( $options['updates_enabled'] ) ? $options['updates_enabled'] : '—',
 			],
+			'disable_updates_when_missing_merchants'      => [
+				'label' => __( 'Disable Updates When Missing Merchants', 'datafeedr-product-sets' ),
+				'value' => isset( $options['disable_updates_when_missing_merchants'] ) && ! empty( $options['disable_updates_when_missing_merchants'] ) ? ucfirst( $options['disable_updates_when_missing_merchants'] ) : '—',
+				'debug' => isset( $options['disable_updates_when_missing_merchants'] ) && ! empty( $options['disable_updates_when_missing_merchants'] ) ? $options['disable_updates_when_missing_merchants'] : '—',
+			],
 			'update_interval'              => [
 				'label' => __( 'Update Interval', 'datafeedr-product-sets' ),
 				'value' => $update_interval,

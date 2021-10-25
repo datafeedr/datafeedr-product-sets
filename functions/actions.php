@@ -142,3 +142,83 @@ function dfrps_import_product_image_action( $post_id ) {
 }
 
 add_action( 'dfrapi_as_dfrps_import_product_image', 'dfrps_import_product_image_action' );
+
+/**
+ * Handle "No merchants selected" Product Set errors.
+ *
+ * @param string $error The error message (ex. No merchants selected)
+ * @param array $data Error data
+ * @param Dfrps_Update $product_set
+ *
+ * @since 1.3.6
+ */
+function dfrps_handle_no_merchants_selected_error( $error, $data, $product_set ) {
+
+	if ( ! isset( $product_set->config['disable_updates_when_missing_merchants'] ) ) {
+		return;
+	}
+
+	if ( $product_set->config['disable_updates_when_missing_merchants'] !== 'no' ) {
+		return;
+	}
+
+	/**
+	 * Only trigger the rest of the code if the error is equal to "No merchants selected".
+	 */
+	if ( $error !== 'No merchants selected' ) {
+		return;
+	}
+
+	/**
+	 * Set the update phase to "4" to skip step #2 and/or #3.
+	 */
+	update_post_meta( $product_set->set['ID'], '_dfrps_cpt_update_phase', 4 );
+
+	/**
+	 * Re-enable Product Set updates.
+	 */
+	$product_set->config['updates_enabled'] = 'enabled';
+	update_option( 'dfrps_configuration', $product_set->config );
+
+	/**
+	 * Fire action to allow user to customize anything that might need to happen here.
+	 */
+	do_action( 'dfrps_handle_no_merchants_selected_error', $error, $data, $product_set );
+
+	/**
+	 * Get URL of the Product Set's "edit page.
+	 */
+	$url = add_query_arg( [ 'post' => $product_set->set['ID'], 'action' => 'edit' ], admin_url( 'post.php' ) );
+
+	/**
+	 * URL to documentation article regarding this error.
+	 */
+	$doc = 'https://datafeedrapi.helpscoutdocs.com/article/253-no-merchants-selected-error';
+
+	/**
+	 * Send email to user letting them know the Product Set is in "draft" mode and requires attention.
+	 */
+	$email            = [];
+	$email['to']      = get_bloginfo( 'admin_email' );
+	$email['subject'] = sprintf( '[ACTION REQUIRED]: Product Set (ID: %d) is Missing Merchants - %s', absint( $product_set->set['ID'] ), esc_html( get_bloginfo( 'name' ) ) );
+
+	$email['message'] = sprintf( '<p>%s</p>', 'The following Product Set is missing merchants and its products have been removed from your store. Product Set updates have been re-enabled.' );
+	$email['message'] .= sprintf( '<p>%s</p>', 'This issue <strong>MUST</strong> to be resolved before the products in this Product Set will be added to your store.' );
+	$email['message'] .= sprintf(
+		'<p>- %s: %s<br />- %s: %s<br />- %s: %s</p>',
+		'Name',
+		esc_html( $product_set->set['post_title'] ),
+		'ID',
+		absint( $product_set->set['ID'] ),
+		'URL',
+		sprintf( '<a href="%s">%s</a>', $url, $url )
+	);
+	$email['message'] .= sprintf( '<p>Learn more about this issue %s.</p>', sprintf( '<a href="%s">here</a>', $doc ) );
+
+	add_filter( 'wp_mail_content_type', 'dfrps_set_html_content_type' );
+	wp_mail( $email['to'], $email['subject'], $email['message'] );
+	remove_filter( 'wp_mail_content_type', 'dfrps_set_html_content_type' );
+}
+
+add_action( 'dfrps_product_set_updates_disabled', 'dfrps_handle_no_merchants_selected_error', 10, 3 );
+

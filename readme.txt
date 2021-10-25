@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 5.9-alpha
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 
 Build sets of products to import into your website.
 
@@ -79,6 +79,10 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.6 - 2021/10/25 =
+* Added new option to prevent Product Set updates from being disabled with encountering "No merchants selected" errors. [More info](https://datafeedrapi.helpscoutdocs.com/article/253-no-merchants-selected-error)
+* Fixed "download importer" link.
 
 = 1.3.5 - 2021/08/09 =
 * Fixed Loopback help link and removed another invalid help link.
