@@ -880,7 +880,10 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	if ( ! in_array( $post->post_status, $valid_post_statuses ) ) {
 		return new WP_Error(
 			'dfrps_invalid_post_status_for_importing_images',
-			sprintf( __( 'Products with a post_status of "%s" will not have their images imported.', 'datafeedr-product-sets', esc_html( $post->post_status ) ) ),
+			sprintf(
+				__( 'Products with a post_status of "%s" will not have their images imported.', 'datafeedr-product-sets' ),
+				esc_html( $post->post_status )
+			),
 			[ 'function' => __FUNCTION__, '$post' => $post, '$valid_post_statuses' => $valid_post_statuses ]
 		);
 	}
