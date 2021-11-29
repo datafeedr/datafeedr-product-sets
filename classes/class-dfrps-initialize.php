@@ -79,14 +79,13 @@ class Dfrps_Initialize {
     	wp_register_script( DFRPS_PREFIX . '_cpt_js', DFRPS_URL.'js/cpt.js', array( 'jquery', 'jquery-color' ), DFRPS_VERSION, false );
         wp_enqueue_script( DFRPS_PREFIX . '_cpt_js' );
     }
-    
+
 	function plugin_row_meta( $links, $plugin_file ) {
-		if ( $plugin_file == DFRPS_BASENAME ) {
-			/* $links[] = sprintf( '<a href="' . admin_url( 'plugin-install.php?tab=search&type=tag&s=dfrapi' ) . '">%s</a>', __( 'Datafeedr API Plugin', DFRPS_DOMAIN ) ); */
-			/* $links[] = sprintf( '<a href="' . admin_url( 'plugin-install.php?tab=search&type=tag&s=dfrps' ) . '">%s</a>', __( 'Importer Plugins', DFRPS_DOMAIN ) ); */
-			$links[] = sprintf( '<a href="' . DFRAPI_HELP_URL . '">%s</a>', __( 'Support', DFRPS_DOMAIN ) );
-			return $links;
+		if ( $plugin_file === DFRPS_BASENAME ) {
+			$links[] = sprintf( '<a href="' . DFRAPI_DOCS_URL . '" target="_blank">%s</a>', __( 'Documentation', DFRAPI_DOMAIN ) );
+			$links[] = sprintf( '<a href="' . DFRAPI_HELP_URL . '" target="_blank">%s</a>', __( 'Support', DFRAPI_DOMAIN ) );
 		}
+
 		return $links;
 	}
 

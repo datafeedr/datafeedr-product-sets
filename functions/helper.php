@@ -205,7 +205,8 @@ function dfrps_format_product_list( $data, $context ) {
         </div>
 	<?php }
 
-	echo dfrps_complex_query_warning($data, $context);
+	echo dfrps_complex_query_warning( $data, $context );
+
 	echo $pagination;
 	echo '<div class="product_list">';
 	if ( isset( $data['products'] ) && ! empty( $data['products'] ) ) {
@@ -240,16 +241,35 @@ function dfrps_complex_query_warning( $data, $context ) {
 	$score         = absint( $data['score'] ?? 0 );
 	$warning_score = DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent;
 
+	/**
+	 * Determine Complexity Level. Values of 0, 1 or 2.
+	 *
+	 * 0 = Not complex
+	 * 1 = Very complex
+	 * 2 = Too complex
+	 */
 	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
-		// Query is too complex. Display warning, score and link to more info.
-		$html .= 'Query complexity: too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+		$complexity = 2;
 	} elseif ( $score >= $warning_score ) {
-		// Query is getting too complex. Display warning and score and link to more info.
-		$html .= 'Query complexity: getting too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+		$complexity = 1;
 	} else {
-		// Query is OK. Display query complexity is good and display score.
-		$html .= 'Query complexity: OK ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+		$complexity = 0;
 	}
+
+    
+
+	$html .= '<div style="display:flex;justify-content:space-between;align-items:center;background-color:#0c88b4;padding:0.25rem;">';
+	$html .= '<div>Query complexity ' . $complexity . '</div>';
+	$html .= '<div>What\'s this?</div>';
+	$html .= '</div>';
+
+	// Query is too complex. Display warning, score and link to more info.
+//		$html .= 'Query complexity: too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+	// Query is getting too complex. Display warning and score and link to more info.
+//		$html .= 'Query complexity: getting too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+	// Query is OK. Display query complexity is good and display score.
+//		$html .= 'Query complexity: OK ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+
 
 	return $html;
 }
