@@ -159,7 +159,6 @@ function dfrps_format_product_list( $data, $context ) {
 		}
 	}
 
-
 	if ( empty( $data ) || empty( $data['products'] ) ) {
 
 		if ( $context == 'div_dfrps_tab_saved_search' ) {
@@ -206,6 +205,7 @@ function dfrps_format_product_list( $data, $context ) {
         </div>
 	<?php }
 
+	echo dfrps_complex_query_warning($data, $context);
 	echo $pagination;
 	echo '<div class="product_list">';
 	if ( isset( $data['products'] ) && ! empty( $data['products'] ) ) {
@@ -216,6 +216,42 @@ function dfrps_format_product_list( $data, $context ) {
 	echo '</div>';
 	echo $pagination;
 
+}
+
+function dfrps_complex_query_warning( $data, $context ) {
+
+	$html            = '';
+	$warning_percent = 0.7;
+
+	/**
+	 * If DFRAPI_COMPLEX_QUERY_SCORE is not defined that means "score" has not
+	 * yet been added to the $data array because the user has not yet upgraded the
+	 * Datafeedr API plugin to the latest version.
+	 */
+	if ( ! defined( 'DFRAPI_COMPLEX_QUERY_SCORE' ) ) {
+		return $html;
+	}
+
+	// Just make sure the "score" item exists in the $data array.
+	if ( ! isset( $data['score'] ) ) {
+		return $html;
+	}
+
+	$score         = absint( $data['score'] ?? 0 );
+	$warning_score = DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent;
+
+	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
+		// Query is too complex. Display warning, score and link to more info.
+		$html .= 'Query complexity: too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+	} elseif ( $score >= $warning_score ) {
+		// Query is getting too complex. Display warning and score and link to more info.
+		$html .= 'Query complexity: getting too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+	} else {
+		// Query is OK. Display query complexity is good and display score.
+		$html .= 'Query complexity: OK ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
+	}
+
+	return $html;
 }
 
 function dfrps_more_info_rows( $product ) {
