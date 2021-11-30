@@ -240,6 +240,8 @@ function dfrps_complex_query_warning( $data, $context ) {
 
 	$score         = absint( $data['score'] ?? 0 );
 	$warning_score = DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent;
+	$label         = __( 'Query Complexity', 'datafeedr-product-sets' );
+	$rating        = number_format_i18n( $score ) . '/' . number_format_i18n( DFRAPI_COMPLEX_QUERY_SCORE );
 
 	/**
 	 * Determine Complexity Level. Values of 0, 1 or 2.
@@ -249,18 +251,19 @@ function dfrps_complex_query_warning( $data, $context ) {
 	 * 2 = Too complex
 	 */
 	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
-		$complexity = 2;
+		$msg = __( 'Bad', 'datafeedr-product-sets' );
+		$css = 'padding:1rem 0.75rem;color:#842029;background-color:#f8d7da;border-color:#f5c2c7;';
 	} elseif ( $score >= $warning_score ) {
-		$complexity = 1;
+		$msg = __( 'High', 'datafeedr-product-sets' );
+		$css = 'padding:0.5rem;color:#664d03;background-color:#fff3cd;border-color:#ffecb5;';
 	} else {
-		$complexity = 0;
+		$msg = __( 'Good', 'datafeedr-product-sets' );
+		$css = 'padding:0.25rem 0.5rem;color:#0f5132;background-color:#d1e7dd;border-color:#badbcc;';
 	}
 
-    
-
-	$html .= '<div style="display:flex;justify-content:space-between;align-items:center;background-color:#0c88b4;padding:0.25rem;">';
-	$html .= '<div>Query complexity ' . $complexity . '</div>';
-	$html .= '<div>What\'s this?</div>';
+	$html .= '<div style="display:flex;justify-content:space-between;align-items:center;border-radius:0.25rem;' . $css . '">';
+	$html .= '<div>' . $label . ': ' . $msg . ' (' . $rating . ')</div>';
+	$html .= '<a href="#" target="_blank"><small>What\'s this?</small></a>';
 	$html .= '</div>';
 
 	// Query is too complex. Display warning, score and link to more info.
