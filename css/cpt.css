@@ -241,7 +241,50 @@
 }
 
 /**
- * CSS FOR PROUCT LISTS
+ * Complex Query Alert Styles
+ */
+.dfrps-complex-query-alert {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 0.25rem;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dfrps-complex-query-alert.dfrps-query-success {
+	padding: 0.25rem 0.5rem;
+	color: #0f5132;
+	background-color: #d1e7dd;
+	border-color: #badbcc;
+}
+
+.dfrps-complex-query-alert.dfrps-query-warning {
+	padding: 0.75rem;
+	color: #664d03;
+	background-color: #fff3cd;
+	border-color: #ffecb5;
+	font-size: 110%;
+}
+
+.dfrps-complex-query-alert.dfrps-query-danger {
+	padding: 1rem;
+	color: #842029;
+	background-color: #f8d7da;
+	border-color: #f5c2c7;
+	font-size: 120%;
+}
+
+.dfrps-complex-query-alert span {
+	opacity: 0.7;
+	font-size: 90%;
+}
+
+.dfrps-complex-query-alert > a {
+	line-height: 1rem;
+}
+
+/**
+ * CSS FOR PRODUCT LISTS
  */
 .datafeedr-productset_admin #div_dfrps_tab_search_results { margin-top: 20px; }
 

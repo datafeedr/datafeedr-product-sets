@@ -219,6 +219,14 @@ function dfrps_format_product_list( $data, $context ) {
 
 }
 
+/**
+ * Returns the HTML alert letting the user know the complexity of their current search query.
+ *
+ * @param array $data
+ * @param $context
+ *
+ * @return string
+ */
 function dfrps_complex_query_warning( $data, $context ) {
 
 	$html            = '';
@@ -238,43 +246,46 @@ function dfrps_complex_query_warning( $data, $context ) {
 		return $html;
 	}
 
-	$score         = absint( $data['score'] ?? 0 );
-	$warning_score = DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent;
-	$label         = __( 'Query Complexity', 'datafeedr-product-sets' );
-	$rating        = number_format_i18n( $score ) . '/' . number_format_i18n( DFRAPI_COMPLEX_QUERY_SCORE );
+	$score      = absint( $data['score'] ?? 0 );
+	$label      = esc_html__( 'Query Score', 'datafeedr-product-sets' );
+	$learn_more = esc_html__( 'Learn More', 'datafeedr-product-sets' );
+	$rating     = esc_html( number_format_i18n( $score ) . '/' . number_format_i18n( DFRAPI_COMPLEX_QUERY_SCORE ) );
+	$percentage = esc_html( dfrps_get_query_complexity_as_percentage( $score ) );
+	$doc_url    = esc_url( 'https://datafeedr.me/docs' );
 
-	/**
-	 * Determine Complexity Level. Values of 0, 1 or 2.
-	 *
-	 * 0 = Not complex
-	 * 1 = Very complex
-	 * 2 = Too complex
-	 */
+	// Determine Query Complexity Level.
 	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
-		$msg = __( 'Bad', 'datafeedr-product-sets' );
-		$css = 'padding:1rem 0.75rem;color:#842029;background-color:#f8d7da;border-color:#f5c2c7;';
-	} elseif ( $score >= $warning_score ) {
-		$msg = __( 'High', 'datafeedr-product-sets' );
-		$css = 'padding:0.5rem;color:#664d03;background-color:#fff3cd;border-color:#ffecb5;';
+		$class = esc_attr( 'danger' );
+		$title = esc_attr__( 'Search query is too complex. Please fix!', 'datafeedr-product-sets' );
+	} elseif ( $score >= ( DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent ) ) {
+		$class = esc_attr( 'warning' );
+		$title = esc_attr__( 'Search query is becoming too complex. Please forego adding more search parameters.', 'datafeedr-product-sets' );
 	} else {
-		$msg = __( 'Good', 'datafeedr-product-sets' );
-		$css = 'padding:0.25rem 0.5rem;color:#0f5132;background-color:#d1e7dd;border-color:#badbcc;';
+		$class = esc_attr( 'success' );
+		$title = esc_attr__( 'Search query complexity is OK!', 'datafeedr-product-sets' );
 	}
 
-	$html .= '<div style="display:flex;justify-content:space-between;align-items:center;border-radius:0.25rem;' . $css . '">';
-	$html .= '<div>' . $label . ': ' . $msg . ' (' . $rating . ')</div>';
-	$html .= '<a href="#" target="_blank"><small>What\'s this?</small></a>';
+	$html .= sprintf( '<div class="dfrps-complex-query-alert dfrps-query-%s" title="%s">', $class, $title );
+	$html .= sprintf( '<div><strong>%s:</strong> %s&#37; <span>(%s)</span></div>', $label, $percentage, $rating );
+	$html .= sprintf( '<a href="%s" target="_blank"><small>%s</small></a>', $doc_url, $learn_more );
 	$html .= '</div>';
 
-	// Query is too complex. Display warning, score and link to more info.
-//		$html .= 'Query complexity: too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
-	// Query is getting too complex. Display warning and score and link to more info.
-//		$html .= 'Query complexity: getting too complex ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
-	// Query is OK. Display query complexity is good and display score.
-//		$html .= 'Query complexity: OK ' . number_format_i18n($score) . '/' . number_format_i18n(DFRAPI_COMPLEX_QUERY_SCORE);
-
-
 	return $html;
+}
+
+/**
+ * Returns the query complexity as a percentage.
+ *
+ * Example: If the query "score" is 1000, this will return 90 (which is a good score).
+ * Math: ( (10,000 − score ) / 10,000 ) × 100
+ *
+ * @param int $score
+ * @param int $precision
+ *
+ * @return float
+ */
+function dfrps_get_query_complexity_as_percentage( int $score, int $precision = 0 ) {
+	return round( ( ( ( DFRAPI_COMPLEX_QUERY_SCORE - $score ) / DFRAPI_COMPLEX_QUERY_SCORE ) * 100 ), $precision );
 }
 
 function dfrps_more_info_rows( $product ) {
