@@ -5,8 +5,8 @@ Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, impor
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
-Tested up to: 5.9-alpha
-Stable tag: 1.3.7
+Tested up to: 5.9-beta1
+Stable tag: 1.3.8
 
 Build sets of products to import into your website.
 
@@ -49,7 +49,7 @@ We currently have one importer which imports products from your Product Sets int
 
 * WordPress Cron enabled.
 * [WordPress memory limit of 128 MB or greater](https://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP).
-* PHP 7.3 or greater
+* PHP 7.4 or greater
 * PHP's `CURL` support must be enabled.
 * MySQL version 5.6 or greater
 * An [importer plugin](http://wordpress.org/plugins/datafeedr-woocommerce-importer/) to handle importing products from your Product Sets into your website.
@@ -79,6 +79,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.8 - 2021/12/06 =
+* Added alert to display [Query Complexity Score](https://datafeedrapi.helpscoutdocs.com/article/255-calculating-api-query-complexity-score) on Product Set edit page.
 
 = 1.3.7 - 2021/11/16 =
 * Fixed bug in `dfrps_do_import_product_thumbnail()` function.
