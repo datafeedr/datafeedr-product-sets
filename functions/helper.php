@@ -159,7 +159,6 @@ function dfrps_format_product_list( $data, $context ) {
 		}
 	}
 
-
 	if ( empty( $data ) || empty( $data['products'] ) ) {
 
 		if ( $context == 'div_dfrps_tab_saved_search' ) {
@@ -206,6 +205,8 @@ function dfrps_format_product_list( $data, $context ) {
         </div>
 	<?php }
 
+	echo dfrps_display_query_complexity_score( $data, $context );
+
 	echo $pagination;
 	echo '<div class="product_list">';
 	if ( isset( $data['products'] ) && ! empty( $data['products'] ) ) {
@@ -216,6 +217,58 @@ function dfrps_format_product_list( $data, $context ) {
 	echo '</div>';
 	echo $pagination;
 
+}
+
+/**
+ * Returns the HTML alert letting the user know the complexity of their current search query.
+ *
+ * @param array $data
+ * @param $context
+ *
+ * @return string
+ */
+function dfrps_display_query_complexity_score( $data, $context ) {
+
+	$html            = '';
+	$warning_percent = 0.7;
+
+	/**
+	 * If DFRAPI_COMPLEX_QUERY_SCORE is not defined that means "score" has not
+	 * yet been added to the $data array because the user has not yet upgraded the
+	 * Datafeedr API plugin to the latest version.
+	 */
+	if ( ! defined( 'DFRAPI_COMPLEX_QUERY_SCORE' ) ) {
+		return $html;
+	}
+
+	// Just make sure the "score" item exists in the $data array.
+	if ( ! isset( $data['score'] ) ) {
+		return $html;
+	}
+
+	$score      = absint( $data['score'] ?? 0 );
+	$label      = esc_html__( 'Query Complexity Score', 'datafeedr-product-sets' );
+	$learn_more = esc_html__( 'Learn More', 'datafeedr-product-sets' );
+	$doc_url    = esc_url( 'https://datafeedrapi.helpscoutdocs.com/article/255-calculating-api-query-complexity-score' );
+
+	// Determine Query Complexity alert level.
+	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
+		$class = esc_attr( 'danger' );
+		$title = esc_attr__( 'Search query is too complex. Please fix!', 'datafeedr-product-sets' );
+	} elseif ( $score >= ( DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent ) ) {
+		$class = esc_attr( 'warning' );
+		$title = esc_attr__( 'Search query is becoming too complex. Please forgo adding more search parameters.', 'datafeedr-product-sets' );
+	} else {
+		$class = esc_attr( 'success' );
+		$title = esc_attr__( 'Search query complexity score is OK!', 'datafeedr-product-sets' );
+	}
+
+	$html .= sprintf( '<div class="dfrps-complex-query-alert dfrps-query-%s" title="%s">', $class, $title );
+	$html .= sprintf( '<div><strong>%s:</strong> %s <span>/%s</span></div>', $label, number_format_i18n( $score ), number_format_i18n( DFRAPI_COMPLEX_QUERY_SCORE ) );
+	$html .= sprintf( '<a href="%s" target="_blank"><small>%s</small></a>', $doc_url, $learn_more );
+	$html .= '</div>';
+
+	return $html;
 }
 
 function dfrps_more_info_rows( $product ) {

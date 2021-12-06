@@ -2,7 +2,7 @@
 /*
 Plugin Name: Datafeedr Product Sets
 Plugin URI: https://www.datafeedr.com
-Description: Build sets of products to import into your website. <strong>REQUIRES: </strong><a href="http://wordpress.org/plugins/datafeedr-api/">Datafeedr API plugin</a> and an <a href="http://wordpress.org/plugins/tags/dfrpsimporter">importer plugin</a>.
+Description: Build sets of products to import into your website. <strong>REQUIRES: </strong><a href="http://wordpress.org/plugins/datafeedr-api/">Datafeedr API</a> and <a href="https://datafeedr.me/dfrpswc">WooCommerce Importer</a> plugins.
 Author: datafeedr.com
 Author URI: https://www.datafeedr.com
 License: GPL v3
