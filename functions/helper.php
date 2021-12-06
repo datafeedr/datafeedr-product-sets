@@ -247,11 +247,9 @@ function dfrps_complex_query_warning( $data, $context ) {
 	}
 
 	$score      = absint( $data['score'] ?? 0 );
-	$label      = esc_html__( 'Query Score', 'datafeedr-product-sets' );
+	$label      = esc_html__( 'Query Complexity Score', 'datafeedr-product-sets' );
 	$learn_more = esc_html__( 'Learn More', 'datafeedr-product-sets' );
-	$rating     = esc_html( number_format_i18n( $score ) . '/' . number_format_i18n( DFRAPI_COMPLEX_QUERY_SCORE ) );
-	$percentage = esc_html( dfrps_get_query_complexity_as_percentage( $score ) );
-	$doc_url    = esc_url( 'https://datafeedr.me/docs' );
+	$doc_url    = esc_url( 'https://datafeedrapi.helpscoutdocs.com/article/255-calculating-api-query-complexity-score' );
 
 	// Determine Query Complexity Level.
 	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
@@ -266,26 +264,11 @@ function dfrps_complex_query_warning( $data, $context ) {
 	}
 
 	$html .= sprintf( '<div class="dfrps-complex-query-alert dfrps-query-%s" title="%s">', $class, $title );
-	$html .= sprintf( '<div><strong>%s:</strong> %s&#37; <span>(%s)</span></div>', $label, $percentage, $rating );
+	$html .= sprintf( '<div><strong>%s:</strong> %s <span>/%s</span></div>', $label, number_format_i18n( $score ), number_format_i18n( DFRAPI_COMPLEX_QUERY_SCORE ) );
 	$html .= sprintf( '<a href="%s" target="_blank"><small>%s</small></a>', $doc_url, $learn_more );
 	$html .= '</div>';
 
 	return $html;
-}
-
-/**
- * Returns the query complexity as a percentage.
- *
- * Example: If the query "score" is 1000, this will return 90 (which is a good score).
- * Math: ( (10,000 − score ) / 10,000 ) × 100
- *
- * @param int $score
- * @param int $precision
- *
- * @return float
- */
-function dfrps_get_query_complexity_as_percentage( int $score, int $precision = 0 ) {
-	return round( ( ( ( DFRAPI_COMPLEX_QUERY_SCORE - $score ) / DFRAPI_COMPLEX_QUERY_SCORE ) * 100 ), $precision );
 }
 
 function dfrps_more_info_rows( $product ) {
