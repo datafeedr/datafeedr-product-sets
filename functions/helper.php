@@ -205,7 +205,7 @@ function dfrps_format_product_list( $data, $context ) {
         </div>
 	<?php }
 
-	echo dfrps_complex_query_warning( $data, $context );
+	echo dfrps_display_query_complexity_score( $data, $context );
 
 	echo $pagination;
 	echo '<div class="product_list">';
@@ -227,7 +227,7 @@ function dfrps_format_product_list( $data, $context ) {
  *
  * @return string
  */
-function dfrps_complex_query_warning( $data, $context ) {
+function dfrps_display_query_complexity_score( $data, $context ) {
 
 	$html            = '';
 	$warning_percent = 0.7;
@@ -251,16 +251,16 @@ function dfrps_complex_query_warning( $data, $context ) {
 	$learn_more = esc_html__( 'Learn More', 'datafeedr-product-sets' );
 	$doc_url    = esc_url( 'https://datafeedrapi.helpscoutdocs.com/article/255-calculating-api-query-complexity-score' );
 
-	// Determine Query Complexity Level.
+	// Determine Query Complexity alert level.
 	if ( $score >= DFRAPI_COMPLEX_QUERY_SCORE ) {
 		$class = esc_attr( 'danger' );
 		$title = esc_attr__( 'Search query is too complex. Please fix!', 'datafeedr-product-sets' );
 	} elseif ( $score >= ( DFRAPI_COMPLEX_QUERY_SCORE * $warning_percent ) ) {
 		$class = esc_attr( 'warning' );
-		$title = esc_attr__( 'Search query is becoming too complex. Please forego adding more search parameters.', 'datafeedr-product-sets' );
+		$title = esc_attr__( 'Search query is becoming too complex. Please forgo adding more search parameters.', 'datafeedr-product-sets' );
 	} else {
 		$class = esc_attr( 'success' );
-		$title = esc_attr__( 'Search query complexity is OK!', 'datafeedr-product-sets' );
+		$title = esc_attr__( 'Search query complexity score is OK!', 'datafeedr-product-sets' );
 	}
 
 	$html .= sprintf( '<div class="dfrps-complex-query-alert dfrps-query-%s" title="%s">', $class, $title );
