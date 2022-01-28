@@ -7,11 +7,11 @@ Author: datafeedr.com
 Author URI: https://www.datafeedr.com
 License: GPL v3
 Requires at least: 3.8
-Tested up to: 5.9-beta1
-Version: 1.3.8
+Tested up to: 6.0-alpha
+Version: 1.3.9
 
 Datafeedr Product Sets Plugin
-Copyright (C) 2021, Datafeedr - help@datafeedr.com
+Copyright (C) 2022, Datafeedr - help@datafeedr.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.3.8' );
+define( 'DFRPS_VERSION', '1.3.9' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );

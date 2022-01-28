@@ -11,16 +11,11 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 
 	function dfrps_html_product_list( $product, $args=array() ) {
 
-		// Image	
-		if ( @$product['image'] != '' ) {
-			$image = @$product['image'];
-		} elseif ( @$product['thumbnail'] != '' ) {
-			$image = @$product['thumbnail'];
-		} else {
-			$image = plugins_url( 'images/icons/no-image.jpg', dirname(__FILE__) );
-		}
+		// Image
+        $image = $product['image'] ?? $product['thumbnail'] ?? plugins_url( 'images/icons/no-image.jpg', __DIR__ );
 
-		$currency = isset( $product['currency'] ) ? $product['currency'] : 'USD';
+        // Currency
+		$currency = $product['currency'] ?? 'USD';
 
 		if ( function_exists( 'dfrapi_get_price' ) ) {
 			$regularprice = isset( $product['price'] ) ? dfrapi_get_price( $product['price'], $currency, 'product-set-search-results' ) : '';
@@ -62,38 +57,38 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 
 							<?php if ( $already_included ) : ?>
 								<div class="dfrps_product_already_included" title="<?php echo __('This product has already been manually added to this Product Set.', DFRPS_DOMAIN ); ?>">
-									<img src="<?php echo plugins_url( 'images/icons/checkmark.png', dirname(__FILE__) ); ?>" />
+									<img src="<?php echo plugins_url( 'images/icons/checkmark.png', __DIR__ ); ?>" />
 								</div>
 							<?php else : ?>
 								<div class="dfrps_add_individual_product">
 									<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Add this product to this Product Set.', DFRPS_DOMAIN ); ?>">
-										<img src="<?php echo plugins_url( 'images/icons/plus.png', dirname(__FILE__) ); ?>" />
+										<img src="<?php echo plugins_url( 'images/icons/plus.png', __DIR__ ); ?>" />
 									</a>
 								</div>
 							<?php endif; ?>
 
 							<div class="dfrps_remove_individual_product">
 								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Remove this product from the individually added list for this Product Set.', DFRPS_DOMAIN ); ?>">
-									<img src="<?php echo plugins_url( 'images/icons/minus.png', dirname(__FILE__) ); ?>" />
+									<img src="<?php echo plugins_url( 'images/icons/minus.png', __DIR__ ); ?>" />
 								</a>
 							</div>
 
 							<div class="dfrps_unblock_individual_product">
 								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Unblock this product and allow it to show up in product searches for this Product Set.', DFRPS_DOMAIN ); ?>">
-									<img src="<?php echo plugins_url( "images/icons/unblock.png", dirname(__FILE__) ); ?>" />
+									<img src="<?php echo plugins_url( "images/icons/unblock.png", __DIR__ ); ?>" />
 								</a>
 							</div>
 
 							<div class="dfrps_block_individual_product">
 								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Block this product from appearing in searches for this Product Set.', DFRPS_DOMAIN ); ?>">
-									<img src="<?php echo plugins_url( 'images/icons/block.png', dirname(__FILE__) ); ?>" />
+									<img src="<?php echo plugins_url( 'images/icons/block.png', __DIR__ ); ?>" />
 								</a>
 							</div>
 
 						</div>
 					</td>
 					<td class="product_type" rowspan="3">
-						<img src="<?php echo plugins_url( 'images/icons/' . $type . '-label.png', dirname(__FILE__) ); ?>" />
+						<img src="<?php echo plugins_url( 'images/icons/' . $type . '-label.png', __DIR__ ); ?>" />
 					</td>
 				</tr>
 				<tr>
@@ -153,8 +148,3 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 		<?php
 	}
 }
-
-	
-	
-	
-
