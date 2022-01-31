@@ -880,11 +880,14 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	if ( has_post_thumbnail( $post ) ) {
 		$thumbnail_id = absint( get_post_thumbnail_id( $post->ID ) );
 
-		return new WP_Error(
-			'dfrps_post_already_has_thumbnail',
-			__( 'This $post already has a thumbnail with an ID of ' . $thumbnail_id, 'datafeedr-product-sets' ),
-			[ 'function' => __FUNCTION__, '$post' => $post ]
-		);
+		if ( $thumbnail_id > 0 ) {
+			return new WP_Error(
+				'dfrps_post_already_has_thumbnail',
+
+				__( 'This $post already has a thumbnail with an ID of ' . $thumbnail_id, 'datafeedr-product-sets' ),
+				[ 'function' => __FUNCTION__, '$post' => $post ]
+			);
+		}
 	}
 
 	/**
