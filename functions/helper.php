@@ -880,6 +880,15 @@ function dfrps_do_import_product_thumbnail( $post_id ) {
 	if ( has_post_thumbnail( $post ) ) {
 		$thumbnail_id = absint( get_post_thumbnail_id( $post->ID ) );
 
+		/**
+		 * Add this check here because for some reason we get past the
+		 * has_post_thumbnail() check even through $thumbnail_id could be
+		 * equal to 0.
+		 *
+		 * So we make sure that $thumbnail_id is actually greater than 0 (ie. an actual ID).
+		 *
+		 * @since 1.3.10 2022-02-02
+		 */
 		if ( $thumbnail_id > 0 ) {
 			return new WP_Error(
 				'dfrps_post_already_has_thumbnail',

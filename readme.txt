@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.8
 Tested up to: 6.0-alpha
-Stable tag: 1.3.9
+Stable tag: 1.3.10
 
 Build sets of products to import into your website.
 
@@ -80,6 +80,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.10 - 2022/02/02 =
+* Added `if ( $thumbnail_id > 0 )` check for image importing.
 
 = 1.3.9 - 2022/01/28 =
 * Fixed some undefined notices in product search form.
