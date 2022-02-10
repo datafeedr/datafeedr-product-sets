@@ -82,8 +82,8 @@ class Dfrps_Initialize {
 
 	function plugin_row_meta( $links, $plugin_file ) {
 		if ( $plugin_file === DFRPS_BASENAME ) {
-			$links[] = sprintf( '<a href="' . DFRAPI_DOCS_URL . '" target="_blank">%s</a>', __( 'Documentation', DFRAPI_DOMAIN ) );
-			$links[] = sprintf( '<a href="' . DFRAPI_HELP_URL . '" target="_blank">%s</a>', __( 'Support', DFRAPI_DOMAIN ) );
+			$links[] = sprintf( '<a href="' . DFRAPI_DOCS_URL . '" target="_blank">%s</a>', __( 'Documentation', 'datafeedr-product-sets' ) );
+			$links[] = sprintf( '<a href="' . DFRAPI_HELP_URL . '" target="_blank">%s</a>', __( 'Support', 'datafeedr-product-sets' ) );
 		}
 
 		return $links;
