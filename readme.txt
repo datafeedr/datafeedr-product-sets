@@ -4,9 +4,10 @@ Contributors: datafeedr.com
 Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, import data feed, data feed, datafeed, import affiliate products
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 7.4
 Requires at least: 3.8
 Tested up to: 6.0-alpha
-Stable tag: 1.3.11
+Stable tag: 1.3.12
 
 Build sets of products to import into your website.
 
@@ -80,6 +81,12 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.12 - 2022/03/02 =
+* Added a minimum WordPress version check to the `register_activation_hook`
+* Added a Multisite check to the `register_activation_hook` to ensure that plugin can only be activated at Site-Level, not Network-Level
+* Replaced calls to `Dfrapi_Env::api_keys_exist()` with `dfrapi_datafeedr_api_keys_exist()`
+* Added "Requires PHP: 7.4" to plugin headers
 
 = 1.3.11 - 2022/02/10 =
 * Updated text domain to datafeedr-product-sets

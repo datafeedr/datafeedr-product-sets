@@ -36,7 +36,11 @@ if ( ! class_exists( 'Dfrps_Configuration' ) ) {
 			// @http://wordpress.org/support/topic/add_menu_page-always-add-an-extra-subpage?replies=6
 			$configuration = get_option( 'dfrps_configuration', array() );
 
-			if ( !Dfrapi_Env::api_keys_exist() || empty( $configuration['default_cpt'] ) ) {
+			$api_keys_exists = function_exists( 'dfrapi_datafeedr_api_keys_exist' )
+				? dfrapi_datafeedr_api_keys_exist()
+				: Dfrapi_Env::api_keys_exist();
+
+			if ( ! $api_keys_exists || empty( $configuration['default_cpt'] ) ) {
 
 				add_submenu_page(
 					'dfrps_configuration',

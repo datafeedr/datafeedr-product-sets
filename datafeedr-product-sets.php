@@ -5,10 +5,12 @@ Plugin URI: https://www.datafeedr.com
 Description: Build sets of products to import into your website. <strong>REQUIRES: </strong><a href="http://wordpress.org/plugins/datafeedr-api/">Datafeedr API</a> and <a href="https://datafeedr.me/dfrpswc">WooCommerce Importer</a> plugins.
 Author: datafeedr.com
 Author URI: https://www.datafeedr.com
+Text Domain: datafeedr-product-sets
 License: GPL v3
+Requires PHP: 7.4
 Requires at least: 3.8
 Tested up to: 6.0-alpha
-Version: 1.3.11
+Version: 1.3.12
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2022, Datafeedr - help@datafeedr.com
@@ -35,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.3.11' );
+define( 'DFRPS_VERSION', '1.3.12' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
@@ -226,7 +228,27 @@ add_action( 'admin_notices', 'dfrps_wp_cron_disabled' );
  * Upon plugin activation.
  */
 register_activation_hook( __FILE__, 'dfrps_activate' );
-function dfrps_activate() {
+function dfrps_activate( bool $network_wide ) {
+
+	// Check that minimum WordPress requirement has been met.
+	$version = get_bloginfo( 'version' );
+	if ( version_compare( $version, '3.8', '<' ) ) {
+		deactivate_plugins( DFRPS_BASENAME );
+		wp_die( __(
+			'The Datafeedr Product Sets Plugin could not be activated because it requires WordPress version 3.8 or greater. Please upgrade your installation of WordPress.',
+			'datafeedr-product-sets'
+		) );
+	}
+
+	// Check that plugin is not being activated at the Network level on Multisite sites.
+	if ( $network_wide && is_multisite() ) {
+		deactivate_plugins( DFRPS_BASENAME );
+		wp_die( __(
+			'The Datafeedr Product Sets plugin cannot be activated at the Network-level. Please activate the Datafeedr Product Sets plugin at the Site-level instead.',
+			'datafeedr-product-sets'
+		) );
+	}
+
 	dfrps_add_capabilities();
 
 	// Add default options if they do not already exist. @since 1.2.1
