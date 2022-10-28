@@ -6,8 +6,8 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.0-alpha
-Stable tag: 1.3.12
+Tested up to: 6.1
+Stable tag: 1.3.13
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.13 - 2022/10/28 =
+* Updated readme
 
 = 1.3.12 - 2022/03/02 =
 * Added a minimum WordPress version check to the `register_activation_hook`
