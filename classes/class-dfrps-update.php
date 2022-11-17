@@ -572,15 +572,15 @@ class Dfrps_Update {
 			$this->delete_first_passes();
 			$next_update_time = dfrps_get_next_update_time();
 			$next_update_time = apply_filters( 'dfrps_cpt_next_update_time', $next_update_time, $this->set );
-			update_post_meta( $this->set['ID'], '_dfrps_cpt_next_update_time', $next_update_time );
+			dfrps_update_product_set_update_interval( $this->set['ID'], $next_update_time );
 			update_post_meta( $this->set['ID'], '_dfrps_cpt_last_update_time_completed', date_i18n( 'U' ) );
 			do_action( 'dfrps_set_update_complete', $this->set );
 			$this->drop_temp_product_table();
+
 			return 'complete';
 		}
 
 		return 'repeat';
-
 	}
 
 

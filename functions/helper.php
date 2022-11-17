@@ -18,17 +18,44 @@ function dfrps_plugin_links( $plugin ) {
 }
 
 /**
- * Gets the next update time for a PS.
+ * Gets the next update time for a PS and returns it as a Unix Timestamp.
+ *
+ * @return int
  */
-function dfrps_get_next_update_time() {
-	$configuration = (array) get_option( DFRPS_PREFIX . '_configuration' );
-	if ( $configuration['update_interval'] == - 1 ) {
-		$time = date_i18n( 'U' );
-	} else {
-		$time = ( ( $configuration['update_interval'] * DAY_IN_SECONDS ) + date_i18n( 'U' ) );
-	}
+function dfrps_get_next_update_time(): int {
+	$configuration   = (array) get_option( DFRPS_PREFIX . '_configuration' );
+	$update_interval = (int) ( $configuration['update_interval'] ?? 7 );
+	$now_timestamp   = (int) date_i18n( 'U' );
 
-	return $time;
+	return ( $update_interval === - 1 )
+		? $now_timestamp
+		: ( ( $update_interval * DAY_IN_SECONDS ) + $now_timestamp );
+}
+
+/**
+ * Updates the next update time of the Product Set.
+ *
+ * @param int $product_set_id The Product Set ID.
+ * @param int $next_update_time Unix timestamp
+ *
+ * @return void
+ */
+function dfrps_update_product_set_update_interval( int $product_set_id, int $next_update_time ): void {
+	update_post_meta( $product_set_id, '_dfrps_cpt_next_update_time', $next_update_time );
+}
+
+function dfrps_get_day_name_from_day_of_week( int $day_of_week ): string {
+	$map = [
+		0 => 'Sunday',
+		1 => 'Monday',
+		2 => 'Tuesday',
+		3 => 'Wednesday',
+		4 => 'Thursday',
+		5 => 'Friday',
+		6 => 'Saturday',
+	];
+
+	return $map[ $day_of_week ] ?? $map[0];
 }
 
 function dfrps_pagination( $data, $context ) {

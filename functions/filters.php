@@ -89,6 +89,86 @@ function dfrps_handle_dfrps_bulk_bump_with_priority( $redirect_to, $doaction, $p
 add_filter( 'handle_bulk_actions-edit-datafeedr-productset', 'dfrps_handle_dfrps_bulk_bump_with_priority', 10, 3 );
 
 /**
+ * If this Product Set has a custom update schedule, use that schedule instead of the default set on Configuration page.
+ *
+ * @param int $next_update_time
+ * @param array $product_set
+ *
+ * @return int
+ */
+function dfrps_update_next_update_time_if_custom_schedule_exists_for_this_product_set( int $next_update_time, array $product_set ): int {
+
+	$custom_schedule = (array) get_post_meta( $product_set['ID'], 'dfrps_custom_update_schedule', true );
+
+	// If no custom schedule has been activated, return the default $next_update_time.
+	if ( $custom_schedule['active'] !== true ) {
+		return $next_update_time;
+	}
+
+	// If the interval type is not selected, we don't have enough data to know what to do with. Return $next_update_time.
+	if ( ! isset( $custom_schedule['interval_type'] ) ) {
+		return $next_update_time;
+	}
+
+	// If the interval type does not match the possible values, return $next_update_time.
+	if ( ! in_array( $custom_schedule['interval_type'], [ 'day_of_week', 'day_of_month' ], true ) ) {
+		return $next_update_time;
+	}
+
+	$custom_update_time = $custom_schedule['time_of_day'] ?? '00:00:00';
+
+	// Get current day's data.
+	$now_timestamp    = (int) date_i18n( 'U' );
+	$day_of_week_now  = (int) date_i18n( 'w' );
+	$day_of_month_now = (int) date_i18n( 'j' );
+
+	$custom_schedule['day_of_week'] = [
+		'd0' => false, // Sunday
+		'd1' => true, // Monday
+		'd2' => false, // Tuesday
+		'd3' => true, // Wednesday
+		'd4' => false, // Thursday
+		'd5' => true, // Friday
+		'd6' => false, // Saturday
+	];
+
+	if ( $custom_schedule['interval_type'] === 'day_of_week' ) {
+
+		$days_of_week_to_update = [];
+
+		foreach ( $custom_schedule['day_of_week'] as $day => $active ) {
+			if ( $active ) {
+				$days_of_week_to_update[] = absint( str_replace( 'd', '', $day ) );
+			}
+		}
+
+		if ( empty( $days_of_week_to_update ) ) {
+			return $next_update_time;
+		}
+
+		sort( $days_of_week_to_update );
+
+		$potential_next_update_times = [];
+
+		for ( $i = 0; $i <= 1; $i ++ ) {
+			foreach ( $days_of_week_to_update as $day_of_week ) {
+				$potential_next_update_times = strtotime( 'this week on wednesday at 11:00' );
+
+			}
+		}
+
+		// Get the next day of the week to update.
+
+
+	}
+
+
+	return $next_update_time;
+}
+
+add_filter( 'dfrps_cpt_next_update_time', 'dfrps_update_next_update_time_if_custom_schedule_exists_for_this_product_set', 10, 2 );
+
+/**
  * Add Datafeedr Product Set Plugin's settings and configuration to the WordPress
  * Site Health Info section (WordPress Admin Area > Tools > Site Health).
  *
