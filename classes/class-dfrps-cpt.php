@@ -6,7 +6,7 @@ if ( ! class_exists( 'Dfrps_Cpt' ) ) {
  * Add Product Set Custom Post Type.
  */
 class Dfrps_Cpt {
-	
+
 	public function __construct() {
 		add_action( 'save_post', 												array( $this, 'save_post' ), 10, 1 );		
 		add_action( 'admin_head-post-new.php', 									array( $this, 'posttype_admin_head_scripts' ) );	
@@ -26,7 +26,7 @@ class Dfrps_Cpt {
 		add_action( 'transition_post_status', 									array( $this, 'update_next_update_time_on_unpublish' ), 10, 3 );
 		add_action( 'transition_post_status', 									array( $this, 'set_type_on_publish' ), 10, 3 );
 		add_action( 'add_meta_boxes', 											array( $this, 'remove_wpseo_meta_box' ), 99999999999999999 );
-		
+
 		add_filter( 'manage_edit-' . DFRPS_CPT . '_columns', 					array( $this, 'column_headers' ) );
 		add_filter( 'manage_edit-' . DFRPS_CPT . '_sortable_columns', 			array( $this, 'column_sorts' ) );
 		add_filter( 'request', 													array( $this, 'column_orderby' ) );
@@ -83,7 +83,7 @@ class Dfrps_Cpt {
 			}
 		}
 	}
-	
+
 	/**
 	 * Don't display Product Sets if its importer plugin has been deactivated.
 	 * 
@@ -101,7 +101,7 @@ class Dfrps_Cpt {
     	if ( is_admin() && $query->query['post_type'] == DFRPS_CPT && $pagenow == 'edit.php' ) {
 			$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
 			$cpts = array_keys( $registered_cpts );
-			$types = implode( "','", $cpts );			
+			$types = implode( "','", $cpts );
 			$qv = &$query->query_vars;
 			$qv['meta_query'] = array();
 			$qv['meta_query'][] = array(
@@ -110,28 +110,28 @@ class Dfrps_Cpt {
 				'compare' 	=> 'IN',
 				'type' 		=> 'CHAR',
 			);
-		}	
+		}
 	}
-	
+
 	/**
 	 * Set _dfrps_cpt_type when Set is published.
 	 */
 	function set_type_on_publish( $new_status, $old_status, $post ) {
-	
+
 		// Make sure this is of type 'datafeedr-productset'.
 		$post_type = get_post_type( $post );
 		if ( $post_type != DFRPS_CPT ) {
 			return;
 		}
-		
+
 		if ( $new_status == 'publish' ) {
 			update_post_meta( $post->ID, '_dfrps_has_been_published', TRUE );
 			$configuration = (array) get_option( DFRPS_PREFIX.'_configuration' );
 			$default_cpt = $configuration['default_cpt'];
-			add_post_meta( $post->ID, '_dfrps_cpt_type', $default_cpt, TRUE );			
-		}		
+			add_post_meta( $post->ID, '_dfrps_cpt_type', $default_cpt, TRUE );
+		}
 	}
-	
+
 	/**
 	 * If $old_status is: 'pending', 'draft', 'auto-draft', 'private'
 	 * And $new_status is: 'publish'
@@ -144,7 +144,7 @@ class Dfrps_Cpt {
 			update_post_meta( $post->ID, '_dfrps_cpt_next_update_time', date_i18n( 'U' ) );
 		}
 	}
-	
+
 	/**
 	 * If $old_status is: 'trash'
 	 * And $new_status is: 'publish'
@@ -157,7 +157,7 @@ class Dfrps_Cpt {
 			update_post_meta( $post->ID, '_dfrps_cpt_next_update_time', ( date_i18n( 'U' ) + 300 ) );
 		}
 	}
-	
+
 	/**
 	 * If $old_status is: 'publish'
 	 * And $new_status is: 'pending', 'draft', 'private'
@@ -170,7 +170,6 @@ class Dfrps_Cpt {
 		}
 	}
 
-	
 	function post_updated_messages( $messages ) {
 		// Copied from here: ~/wp-admin/edit-form-advanced.php
 		global $post;
@@ -194,7 +193,7 @@ class Dfrps_Cpt {
 		);
 		return $messages;
 	}
-	
+
 	function bulk_post_updated_messages( $bulk_messages, $bulk_counts ) {
 		// Copied from here: ~/wp-admin/edit.php
 		$bulk_messages[DFRPS_CPT] = array(
@@ -205,31 +204,31 @@ class Dfrps_Cpt {
 			'untrashed' => _n( '%s Product Set restored from the Trash.', '%s Product Sets restored from the Trash.', $bulk_counts['untrashed'] ),
 		);
 		return $bulk_messages;
-	}	
-	
+	}
+
 	/**
 	 * Get rid of WordPress SEO metabox - adapted from http://wordpress.stackexchange.com/a/91184/2015
 	 */
 	function remove_wpseo_meta_box() {
 		remove_meta_box( 'wpseo_meta', DFRPS_CPT, 'normal' );
 	}
-	
+
 	function remove_all_wpseo_stuff() {
-	
+
 		if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == DFRPS_CPT ) {
 			return '__return_false';
 		}
-		
+
 		if ( isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) {
 			$post_type = get_post_type( $_GET['post'] );
 			if ( $post_type == DFRPS_CPT ) {
 				return '__return_false';
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	function admin_menu() {
 		add_submenu_page(
 			'dfrps',
@@ -240,7 +239,7 @@ class Dfrps_Cpt {
 			'' 
 		);
 	}
-		
+
 	/**
 	 * Hides the 'view' button in the post edit page
 	 * Hide "view" links on CPT page: https://gist.github.com/grappler/6046201
@@ -252,7 +251,7 @@ class Dfrps_Cpt {
 		}
 		return;
 	}
- 
+
 	/**
 	 * Removes the 'view' link in the admin bar
 	 * Hide "view" links on CPT page: https://gist.github.com/grappler/6046201
@@ -263,7 +262,7 @@ class Dfrps_Cpt {
 			$wp_admin_bar->remove_menu( 'view' );
 		}
 	}
- 
+
 	/**
 	 * Removes the 'view' button in the posts list page
 	 * Hide "view" links on CPT page: https://gist.github.com/grappler/6046201
@@ -276,7 +275,7 @@ class Dfrps_Cpt {
 		}
 		return $actions;
 	}
-		
+
 	/**
 	 * This adds our metaboxes for selecting CPTs 
 	 * as well as choosing categories.
@@ -285,7 +284,7 @@ class Dfrps_Cpt {
 	 * @http://sixtyonedesigns.com/using-ajax-in-wordpress-admin-meta-boxes/
 	 */
 	function add_custom_meta_boxes() {
-	
+
 		// Show Dashboard
 		add_meta_box(
 			'dfrps_cpt_dashboard_metabox', 
@@ -296,7 +295,7 @@ class Dfrps_Cpt {
 			'high', 
 			array()
 		);
-			
+
 		// Show CPT picker (or message if no registered CPTs exist).
 		add_meta_box(
 			'dfrps_cpt_picker_metabox', 
@@ -307,15 +306,15 @@ class Dfrps_Cpt {
 			'default', 
 			array()
 		);
-		
+
 		$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
-		
+
 		if ( !empty( $registered_cpts ) ) {
-			
+
 			foreach ( $registered_cpts as $cpt => $value ) { 
-				
+
 				$metabox_id = 'dfrps_' . $registered_cpts[$cpt]['post_type'] . '_' . $registered_cpts[$cpt]['taxonomy'] . '_category_chooser';
-				
+
 				add_meta_box(
 					$metabox_id, 
 					$registered_cpts[$cpt]['tax_name'], 
@@ -325,19 +324,19 @@ class Dfrps_Cpt {
 					'default', 
 					array( 'cpt' => $registered_cpts[$cpt] )
 				);
-				
+
 				add_filter( 'postbox_classes_' . DFRPS_CPT . '_' . $metabox_id, array( $this, 'add_metabox_class_for_categories' ) );
 			}
-		}	
+		}
 	}
-	
+
 	function add_metabox_class_for_categories( $classes=array() ) {
 		if( !in_array( 'dfrps_category_metabox', $classes ) ) {
         	$classes[] = 'dfrps_category_metabox';
         }
     	return $classes;
 	}
-	
+
 	function cpt_dashboard_metabox( $post, $box ) {
 		echo '
 		<div id="dfrps_dynamic_dashboard_area">
@@ -349,17 +348,17 @@ class Dfrps_Cpt {
 		</div>
 		';
 	}
-		
+
 	function cpt_picker_metabox( $post, $box ) {
-		
+
 		// Get registered CPTs.
 		$registered_cpts = get_option( 'dfrps_registered_cpts', array() );
 		$num_registered_cpts = count( $registered_cpts );
-		
+
 		if ( $num_registered_cpts == 0 ) {
-		
+
 			// There are no registered CPTs, so just return.
-		
+
 			echo '<p class="dfrps_warning">';
 			_e( 'Uh-oh! You haven\'t registered any Custom Post Types to use with the Datafeedr Product Sets plugin.', DFRPS_DOMAIN );
 			echo '</p><p class="dfrps_warning">';
@@ -369,26 +368,26 @@ class Dfrps_Cpt {
 			echo '<a href="' . admin_url('plugins.php') . '" target="_blank">';
 			_e( ' here', DFRPS_DOMAIN );
 			echo '</a>.</p>';
-		
+
 		} elseif ( $num_registered_cpts == 1 ) {
-		
+
 			// Set _dfrps_cpt_type
 			dfrps_set_cpt_type_to_default( $post->ID );
-		
+
 			// There's just 1 registered CPT so make that the "default".
 			$post_type = array_keys( $registered_cpts );
 			$cpt = $post_type[0];
 			echo '<label><input type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" checked="checked" /> ' . $registered_cpts[$cpt]['name'].'</label>';
-			
+
 		} else {
-		
+
 			// There's more than 1 registered CPT, so "check" the default and allow user to check others.
 			$configuration = (array) get_option( DFRPS_PREFIX.'_configuration' );
 			$default_cpt = $configuration['default_cpt'];
-			
+
 			$import_into = get_post_meta( $post->ID, '_dfrps_cpt_type', TRUE );
 			$has_been_published = get_post_meta( $post->ID, '_dfrps_has_been_published', TRUE );
-		
+
 			// Loop through registered CPTs.
 			foreach ( $registered_cpts as $cpt => $values ) {
 				echo '<label>';
@@ -408,14 +407,14 @@ class Dfrps_Cpt {
 				}
 				echo '</label>';
 			}
-				
+
 			if ( $num_registered_cpts > 1 ) {
 				echo '<div class="dfrps_type_disabled_explanation"><small>';
 				_e( 'The "Import Into" field cannot be modified after a Product Set has been published.', DFRPS_DOMAIN ); 
 				echo '</small></div>';
 			}
-		}		
-	}	
+		}
+	}
 
 	/**
 	 * Display post categories form fields.
@@ -434,15 +433,15 @@ class Dfrps_Cpt {
         $tax_instructions = $box['args']['cpt']['tax_instructions'];
 		$tax = get_taxonomy( $taxonomy );
 		$name = ( $taxonomy == 'category' ) ? 'post_category' : 'tax_input[' . $taxonomy . ']';
-		
+
 		$selected_cats = dfrps_get_cpt_terms( $post->ID ); // Ticket: 9167
-		
+
 		?>
-	
+
 		<div id="taxonomy-<?php echo $taxonomy; ?>" class="categorydiv">
-			
+
 			<div class="dfrps_tax_instructions"><?php echo $tax_instructions; ?></div>
-			
+
 			<div id="<?php echo $taxonomy; ?>-all" class="tabs-panel dfrps_category_selection_panel">
 				<div class="dfrps_saving_taxonomy"><?php _e( 'Saving&hellip;', DFRPS_DOMAIN ); ?></div>
 				<?php echo "<input type='hidden' name='{$name}[]' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.?>
@@ -450,7 +449,7 @@ class Dfrps_Cpt {
 					<?php wp_terms_checklist(false, array( 'selected_cats' => $selected_cats, 'taxonomy' => $taxonomy ) ) ?>
 				</ul>
 			</div>
-		
+
 			<?php if ( current_user_can($tax->cap->edit_terms) ) : ?>
 				<div id="<?php echo $taxonomy; ?>-adder" class="wp-hidden-children">
 					<h4><a id="<?php echo $taxonomy; ?>-add-toggle" href="#<?php echo $taxonomy; ?>-add" class="hide-if-no-js">
@@ -470,7 +469,7 @@ class Dfrps_Cpt {
 		</div>
 	<?php
 	}
-	
+
 	/**
 	 * Adds "datafeedr-productset_admin" CSS class to all CPT pages.
 	 */
@@ -510,7 +509,7 @@ class Dfrps_Cpt {
 
 	 */
 	function column_headers( $columns ) {
-	
+
 		unset( $columns['date'] );
 		unset( $columns['wpseo-score'] );
 		unset( $columns['wpseo-title'] );
@@ -535,10 +534,10 @@ class Dfrps_Cpt {
 	 * This determines what to show in each column on this page: edit.php?post_type=datafeedr-productset
 	 */
 	function column_fields( $column, $post_id ) {
-		
+
 		$post 				= $GLOBALS['post'];
 		$meta 				= get_post_custom( $post_id );
-		
+
 		$update_phase 		= intval( $meta['_dfrps_cpt_update_phase'][0] );
 		$next_update_time 	= ( isset( $meta['_dfrps_cpt_next_update_time'][0] ) ) ? $meta['_dfrps_cpt_next_update_time'][0] : 0;
 		$started 			= ( isset( $meta['_dfrps_cpt_last_update_time_started'][0] ) ) ? $meta['_dfrps_cpt_last_update_time_started'][0] : 0;
@@ -556,7 +555,7 @@ class Dfrps_Cpt {
 		$active_status = ( dfrps_set_is_active( $meta['_dfrps_cpt_type'][0] ) )
 			? '<div class="dfrps_cpt_active" title="This Product Set is active and regularly performing product imports/updates.">Active</div>'
 			: '<div class="dfrps_cpt_inactive" title="This Product Set is no longer importing/updating products.">Inactive</div>';
-		
+
 		switch ( $column ) {
 
 			case 'created':
@@ -599,7 +598,7 @@ class Dfrps_Cpt {
 
 			case '_dfrps_cpt_next_update_time':
 				if ( $post->post_status == 'publish' ) {
-				
+
 					if ( $next_update_time == 0 ) {
 						echo '<abbr title="' . __( 'This Product Set will update as soon as possible.', DFRPS_DOMAIN ) . '">ASAP</abbr>';
 					} else {
@@ -653,7 +652,7 @@ class Dfrps_Cpt {
 				break;
 		}
 	}
-	
+
 	/**
  	 * Register the column as sortable
  	 * @http://scribu.net/wordpress/custom-sortable-columns.html
@@ -670,12 +669,12 @@ class Dfrps_Cpt {
 		$columns['_dfrps_cpt_last_update_num_products_deleted'] = 'products_deleted';
 		return $columns;
 	}
-	
+
 	/**
 	 * Modify query to handle sorts.
 	 */
 	function column_orderby( $vars ) {
-		
+
 		// Next Update Column
 		if ( isset( $vars['orderby'] ) && 'next_update' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
@@ -683,7 +682,7 @@ class Dfrps_Cpt {
 				'orderby' => 'meta_value_num'
 			) );
 		}
-		
+
 		// Started Column
 		if ( isset( $vars['orderby'] ) && 'started' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
@@ -691,7 +690,7 @@ class Dfrps_Cpt {
 				'orderby' => 'meta_value_num'
 			) );
 		}
-		
+
 		// Last Update Column
 		if ( isset( $vars['orderby'] ) && 'last_update' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
@@ -699,7 +698,7 @@ class Dfrps_Cpt {
 				'orderby' => 'meta_value_num'
 			) );
 		}
-		
+
 		// Number of Products
 		if ( isset( $vars['orderby'] ) && 'num_products' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
@@ -707,7 +706,7 @@ class Dfrps_Cpt {
 				'orderby' => 'meta_value_num'
 			) );
 		}
-		
+
 		// Number of API Requests
 		if ( isset( $vars['orderby'] ) && 'api_requests' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
@@ -715,7 +714,7 @@ class Dfrps_Cpt {
 				'orderby' => 'meta_value_num'
 			) );
 		}
-		
+
 		// Number of Deleted Products
 		if ( isset( $vars['orderby'] ) && 'products_deleted' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
@@ -723,10 +722,10 @@ class Dfrps_Cpt {
 				'orderby' => 'meta_value_num'
 			) );
 		}
- 
+
 		return $vars;
 	}
-	
+
 	/**
 	 * Add filter to list of Product Sets to filter by what the Product Set is importing into.
 	 * 
@@ -751,7 +750,7 @@ class Dfrps_Cpt {
 		} else {
 			$type = '';
 		}
-				
+
 		echo "<select name='_dfrps_cpt_type' id='dfrps_type_filter' class='postform'>";
 		echo "<option value=''>" . __( 'Show all types', DFRPS_DOMAIN ) . "</option>";
 		foreach ( $cpts as $cpt ) {
@@ -759,7 +758,7 @@ class Dfrps_Cpt {
 		}
 		echo "</select>";
 	}
-	
+
 	/**
 	 * Set the next update time to 5 minutes in the future so a user has time Restore
 	 * this product set from the Trash.
@@ -774,38 +773,38 @@ class Dfrps_Cpt {
 		update_post_meta( $post_id, '_dfrps_cpt_next_update_time', ( date_i18n( 'U' ) + 300 ) );
 		dfrps_reset_product_set_update( $post_id );
 	}
-	
+
 	/**
 	 * This saves the data added in meta/custom fields and saves it to the database.
 	 * @http://codex.wordpress.org/Function_Reference/add_meta_box
 	 * @http://codex.wordpress.org/Plugin_API/Action_Reference/save_post
 	 */
 	function save_post( $post_id ) {
-	
+
 		// Make sure this is of type 'datafeedr-productset'.
 		$post_type = get_post_type( $post_id );
 		if ( $post_type != DFRPS_CPT ) {
 			return;
 		}
-				
+
 		add_post_meta( $post_id, '_dfrps_cpt_update_phase', 0, true );
-				
+
 		if ( isset( $_POST['post_status'] ) && $_POST['post_status'] != 'publish' && $_POST['post_status'] != 'future' ) {
 			//add_post_meta( $post_id, '_dfrps_cpt_next_update_time', 3314430671, true );
 		} else {
 			if ( isset( $_POST['ID'] ) ) {
 				$publish_time = get_the_time( 'U', $_POST['ID'] );
 				//add_post_meta( $post_id, '_dfrps_cpt_next_update_time', $publish_time, true );
-			}	
+			}
 		}
-		
+
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_time_started', 0, true );
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_time_completed', 0, true );
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_api_requests', 0, true );
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_products_added', 0, true );
-		
+
 	}
-	
+
 	/**
 	* This changes the input title which appears when the title field is blank.
 	* @http://wp-snippets.com/change-enter-title-here-text-for-custom-post-type/
@@ -840,7 +839,7 @@ class Dfrps_Cpt {
 		if  ( DFRPS_CPT != get_post_type() ) { echo ''; return; }
 		require_once ( DFRPS_PATH . 'functions/cpt-ajax.php' );
 	}
-	
+
 	/**
 	* This changes the "Publish" button to "Save Product Set" on add/edit post page.
 	* @http://wordpress.stackexchange.com/a/36115/34155
@@ -855,7 +854,7 @@ class Dfrps_Cpt {
 		}
 		return $translation;
 	}
-	
+
 	/**
 	* Prevent autosave on specific content type.
 	* @http://ryansechrest.com/2012/09/prevent-autosave-on-a-custom-post-type-in-wordpress/
@@ -867,14 +866,14 @@ class Dfrps_Cpt {
 			//wp_enqueue_style( 'dfrapi_searchform' );
 		}
 	}
-	
+
 	/**
 	 * Adds the tabs to the layout just under the title field.
 	 * Adds the search form.
 	 * Adds the search results area.
 	 */
-	function meta_boxes() {		
-		
+	function meta_boxes() {
+
 		// Add the update status meta box if it's not a new set.
 		if ( !preg_match( "/post-new.php/i", $_SERVER['SCRIPT_NAME'] ) ) {
 			add_meta_box(
@@ -887,7 +886,7 @@ class Dfrps_Cpt {
 				array()
 			);
 		}
-	
+
 		// Add the tabs meta box.
 		add_meta_box(
 			'div_dfrps_tabs', 
@@ -898,7 +897,7 @@ class Dfrps_Cpt {
 			'default', 
 			array()
 		);
-		
+
 		// Add the search form meta box.
 		add_meta_box(
 			'div_dfrps_tab_search', 
@@ -909,7 +908,7 @@ class Dfrps_Cpt {
 			'default', 
 			array()
 		);
-		
+
 		// Add the saved search meta box.
 		add_meta_box(
 			'div_dfrps_tab_saved_search', 
@@ -920,7 +919,7 @@ class Dfrps_Cpt {
 			'default', 
 			array()
 		);
-		
+
 		// Add the included products meta box.
 		add_meta_box(
 			'div_dfrps_tab_included', 
@@ -931,7 +930,7 @@ class Dfrps_Cpt {
 			'default', 
 			array()
 		);
-		
+
 		// Add the blocked products meta box.
 		add_meta_box(
 			'div_dfrps_tab_blocked', 
@@ -943,39 +942,39 @@ class Dfrps_Cpt {
 			array()
 		);
 	}
-	
+
 	function saved_search_products() {
-		echo 'saved search here';		
+		echo 'saved search here';
 	}
-	
+
 	function included_products() {
 		echo 'included products here';
 	}
-	
+
 	function blocked_products() {
 		echo 'blocked products here';
 	}
-	
+
 	function last_update_status() {
-	
+
 		$post 				= $GLOBALS['post'];
 		$meta 				= get_post_custom( $post->ID );
 		$completed 			= $meta['_dfrps_cpt_last_update_time_completed'][0];
 		$update_errors 		= ( isset( $meta['_dfrps_cpt_errors'][0] ) ) ? maybe_unserialize( $meta['_dfrps_cpt_errors'][0] ) : '';
-				
+
 		// Show last update stats
 		if ( $completed == 0 ) {
 			// Is updating now or has never updated.
 			// Show values from '_dfrps_cpt_previous_update_info' meta field if exists.
 			$meta = ( isset( $meta['_dfrps_cpt_previous_update_info'][0] ) ) ? maybe_unserialize( $meta['_dfrps_cpt_previous_update_info'][0] ) : array();
 		}
-		
+
 		if ( !isset( $meta['_dfrps_cpt_last_update_time_completed'][0] ) ) {
-		
+
 			echo __( 'This Product Set has never been imported.', DFRPS_DOMAIN );
-		
+
 		} else {
-		
+
 			if ( version_compare( phpversion(), '5.3.0', '>=') ) {
 				$datetime1 = new DateTime('@' . $meta['_dfrps_cpt_last_update_time_started'][0]);
 				$datetime2 = new DateTime('@' . $meta['_dfrps_cpt_last_update_time_completed'][0]);
@@ -984,7 +983,7 @@ class Dfrps_Cpt {
 				$elapsed   = str_replace(array('0 years,', ' 0 months,', ' 0 days,',  ' 0 hours,', ' 0 minutes,'), '', $elapsed);
 				$elapsed   = str_replace(array('1 years, ', ' 1 months, ', ' 1 days, ',  ' 1 hours, ', ' 1 minutes'), array('1 year, ', '1 month, ', ' 1 day, ', ' 1 hour, ', ' 1 minute'), $elapsed);
 			}
-						
+
 			if ( version_compare( phpversion(), '5.3.0', '>=') ) {
 				$elapsed_row = '
 				<tr class="alternate">
@@ -993,11 +992,11 @@ class Dfrps_Cpt {
 				</tr>
 				';
 			}
-			
+
 			if ( is_array( $update_errors ) && !empty( $update_errors ) ) {
 				echo dfrapi_output_api_error( $update_errors );
 			}
-			
+
 			echo '
 			<table class="widefat last_update_table" cellspacing="0">
 				<tbody>
@@ -1027,12 +1026,12 @@ class Dfrps_Cpt {
 			';
 		}
 	}
-	
+
 	/**
 	 * Tabs layout for "Search", "Included" and "Excluded" products.
 	 */
 	function tabs() {
-		?>		
+		?>
 		<h2 class="nav-tab-wrapper" id="dfrps_cpt_tabs">
 			<a href="#" class="nav-tab nav-tab-active" id="tab_search">
 				<?php _e( 'Search', DFRPS_DOMAIN ); ?>
@@ -1055,7 +1054,7 @@ class Dfrps_Cpt {
 		</h2>
 		<?php
 	}
-	
+
 	/**
 	* Add CSS class to meta boxes.
 	* @http://wordpress.stackexchange.com/a/49784/34155
@@ -1064,7 +1063,7 @@ class Dfrps_Cpt {
 		array_push( $classes, 'dfrps_meta_box', 'no_box' );
 		return $classes;
 	}
-	
+
 	/**
 	* Add CSS class to meta boxes.
 	* @http://wordpress.stackexchange.com/a/49784/34155
@@ -1073,9 +1072,9 @@ class Dfrps_Cpt {
 		array_push( $classes, 'dfrps_meta_box', 'dfrps_hidden', 'no_box' );
 		return $classes;
 	}
-	
+
 	function get_search_form_defaults( $post_id ) {
-		
+
 		$saved_query = get_post_meta( $post_id, '_dfrps_cpt_query', true );
 		if ( $saved_query != '' ) {
 			return $saved_query;
@@ -1085,16 +1084,16 @@ class Dfrps_Cpt {
 		if ( $temp_query != '' ) {
 			return $temp_query;
 		}
-		
+
 		$configuration = (array) get_option( DFRPS_PREFIX.'_configuration' );
 		$default_filters = $configuration['default_filters'];
 		if ( !empty( $default_filters ) ) {
 			return $configuration['default_filters']['dfrps_query'];
 		}
-		
-		return false;		
+
+		return false;
 	}
-	
+
 	function search_form() { ?>	
 		<div id="dfrps_search_form_wrapper" class="stuffbox">
 			<div class="instructions" style="display: none;">
@@ -1245,7 +1244,7 @@ class Dfrps_Cpt {
 								</tr>
 							</tbody>
 						</table>
-						
+
 						<h3><?php _e( 'Character Operators', DFRPS_DOMAIN ); ?></h3>
 						<p><?php _e( 'Use these filter operators to further modify your filter operators. ', DFRPS_DOMAIN ); ?></p> 
 						<table class="widefat" cellspacing="0">
@@ -1301,9 +1300,7 @@ class Dfrps_Cpt {
 		<div id="div_dfrps_tab_search_results"></div>
 		<?php
 	}
-	
+
 }
-
-
 
 } // class_exists check
