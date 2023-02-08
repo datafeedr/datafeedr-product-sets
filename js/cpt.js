@@ -41,5 +41,24 @@ jQuery(function($) {
 	}
 	dfrpsStyleUpdatingRow();
 
-}); // jQuery(function($) {
+	function schedule_metabox() {
+        $('#enabled').on('click', function(e){
+            $('.options').toggle();
+        });
 
+        $('#day-of-week').on('change', function(e){
+            if ( $("#day-of-week").prop('checked', true)) {
+                $('.week').show();
+                $('.month').hide();
+            }
+        });
+        $('#day-of-month').on('change', function(e){
+           if ( $("#day-of-month").prop('checked', true)){
+                $('.week').hide();
+                $('.month').show();
+            }
+        });
+    }
+    schedule_metabox();
+
+}); // jQuery(function($)
