@@ -9,11 +9,11 @@ Text Domain: datafeedr-product-sets
 License: GPL v3
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.1
-Version: 1.3.13
+Tested up to: 6.1.2-alpha
+Version: 1.3.14
 
 Datafeedr Product Sets Plugin
-Copyright (C) 2022, Datafeedr - help@datafeedr.com
+Copyright (C) 2023, Datafeedr - help@datafeedr.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.3.13' );
+define( 'DFRPS_VERSION', '1.3.14' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
