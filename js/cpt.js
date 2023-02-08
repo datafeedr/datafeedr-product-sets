@@ -39,11 +39,7 @@ jQuery(function($) {
 			$("tr#"+row).addClass("dfrps_updating_row");
 		}
 	}
-	dfrpsStyleUpdatingRow();	
+	dfrpsStyleUpdatingRow();
 
 }); // jQuery(function($) {
 
-
-
-
-       

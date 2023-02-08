@@ -16,9 +16,9 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 			$this->key = 'dfrps_tools';
 			add_action( 'admin_init', array( &$this, 'register_settings' ) );
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-			add_action( 'admin_notices', array( $this, 'admin_notice' ) );		
+			add_action( 'admin_notices', array( $this, 'admin_notice' ) );
 		}
-	
+
 		function admin_menu() {
 			add_submenu_page(
 				'dfrps',
@@ -29,7 +29,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 				array( $this, 'output' ) 
 			);
 		}
-		
+
 		function admin_notice() {
 			if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true && isset( $_GET['page'] ) && $this->key == $_GET['page'] ) {
 				echo '<div class="updated"><p>';
@@ -42,7 +42,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 			echo '<div class="wrap" id="' . $this->key . '">';
 			echo '<h2>' . __( 'Tools &#8212; Datafeedr Product Sets', DFRPS_DOMAIN ) . '</h2>';
 			?>
-			
+
 			<script>
 			jQuery(function($) {
 				$('#dfrps_test_loopbacks').on('click',function(e) {
@@ -58,11 +58,11 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 					}).done(function(html) {
 						$("#dfrps_test_loopbacks").text('<?php _e("Test Loopbacks", DFRPS_DOMAIN); ?>').removeClass('button-disabled');
 						$("#dfrps_test_loopbacks_result").show().html(html);
-			
+
 					});
 					e.preventDefault();
 				});
-				
+
 				$('#dfrps_reset_cron').on('click',function(e) {
 					$("#dfrps_reset_cron_result").hide();
 					$("#dfrps_reset_cron").text('<?php _e("Resetting...", DFRPS_DOMAIN); ?>').addClass('button-disabled');
@@ -76,12 +76,11 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 					}).done(function(html) {
 						$("#dfrps_reset_cron").text('<?php _e("Reset Cron", DFRPS_DOMAIN); ?>').removeClass('button-disabled');
 						$("#dfrps_reset_cron_result").show().html(html);
-			
+
 					});
 					e.preventDefault();
 				});
-				
-				
+
 				$('#dfrps_fix_missing_images').on('click',function(e) {
 					$("#dfrps_fix_missing_images_result").hide();
 					$("#dfrps_fix_missing_images").text('<?php _e("Processing...", DFRPS_DOMAIN); ?>').addClass('button-disabled');
@@ -95,13 +94,13 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 					}).done(function(html) {
 						$("#dfrps_fix_missing_images").text('<?php _e("Fix Missing Images", DFRPS_DOMAIN); ?>').removeClass('button-disabled');
 						$("#dfrps_fix_missing_images_result").show().html(html);
-			
+
 					});
 					e.preventDefault();
 				});
-				
+
 				$('#dfrps_start_batch_image_import').on('click',function(e) {
-					$("#dfrps_start_batch_image_import_result").show().html('<div><?php _e("Starting...", DFRPS_DOMAIN); ?></div>');					
+					$("#dfrps_start_batch_image_import_result").show().html('<div><?php _e("Starting...", DFRPS_DOMAIN); ?></div>');
 					$.ajax({
 						type: "POST",
 						url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
@@ -115,7 +114,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 					});
 					e.preventDefault();
 				});
-				
+
 				$('#dfrps_stop_batch_image_import').on('click',function(e) {
 					$("#dfrps_stop_batch_image_import").text('<?php _e("Stopping...", DFRPS_DOMAIN); ?>').addClass('button-disabled');
 					$.ajax({
@@ -130,7 +129,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 					});
 					e.preventDefault();
 				});
-				
+
 				var reload_batch_import = function() {
 					return $.ajax({
 						type: "POST",
@@ -142,31 +141,30 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 						},
 						success: function(data) {
 							$("#dfrps_start_batch_image_import_result").prepend(data);
-							
+
 							if ( data != 'Stopped' && data != 'Complete' ) {
 								reload_batch_import();
 							}
 						}
 					});
 				};
-				
-				
+
 			}); // jQuery(function($) {
 			</script>
-			
+
 			<?php
 			settings_fields( $this->page );
 			do_settings_sections( $this->page);
 			echo '</div>';
 		}
-	
+
 		function register_settings() {
 			add_settings_section( 'loopback_test', __( 'Test HTTP Loopback', DFRPS_DOMAIN ), array( &$this, 'section_loopback_test_desc' ), $this->page );
 			add_settings_section( 'reset_cron', __( 'Reset Cron', DFRPS_DOMAIN ), array( &$this, 'section_reset_cron_desc' ), $this->page );
 			add_settings_section( 'fix_missing_images', __( 'Fix Missing Images', DFRPS_DOMAIN ), array( &$this, 'section_fix_missing_images_desc' ), $this->page );
 			add_settings_section( 'batch_image_import', __( 'Bulk Image Import', DFRPS_DOMAIN ), array( &$this, 'section_batch_image_import_desc' ), $this->page );
 		}
-	
+
 		function section_loopback_test_desc() { ?>
 			<p>
 				<?php _e( 'If HTTP Loopbacks are disabled by your web host, Product Sets will not import products into your site. Click the <strong>[Test Loopbacks]</strong> button below to determine if loopbacks are enabled or disabled on your server. ', DFRPS_DOMAIN ); ?>
@@ -177,7 +175,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 			<hr />
 		<?php
 		}
-	
+
 		function section_reset_cron_desc() { ?>
 			<p><?php _e( 'If your Product Sets have stalled during an update or are past due, click the <strong>[Reset Cron]</strong> button below to attempt to jumpstart the cron again.', DFRPS_DOMAIN ); ?></p>
 			<p><a href="#" id="dfrps_reset_cron" class="button"><?php _e("Reset Cron", DFRPS_DOMAIN); ?></a></p>
@@ -185,7 +183,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 			<hr />
 		<?php
 		}
-	
+
 		function section_fix_missing_images_desc() { ?>
 			<p><?php _e( 'If a product has an image but it wasn\'t imported into your site succesfully, click the <strong>[Fix Missing Images]</strong> button to attempt to redownload the missing images the next time those products are displayed on your site.', DFRPS_DOMAIN ); ?></p>
 			<p><a href="#" id="dfrps_fix_missing_images" class="button"><?php _e("Fix Missing Images", DFRPS_DOMAIN); ?></a></p>
@@ -193,7 +191,7 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 			<hr />
 		<?php
 		}
-		
+
 		function section_batch_image_import_desc() { ?>
 			<p>
 				<?php _e( 'When a product is first displayed on your website, its image is downloaded from the merchant\'s website. ', DFRPS_DOMAIN ); ?>
@@ -207,11 +205,11 @@ if ( ! class_exists( 'Dfrps_Tools' ) ) {
 			<ol reversed id="dfrps_start_batch_image_import_result" style="margin-left: 0; padding: 10px; padding-left: 40px; border: 1px solid silver; display: none; background: #FFF;"></ol>
 		<?php
 		}
-		
+
 		function validate( $input ) {
 			return $input;
 		}
-		
+
 	} // class Dfrps_Tools
 
 } // class_exists check

@@ -42,8 +42,8 @@ class Dfrps_Image_Importer {
 	/**
 	 * Check if there is an image URL.
 	 *
-	 * Check the field respsonsible for storing the URL of the image
-	 * we intentd to import.
+	 * Check the field responsible for storing the URL of the image
+	 * we intend to import.
 	 *
 	 * @since 1.1.10
 	 *
@@ -120,7 +120,7 @@ class Dfrps_Image_Importer {
 	}
 
 	/**
-	 * Detemine if we should download and import the image for this post.
+	 * Determine if we should download and import the image for this post.
 	 *
 	 * This will check whether this post was added by a Product Set,
 	 * if its type is a registered CPT, already has a thumbnail and if
@@ -202,7 +202,7 @@ class Dfrps_Image_Importer {
 	 * @since 1.1.10
 	 * @since 1.2.18 - Changed Chrome user-agent to Firefox to deal with .webp issues.
 	 *
-	 * @param array $r The arguements of the WP_Http request.
+	 * @param array $r The arguments of the WP_Http request.
 	 * @param string $url The URL of the image.
 	 *
 	 * @return array Returns back to the filter.
@@ -236,7 +236,7 @@ class Dfrps_Image_Importer {
 	 * @see wp_remote_get(), wp_remote_retrieve_header(), media_handle_sideload()
 	 * @link http://theme.fm/2011/10/how-to-upload-media-via-url-programmatically-in-wordpress-2657/
 	 *
-	 * @return bool|int Returns false if image processing fails. Retunrs ID of attachment if image processing succeeds.
+	 * @return bool|int Returns false if image processing fails. Returns ID of attachment if image processing succeeds.
 	 */
 	function media_sideload_image() {
 
