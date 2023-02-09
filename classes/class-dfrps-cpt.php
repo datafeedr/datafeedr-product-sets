@@ -944,8 +944,14 @@ class Dfrps_Cpt {
             $interval = isset( $_POST['interval'] ) ? sanitize_text_field( $_POST['interval'] ) : 'Day of week';
             $month    = isset( $_POST['month'] ) ? (array) $_POST['month'] : [];
     		$month    = array_map( 'strip_tags', $month );
+    		if ( empty( $month ) ) {
+    		    $month = ['1'];
+			}
             $week     = isset( $_POST['week'] ) ? (array) $_POST['week'] : [];
             $week     = array_map( 'strip_tags', $week );
+            if ( empty( $week ) ){
+                $week = ['1'];
+			}
             $hour     = isset( $_POST['hour'] ) ? sanitize_key( $_POST['hour'] ) : '';
             $minute   = isset( $_POST['minute'] ) ? sanitize_key( $_POST['minute'] ) : '';
 
