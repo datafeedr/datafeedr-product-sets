@@ -379,18 +379,18 @@ class Dfrps_Cpt {
         }
 
 		echo '<div class="section">';
-		echo '<input name="enabled" type="checkbox" ' . checked( 'on', $settings['enabled'], false ) . ' id="enabled"> Enabled';
+		echo '<input name="enabled" type="checkbox" ' . checked( 'on', $settings['enabled'], false ) . ' id="enabled">' . __( 'Enabled', 'datafeedr-product-sets' );
 		echo '</div>';
 
 		$show = 'on' === $settings['enabled'] ? '' : 'style="display:none"';
 		echo '<div class="options" ' . $show .'>';
 
 		echo '<div class="section intervals">';
-		echo '<label for="interval">Interval <span class="req">*</span></label>';
+		echo '<label for="interval">' . __( 'Interval', 'datafeedr-product-sets' ) . ' <span class="req">*</span></label>';
         echo '<input type="radio" class="interval" name="interval" value="Day of week" id="day-of-week" ' . checked( 'Day of week', $settings['interval'], false ) . ' >';
-        echo '<label  class="interval-label" for="day-of-week">Day of week</label><br/>';
+        echo '<label  class="interval-label" for="day-of-week">' . __( 'Day of week', 'datafeedr-product-sets' ) . '</label><br/>';
 		echo '<input type="radio" class="interval" name="interval" value="Day of the month" id="day-of-month" ' . checked( 'Day of the month', $settings['interval'], false ) . ' >';
-		echo '<label class="interval-label" for="day-of-month">Day of the month</label><br/>';
+		echo '<label class="interval-label" for="day-of-month">' . __( 'Day of the month', 'datafeedr-product-sets' ) . '</label><br/>';
 		echo '</div>';
 
 		echo $this->day_of_week( $settings );
@@ -400,7 +400,7 @@ class Dfrps_Cpt {
 		$hour = substr( $settings['time'], 0, 2 );
 		$minute = substr( $settings['time'], 3, 2 );
 		echo '<div class="section time">';
-		echo '<label for="hour">Time (HH:MM) <span class="req">*</span></label>';
+		echo '<label for="hour">' . __( 'Time (HH:MM)', 'datafeedr-product-sets' ) . ' <span class="req">*</span></label>';
 		echo '<select name="hour">';
 		for ( $i = 0; $i <= 23; $i++ ){
 			$value = ( 10 <= $i ) ? strval( $i) : '0' . $i;
@@ -428,29 +428,29 @@ class Dfrps_Cpt {
         $html = '';
 		$show = 'Day of week' === $settings['interval'] ? '' : 'style="display:none"';
 		$html .= '<div class="section week" ' . $show . ' >';
-		$html .= '<label for="week">Days <span class="req">*</span></label>';
+		$html .= '<label for="week">' . __( 'Days', 'datafeedr-product-sets' ) . ' <span class="req">*</span></label>';
 		$html .= '<select name="week[]" id="week" class="day" size="7" multiple>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '1', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="1" ' . $selected . '>Every Monday</option>';
+		$html .= '<option value="1" ' . $selected . '>' . __( 'Every Monday', 'datafeedr-product-sets' ) . '</option>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '2', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="2" ' . $selected . '>Every Tuesday</option>';
+		$html .= '<option value="2" ' . $selected . '>' . __( 'Every Tuesday', 'datafeedr-product-sets' ) . '</option>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '3', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="3" ' . $selected . '>Every Wednesday</option>';
+		$html .= '<option value="3" ' . $selected . '>' . __( 'Every Wednesday', 'datafeedr-product-sets' ) . '</option>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '4', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="4" ' . $selected . '>Every Thursday</option>';
+		$html .= '<option value="4" ' . $selected . '>' . __( 'Every Thursday', 'datafeedr-product-sets' ) . '</option>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '5', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="5" ' . $selected . '>Every Friday</option>';
+		$html .= '<option value="5" ' . $selected . '>' . __( 'Every Friday', 'datafeedr-product-sets' ) . '</option>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '6', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="6" ' . $selected . '>Every Saturday</option>';
+		$html .= '<option value="6" ' . $selected . '>' . __( 'Every Saturday', 'datafeedr-product-sets' ) . '</option>';
 
 		$selected = in_array( '0', $settings['days'] ) ? 'selected' : '';
-		$html .= '<option value="0" ' . $selected . '>Every Sunday</option>';
+		$html .= '<option value="0" ' . $selected . '>' . __( 'Every Sunday', 'datafeedr-product-sets' ) . '</option>';
 		$html .= '</select>';
 		$html .= '</div>';
 
@@ -468,26 +468,14 @@ class Dfrps_Cpt {
 
 		$show = 'Day of the month' === $settings['interval'] ? '' : 'style="display:none"';
 		$html .= '<div class="section month" ' . $show . '>';
-		$html .= '<label for="month">Days <span class="req">*</span></label>';
+		$html .= '<label for="month">' . __( 'Days', 'datafeedr-product-sets' ) . ' <span class="req">*</span></label>';
 		$html .= '<select name="month[]" id="month" class="day" size="10" multiple>';
 
 	    for ( $i=1; $i < 29; $i++ ) {
             $selected = 'Day of the month' === $settings['interval'] && in_array( $i, $settings['days'] ) ? 'selected' : '';
-            switch ( $i ){
-                case 1:
-                    $suffix = 'st';
-                    break;
-                case 2:
-                    $suffix = 'nd';
-                    break;
-                case 3:
-                    $suffix = 'rd';
-                    break;
-                default:
-                    $suffix = 'th';
-            }
+			$date     = sprintf( 'January %d, 2000', $i );
 
-			$html .= '<option value="' . $i . '" ' . $selected . ' >Every ' . $i . $suffix . '</option>';
+			$html .= '<option value="' . $i . '" ' . $selected . ' >' . __( 'Every ', 'datafeedr-product-sets' ) . esc_html( date_i18n( 'jS', strtotime( $date ) ) ) . '</option>';
  		}
 		$html .= '</select>';
 		$html .= '</div>';
