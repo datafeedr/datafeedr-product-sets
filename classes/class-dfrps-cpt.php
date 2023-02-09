@@ -360,28 +360,29 @@ class Dfrps_Cpt {
 	}
 
 	/**
-     * Callback for Custom Update Schedule meta box.
-     *
+	 * Callback for Custom Update Schedule meta box.
+	 *
 	 * @param WP_Post $post
 	 * @param $box
 	 */
     function cpt_schedule_metabox( $post, $box ) {
 
-	    // TODO: Get settings from the post meta
-        //$settings = get_post_meta( $post->ID, '_dfrps_update_schedule', true );
-	    $settings = [
-			'enabled' => 'yes',
-			'interval' => 'Day of week',
-            'days' => ['0','1','2'],
-            'time' => '12:13',
-        ];
+        $settings = get_post_meta( $post->ID, '_dfrps_update_schedule', true );
 
+        if ( empty( $settings ) ) {
+            $settings = [
+                'enabled' => '',
+                'interval' => 'Day of week',
+                'days' => [],
+                'time' => '00:00',
+            ];
+        }
 
 		echo '<div class="section">';
-		echo '<input type="checkbox" ' . checked( 'yes', $settings['enabled'], false ) . ' id="enabled"> Enabled';
+		echo '<input name="enabled" type="checkbox" ' . checked( 'on', $settings['enabled'], false ) . ' id="enabled"> Enabled';
 		echo '</div>';
 
-		$show = 'yes' === $settings['enabled'] ? '' : 'style="display:none"';
+		$show = 'on' === $settings['enabled'] ? '' : 'style="display:none"';
 		echo '<div class="options" ' . $show .'>';
 
 		echo '<div class="section intervals">';
@@ -403,14 +404,14 @@ class Dfrps_Cpt {
 		echo '<select name="hour">';
 		for ( $i = 0; $i <= 23; $i++ ){
 			$value = ( 10 <= $i ) ? strval( $i) : '0' . $i;
-			echo '<option value="' . $value . '" ' . selected($i, $hour, false ) . '>' . $value . '</option>';
+			echo '<option value="' . $value . '" ' . selected( $value, $hour, false ) . '>' . $value . '</option>';
         }
 		echo '</select>';
 		echo ":";
 		echo '<select name="minute">';
 		for ( $i = 0; $i <= 59; $i++ ){
 		    $value = ( 10 <= $i ) ? strval( $i) : '0' . $i;
-			echo '<option value="' . $value . '" ' . selected($i, $minute, false ) . '>' . $value . '</option>';
+			echo '<option value="' . $value . '" ' . selected( $value, $minute, false ) . '>' . $value . '</option>';
 		}
 		echo '</select>';
 		echo '</div>';
@@ -428,7 +429,7 @@ class Dfrps_Cpt {
 		$show = 'Day of week' === $settings['interval'] ? '' : 'style="display:none"';
 		$html .= '<div class="section week" ' . $show . ' >';
 		$html .= '<label for="week">Days <span class="req">*</span></label>';
-		$html .= '<select name="week" id="week" class="day" multiple>';
+		$html .= '<select name="week[]" id="week" class="day" size="7" multiple>';
 
 		$selected = 'Day of week' === $settings['interval'] && in_array( '1', $settings['days'] ) ? 'selected' : '';
 		$html .= '<option value="1" ' . $selected . '>Every Monday</option>';
@@ -468,7 +469,7 @@ class Dfrps_Cpt {
 		$show = 'Day of the month' === $settings['interval'] ? '' : 'style="display:none"';
 		$html .= '<div class="section month" ' . $show . '>';
 		$html .= '<label for="month">Days <span class="req">*</span></label>';
-		$html .= '<select name="month" id="month" class="day" multiple>';
+		$html .= '<select name="month[]" id="month" class="day" size="10" multiple>';
 
 	    for ( $i=1; $i < 29; $i++ ) {
             $selected = 'Day of the month' === $settings['interval'] && in_array( $i, $settings['days'] ) ? 'selected' : '';
@@ -948,7 +949,35 @@ class Dfrps_Cpt {
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_api_requests', 0, true );
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_products_added', 0, true );
 
-		// TODO Save custom update schedule.
+		$enabled = isset( $_POST['enabled'] ) ? sanitize_key( $_POST['enabled'] ) : '';
+
+        if ( 'on' === $enabled ) {
+
+            $interval = isset( $_POST['interval'] ) ? sanitize_text_field( $_POST['interval'] ) : 'Day of week';
+            $month    = isset( $_POST['month'] ) ? (array) $_POST['month'] : [];
+    		$month    = array_map( 'strip_tags', $month );
+            $week     = isset( $_POST['week'] ) ? (array) $_POST['week'] : [];
+            $week     = array_map( 'strip_tags', $week );
+            $hour     = isset( $_POST['hour'] ) ? sanitize_key( $_POST['hour'] ) : '';
+            $minute   = isset( $_POST['minute'] ) ? sanitize_key( $_POST['minute'] ) : '';
+
+            $schedule = [
+                    'enabled' => $enabled,
+                    'interval' => $interval,
+                    'days' => '',
+                    'time' => $hour . ':' . $minute,
+            ];
+
+            if ( 'Day of week' === $schedule['interval'] ) {
+                $schedule['days'] = $week;
+            } else {
+                $schedule['days'] = $month;
+            }
+
+			update_post_meta( $post_id, '_dfrps_update_schedule', $schedule );
+		} else {
+			delete_post_meta( $post_id, '_dfrps_update_schedule', );
+		}
 	}
 
 	/**
