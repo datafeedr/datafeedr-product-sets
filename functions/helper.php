@@ -19,16 +19,112 @@ function dfrps_plugin_links( $plugin ) {
 
 /**
  * Gets the next update time for a PS.
+ *
+ * @param int $post_id
+ * @return float|int|string
  */
-function dfrps_get_next_update_time() {
-	$configuration = (array) get_option( DFRPS_PREFIX . '_configuration' );
-	if ( $configuration['update_interval'] == - 1 ) {
-		$time = date_i18n( 'U' );
+function dfrps_get_next_update_time( int $post_id ) {
+
+	$schedule = get_post_meta( $post_id, '_dfrps_update_schedule', true );
+    $enabled  = $schedule['enabled'] ?? '';
+
+	if ( empty( $schedule ) || 'on' !== $enabled ) {
+		$configuration = (array) get_option( DFRPS_PREFIX . '_configuration' );
+		if ( $configuration['update_interval'] == - 1 ) {
+			$time = date_i18n( 'U' );
+		} else {
+			$time = ( ( $configuration['update_interval'] * DAY_IN_SECONDS ) + date_i18n( 'U' ) );
+		}
 	} else {
-		$time = ( ( $configuration['update_interval'] * DAY_IN_SECONDS ) + date_i18n( 'U' ) );
-	}
+	    $time = dfrps_get_custom_update_time( $schedule );
+    }
 
 	return $time;
+}
+
+/**
+ * Calculate the next time for Product Set to update based on custom schedule.
+ *
+ * The `$schedule` will be either Day of week, or Day of month and include a list of days and time to run.
+ *
+ * @param $schedule
+ * @return string
+ */
+function dfrps_get_custom_update_time( $schedule ) {
+	$time = date_i18n( 'U' ); // If schedule is malformed return current time.
+
+	$interval = $schedule['interval'] ?? '';
+	$days     = $schedule['days'] ?? [];
+	$hour     = substr( $schedule['time'] ?? '', 0, 2 );
+	$minute   = substr( $schedule['time'] ?? '', 3, 2 );
+    $offset   = ( intval( $hour)  * 60 * 60 ) + ( intval ( $minute ) * 60 );
+
+	if ( 'Day of week' === $interval ) {
+	    // Days will be array of values 0 to 7
+        $day_of_week = date('w', time() );
+        $found = false;
+
+        while ( ! $found ) {
+            $day_of_week++;
+            if ( 7 === intval( $day_of_week) ) {
+                $day_of_week = 0;
+            }
+            if ( in_array( $day_of_week, $days ) ) {
+				$found = true; // make sure this loop ends.
+                switch ( $day_of_week ){
+                    case 0:
+                        $name_of_day = 'sunday';
+                        break;
+					case 1:
+						$name_of_day = 'monday';
+						break;
+					case 2:
+						$name_of_day = 'tuesday';
+						break;
+					case 3:
+						$name_of_day = 'wednesday';
+						break;
+					case 4:
+						$name_of_day = 'thursday';
+						break;
+					case 5:
+						$name_of_day = 'friday';
+						break;
+					case 6:
+						$name_of_day = 'saturday';
+						break;
+                }
+                $date = strtotime( 'next ' . $name_of_day );
+                $time = $date + $offset;
+                break;
+            }
+        }
+    } elseif ( 'Day of the month' === $interval ) {
+	    // Days will be 1 to 28
+        $day_of_month = date('j', time() );
+        $current_year = intval( date( 'o', time() ) );
+        $current_month = intval( date( 'n', time() ) );
+		$found = false;
+
+		while ( ! $found ) {
+			$day_of_month++;
+			if ( 29 == $day_of_month ) {
+				$day_of_month = 1;
+				$current_month++;
+				if ( 12 < $current_month ) {
+				    $current_month = 1;
+				    $current_year++;
+                }
+			}
+			if ( in_array( $day_of_month, $days ) ) {
+				$found = true; // make sure this loop ends.
+				$time = strtotime( strval( $current_year ) . '-' . strval( $current_month ). '-' . strval( $day_of_month ) . ' ' . $hour . ':' . $minute . ':00' );
+				break;
+			}
+		}
+    }
+
+    return $time;
 }
 
 function dfrps_pagination( $data, $context ) {
