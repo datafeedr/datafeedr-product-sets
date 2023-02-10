@@ -968,7 +968,8 @@ class Dfrps_Cpt {
                 $schedule['days'] = $month;
             }
 
-			update_post_meta( $post_id, '_dfrps_update_schedule', $schedule );
+	        update_post_meta( $post_id, '_dfrps_update_schedule', $schedule );
+	        update_post_meta( $post_id, '_dfrps_cpt_next_update_time', dfrps_get_custom_update_time( $schedule ) );
 		} else {
 			delete_post_meta( $post_id, '_dfrps_update_schedule', );
 		}
