@@ -217,8 +217,8 @@ function dfrps_wp_cron_disabled() {
 	$msg = 'Datafeedr Product Set updates cannot run because the WordPress Cron is disabled. Open your <code>wp-config.php</code> file and remove this line: <code>define(\'DISABLE_WP_CRON\', true );</code>.';
 
 	echo '<div class="error dfrps_wp_cron_disabled_notice"><p>';
-	echo '<strong>' . __( 'Warning:', DFRPS_DOMAIN ) . '</strong> ';
-	echo __( $msg, DFRPS_DOMAIN );
+	echo '<strong>' . __( 'Warning:', 'datafeedr-product-sets' ) . '</strong> ';
+	echo __( $msg, 'datafeedr-product-sets' );
 	echo '</p></div>';
 }
 
@@ -288,19 +288,19 @@ add_action( 'init', 'dfrps_create_post_type' );
 function dfrps_create_post_type() {
 
 	$labels = array(
-		'name'               => _x( 'Product Sets', DFRPS_DOMAIN ),
-		'singular_name'      => _x( 'Product Set', DFRPS_DOMAIN ),
-		'add_new'            => _x( 'Add New Product Set', DFRPS_DOMAIN ),
-		'all_items'          => _x( 'All Product Sets', DFRPS_DOMAIN ),
-		'add_new_item'       => _x( 'Add New Product Set', DFRPS_DOMAIN ),
-		'edit_item'          => _x( 'Edit Product Set', DFRPS_DOMAIN ),
-		'new_item'           => _x( 'New Product Set', DFRPS_DOMAIN ),
-		'view_item'          => _x( 'View Product Set', DFRPS_DOMAIN ),
-		'search_items'       => _x( 'Search Product Sets', DFRPS_DOMAIN ),
-		'not_found'          => _x( 'No Product Sets found', DFRPS_DOMAIN ),
-		'not_found_in_trash' => _x( 'No Product Sets found in trash', DFRPS_DOMAIN ),
-		'parent_item_colon'  => _x( 'Parent Product Set:', DFRPS_DOMAIN ),
-		'menu_name'          => _x( 'Product Sets', DFRPS_DOMAIN )
+		'name'               => _x( 'Product Sets', 'datafeedr-product-sets' ),
+		'singular_name'      => _x( 'Product Set', 'datafeedr-product-sets' ),
+		'add_new'            => _x( 'Add New Product Set', 'datafeedr-product-sets' ),
+		'all_items'          => _x( 'All Product Sets', 'datafeedr-product-sets' ),
+		'add_new_item'       => _x( 'Add New Product Set', 'datafeedr-product-sets' ),
+		'edit_item'          => _x( 'Edit Product Set', 'datafeedr-product-sets' ),
+		'new_item'           => _x( 'New Product Set', 'datafeedr-product-sets' ),
+		'view_item'          => _x( 'View Product Set', 'datafeedr-product-sets' ),
+		'search_items'       => _x( 'Search Product Sets', 'datafeedr-product-sets' ),
+		'not_found'          => _x( 'No Product Sets found', 'datafeedr-product-sets' ),
+		'not_found_in_trash' => _x( 'No Product Sets found in trash', 'datafeedr-product-sets' ),
+		'parent_item_colon'  => _x( 'Parent Product Set:', 'datafeedr-product-sets' ),
+		'menu_name'          => _x( 'Product Sets', 'datafeedr-product-sets' )
 	);
 
 	$args = array(

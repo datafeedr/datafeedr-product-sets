@@ -67,7 +67,7 @@ function dfrps_ajax_reset_cron() {
 	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
 	wp_clear_scheduled_hook( 'dfrps_cron' );
 	wp_schedule_event( time(), 'dfrps_schedule', 'dfrps_cron' );
-	_e( 'Cron was successfully reset.', DFRPS_DOMAIN );
+	_e( 'Cron was successfully reset.', 'datafeedr-product-sets' );
 	die;
 }
 
@@ -100,20 +100,20 @@ function dfrps_ajax_fix_missing_images() {
 	if ( is_integer( $update ) ) {
 		echo number_format( $update );
 		if ( $update == 0 ) {
-			_e( ' product images need fixing at this time.', DFRPS_DOMAIN );
+			_e( ' product images need fixing at this time.', 'datafeedr-product-sets' );
 		} else {
 			echo sprintf(
 				_n(
 					' product image is flagged to be fixed the next time it is displayed on your site.',
 					' product images are flagged to be fixed the next time they are displayed on your site.',
 					$update,
-					DFRPS_DOMAIN
+					'datafeedr-product-sets'
 				),
 				$update
 			);
 		}
 	} else {
-		_e( 'There was an error with your request.', DFRPS_DOMAIN );
+		_e( 'There was an error with your request.', 'datafeedr-product-sets' );
 		echo '<pre>';
 		print_r( $update );
 		echo '</pre>';
@@ -251,7 +251,7 @@ function dfrps_ajax_dashboard() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -288,7 +288,7 @@ function dfrps_ajax_dashboard() {
 	if ( ! dfrps_set_is_active( $type ) ) {
 
 		$html .= '<div state="inactive_type"></div>';
-		$html .= '<p><span class="dashicons dashicons-flag"></span> ' . __( 'This Product Set is inactive. To re-activate this Product Set, install and activate the importer plugin responsible for importing products into the "' . $type . '" custom post type.', DFRPS_DOMAIN ) . '</p>';
+		$html .= '<p><span class="dashicons dashicons-flag"></span> ' . __( 'This Product Set is inactive. To re-activate this Product Set, install and activate the importer plugin responsible for importing products into the "' . $type . '" custom post type.', 'datafeedr-product-sets' ) . '</p>';
 
 	} else {
 
@@ -301,13 +301,13 @@ function dfrps_ajax_dashboard() {
 			$cats_class  = ( $cats_query ) ? ' dfrps_dashboard_step_completed' : '';
 
 			$html .= '<div state="00"></div>';
-			$html .= '<p><span class="dashicons dashicons-smiley"></span> ' . __( 'Let\'s get started on a new Product Set!', DFRPS_DOMAIN ) . '</p>';
+			$html .= '<p><span class="dashicons dashicons-smiley"></span> ' . __( 'Let\'s get started on a new Product Set!', 'datafeedr-product-sets' ) . '</p>';
 			$html .= '<ol>';
-			$html .= '<li id="dfrps_step_title" class="' . $title_class . '">' . __( 'Title your Product Set.', DFRPS_DOMAIN ) . '</li>';
-			$html .= '<li id="dfrps_step_search" class="' . $temp_class . '">' . __( 'Search for products.', DFRPS_DOMAIN ) . '</li>';
-			$html .= '<li id="dfrps_step_save" class="' . $saved_class . '">' . __( ' Click <strong>[Add as Saved Search]</strong> when you\'re happy with search results.', DFRPS_DOMAIN ) . '</li>';
-			$html .= '<li id="dfrps_step_category" class="' . $cats_class . '">' . __( 'Select a category to import into.', DFRPS_DOMAIN ) . '</li>';
-			$html .= '<li id="dfrps_step_publish">' . __( 'Click the <strong>[Publish]</strong> button to import these products into your site.', DFRPS_DOMAIN ) . '</li>';
+			$html .= '<li id="dfrps_step_title" class="' . $title_class . '">' . __( 'Title your Product Set.', 'datafeedr-product-sets' ) . '</li>';
+			$html .= '<li id="dfrps_step_search" class="' . $temp_class . '">' . __( 'Search for products.', 'datafeedr-product-sets' ) . '</li>';
+			$html .= '<li id="dfrps_step_save" class="' . $saved_class . '">' . __( ' Click <strong>[Add as Saved Search]</strong> when you\'re happy with search results.', 'datafeedr-product-sets' ) . '</li>';
+			$html .= '<li id="dfrps_step_category" class="' . $cats_class . '">' . __( 'Select a category to import into.', 'datafeedr-product-sets' ) . '</li>';
+			$html .= '<li id="dfrps_step_publish">' . __( 'Click the <strong>[Publish]</strong> button to import these products into your site.', 'datafeedr-product-sets' ) . '</li>';
 			$html .= '</ol>';
 		}
 
@@ -321,12 +321,12 @@ function dfrps_ajax_dashboard() {
 				if ( $last_update_time == 0 ) {
 
 					$html .= '<div state="updating_' . $percent . '"></div>';
-					$html .= '<p><span class="dashicons dashicons-upload"></span>' . __( 'The products in this Product Set are currently being imported into your site.', DFRPS_DOMAIN ) . '</p>';
+					$html .= '<p><span class="dashicons dashicons-upload"></span>' . __( 'The products in this Product Set are currently being imported into your site.', 'datafeedr-product-sets' ) . '</p>';
 
 				} else {
 
 					$html .= '<div state="updating_' . $percent . '"></div>';
-					$html .= '<p><span class="dashicons dashicons-upload"></span>' . __( 'The products in this Product Set are currently being updated.', DFRPS_DOMAIN ) . '</p>';
+					$html .= '<p><span class="dashicons dashicons-upload"></span>' . __( 'The products in this Product Set are currently being updated.', 'datafeedr-product-sets' ) . '</p>';
 				}
 
 				if ( $percent ) {
@@ -338,24 +338,24 @@ function dfrps_ajax_dashboard() {
 				if ( $post_status == 'future' ) {
 
 					$html .= '<div state="future"></div>';
-					$html .= '<p><span class="dashicons dashicons-clock"></span> ' . __( 'This Product Set is scheduled to be published at a future date. The products in this Set will be imported when the Set becomes published.', DFRPS_DOMAIN ) . '</p>';
+					$html .= '<p><span class="dashicons dashicons-clock"></span> ' . __( 'This Product Set is scheduled to be published at a future date. The products in this Set will be imported when the Set becomes published.', 'datafeedr-product-sets' ) . '</p>';
 
 				} else {
 
 					$html .= '<div state="queued"></div>';
-					$html .= '<p><span class="dashicons dashicons-calendar"></span> ' . __( 'The products in this Product Set are queued to update on ', DFRPS_DOMAIN ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $next_update_time ) . '.</p>';
-					$html .= '<p><span class="dashicons dashicons-info"></span><em>' . __( 'Actual update time is determined by its place in the queue as well as the next scheduled cron.', DFRPS_DOMAIN ) . '</em></p>';
+					$html .= '<p><span class="dashicons dashicons-calendar"></span> ' . __( 'The products in this Product Set are queued to update on ', 'datafeedr-product-sets' ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $next_update_time ) . '.</p>';
+					$html .= '<p><span class="dashicons dashicons-info"></span><em>' . __( 'Actual update time is determined by its place in the queue as well as the next scheduled cron.', 'datafeedr-product-sets' ) . '</em></p>';
 
 				}
 
 			} elseif ( ( $last_update_time + 60 ) > date_i18n( 'U' ) ) {
 
 				$html .= '<div state="recently_completed"></div>';
-				$html .= '<p><span class="dashicons dashicons-yes"></span> ' . __( 'This Product Set completed a full product update less than 1 minute ago.', DFRPS_DOMAIN ) . '</p>';
+				$html .= '<p><span class="dashicons dashicons-yes"></span> ' . __( 'This Product Set completed a full product update less than 1 minute ago.', 'datafeedr-product-sets' ) . '</p>';
 
 				$num_links = count( $links );
 				if ( $num_links > 0 ) {
-					$html .= '<p><span class="dashicons dashicons-welcome-view-site"></span> ' . __( 'View category: ', DFRPS_DOMAIN );
+					$html .= '<p><span class="dashicons dashicons-welcome-view-site"></span> ' . __( 'View category: ', 'datafeedr-product-sets' );
 					$i    = 1;
 					foreach ( $links as $link ) {
 						$html .= '<a href="' . $link['url'] . '" target="_blank">' . $link['name'] . '</a>';
@@ -370,16 +370,16 @@ function dfrps_ajax_dashboard() {
 			} elseif ( date_i18n( 'U' ) > $next_update_time ) {
 
 				$html .= '<div state="queued"></div>';
-				$html .= '<p><span class="dashicons dashicons-calendar"></span> ' . __( 'The products in this Product Set are queued to update on ', DFRPS_DOMAIN ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $next_update_time ) . '.</p>';
-				$html .= '<p><span class="dashicons dashicons-info"></span><em>' . __( 'Actual update time is determined by its place in the queue as well as the next scheduled cron.', DFRPS_DOMAIN ) . '</em></p>';
+				$html .= '<p><span class="dashicons dashicons-calendar"></span> ' . __( 'The products in this Product Set are queued to update on ', 'datafeedr-product-sets' ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $next_update_time ) . '.</p>';
+				$html .= '<p><span class="dashicons dashicons-info"></span><em>' . __( 'Actual update time is determined by its place in the queue as well as the next scheduled cron.', 'datafeedr-product-sets' ) . '</em></p>';
 
 			} else {
 
 				$html .= '<div state="scheduled"></div>';
-				$html .= '<p><span class="dashicons dashicons-calendar"></span> ' . __( 'The products in this Product Set are scheduled to update on ', DFRPS_DOMAIN ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $next_update_time ) . '.</p>';
+				$html .= '<p><span class="dashicons dashicons-calendar"></span> ' . __( 'The products in this Product Set are scheduled to update on ', 'datafeedr-product-sets' ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), $next_update_time ) . '.</p>';
 				$html .= '<p>
-					<a href="#" class="button" id="dfrps_set_next_update_time_to_now">' . __( 'Bump', DFRPS_DOMAIN ) . '</a><br />
-					<small><em>' . __( 'Bump Product Set to front of update queue.', DFRPS_DOMAIN ) . '</em></small>
+					<a href="#" class="button" id="dfrps_set_next_update_time_to_now">' . __( 'Bump', 'datafeedr-product-sets' ) . '</a><br />
+					<small><em>' . __( 'Bump Product Set to front of update queue.', 'datafeedr-product-sets' ) . '</em></small>
 				</p>';
 			}
 
@@ -399,7 +399,7 @@ function dfrps_ajax_update_progress_bar() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -423,12 +423,12 @@ function dfrps_ajax_delete_saved_search() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
 	delete_post_meta( $postid, '_dfrps_cpt_query' );
-	_e( 'Saved search successfully deleted!', DFRPS_DOMAIN );
+	_e( 'Saved search successfully deleted!', 'datafeedr-product-sets' );
 	die;
 
 }
@@ -442,18 +442,18 @@ function dfrps_ajax_update_now() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
 	update_post_meta( $postid, '_dfrps_cpt_next_update_time', date_i18n( 'U' ) );
 
 	$html = '<div state="queued"></div>';
-	$html .= '<p><span class="dashicons dashicons-calendar"></span>' . __( 'The products in this Product Set are queued to update on ', DFRPS_DOMAIN ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), date_i18n( 'U' ) ) . '.</p>';
-	$html .= '<p><span class="dashicons dashicons-info"></span><em>' . __( 'Actual update time is determined by its place in the queue as well as the next scheduled cron.', DFRPS_DOMAIN );
+	$html .= '<p><span class="dashicons dashicons-calendar"></span>' . __( 'The products in this Product Set are queued to update on ', 'datafeedr-product-sets' ) . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ), date_i18n( 'U' ) ) . '.</p>';
+	$html .= '<p><span class="dashicons dashicons-info"></span><em>' . __( 'Actual update time is determined by its place in the queue as well as the next scheduled cron.', 'datafeedr-product-sets' );
 	echo $html;
 
-	//_e( 'This Product Set will update ASAP!', DFRPS_DOMAIN );
+	//_e( 'This Product Set will update ASAP!', 'datafeedr-product-sets' );
 	die;
 
 }
@@ -467,7 +467,7 @@ function dfrps_ajax_update_import_into() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -492,7 +492,7 @@ function dfrps_ajax_update_taxonomy() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -519,7 +519,7 @@ function dfrps_ajax_save_query() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -527,7 +527,7 @@ function dfrps_ajax_save_query() {
 	$temp_query = get_post_meta( $postid, '_dfrps_cpt_temp_query', true );
 	update_post_meta( $postid, '_dfrps_cpt_query', $temp_query );
 
-	_e( 'Update Saved Search', DFRPS_DOMAIN );
+	_e( 'Update Saved Search', 'datafeedr-product-sets' );
 	die;
 }
 
@@ -558,7 +558,7 @@ function dfrps_ajax_get_products() {
 
 	// If $postid doesn't validate, show error.
 	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', DFRPS_DOMAIN );
+		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -575,7 +575,7 @@ function dfrps_ajax_get_products() {
 
 	// If $context doesn't validate, show error.
 	if ( ! $context ) {
-		_e( 'No context provided. Context is required.', DFRPS_DOMAIN );
+		_e( 'No context provided. Context is required.', 'datafeedr-product-sets' );
 		die;
 	}
 
@@ -618,7 +618,7 @@ function dfrps_ajax_get_products() {
 			$timezone_format = _x( 'Y-m-d G:i:s', 'timezone date format' );
 			$post            = array(
 				'ID'          => $postid,
-				'post_title'  => __( 'Auto Save', DFRPS_DOMAIN ) . ' - ' . date_i18n( $timezone_format ),
+				'post_title'  => __( 'Auto Save', 'datafeedr-product-sets' ) . ' - ' . date_i18n( $timezone_format ),
 				'post_status' => 'draft',
 			);
 			wp_update_post( $post );
@@ -788,7 +788,7 @@ function dfrps_ajax_get_products() {
 function dfrps_ajax_add_individual_product() {
 	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
 	dfrps_helper_add_id_to_postmeta( $_REQUEST['pid'], $_REQUEST['postid'], '_dfrps_cpt_manually_added_ids' );
-	echo '<div class="dfrps_product_already_included" title="' . __( 'Product successfully added to this Product Set.', DFRPS_DOMAIN ) . '"><img src="' . plugins_url( "images/icons/checkmark.png", dirname( __FILE__ ) ) . '" /></div>';
+	echo '<div class="dfrps_product_already_included" title="' . __( 'Product successfully added to this Product Set.', 'datafeedr-product-sets' ) . '"><img src="' . plugins_url( "images/icons/checkmark.png", dirname( __FILE__ ) ) . '" /></div>';
 	die;
 }
 

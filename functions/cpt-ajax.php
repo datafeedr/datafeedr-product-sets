@@ -557,7 +557,7 @@ $nonce = wp_create_nonce( 'dfrps_ajax_nonce' );
 	
 				// Make it "addable" again on the Search tab page.
 				$("#product_"+pid+"_div_dfrps_tab_search .action_links .dfrps_product_already_included").remove();
-				$("#product_"+pid+"_div_dfrps_tab_search .action_links").prepend('<div class="dfrps_add_individual_product"><a href="#" product-id="'+pid+'" title="<?php echo __("Add this product to this Product Set.", DFRPS_DOMAIN ); ?>"><img src="<?php echo plugins_url( "images/icons/plus.png", dirname(__FILE__) ); ?>" /></a></div>');
+				$("#product_"+pid+"_div_dfrps_tab_search .action_links").prepend('<div class="dfrps_add_individual_product"><a href="#" product-id="'+pid+'" title="<?php echo __("Add this product to this Product Set.", 'datafeedr-product-sets' ); ?>"><img src="<?php echo plugins_url( "images/icons/plus.png", dirname(__FILE__) ); ?>" /></a></div>');
 			});
 
 			e.preventDefault();
