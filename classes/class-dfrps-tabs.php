@@ -22,13 +22,13 @@ class Dfrps_Tabs {
 	
 	function set_tabs() {
 		self::$tabs = array ( 
-			'configuration' => __( 'Configuration', DFRPS_DOMAIN ),
-			'networks' => __( 'Networks', DFRPS_DOMAIN ),
-			'merchants' => __( 'Merchants', DFRPS_DOMAIN ),
-			'tools' => __( 'Tools', DFRPS_DOMAIN ),
-			'export' => __( 'Export', DFRPS_DOMAIN ),
-			'import' => __( 'Import', DFRPS_DOMAIN ),
-			'account' => __( 'Account', DFRPS_DOMAIN ),
+			'configuration' => __( 'Configuration', 'datafeedr-product-sets' ),
+			'networks' => __( 'Networks', 'datafeedr-product-sets' ),
+			'merchants' => __( 'Merchants', 'datafeedr-product-sets' ),
+			'tools' => __( 'Tools', 'datafeedr-product-sets' ),
+			'export' => __( 'Export', 'datafeedr-product-sets' ),
+			'import' => __( 'Import', 'datafeedr-product-sets' ),
+			'account' => __( 'Account', 'datafeedr-product-sets' ),
 		);		
 	}
 	

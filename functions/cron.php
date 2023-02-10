@@ -24,7 +24,7 @@ add_filter( 'cron_schedules', 'dfrps_cron_schedules' );
 function dfrps_cron_schedules( $array ) {
     $array['dfrps_schedule'] = array(
 		'interval' 	=> dfrps_default_cron_interval(),
-		'display' 	=> __( 'DFRPS Cron Schedule', DFRPS_DOMAIN ),
+		'display' 	=> __( 'DFRPS Cron Schedule', 'datafeedr-product-sets' ),
     );
     return $array;
 }
