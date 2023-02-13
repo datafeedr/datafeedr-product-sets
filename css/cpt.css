@@ -92,10 +92,6 @@
     display: inline;
 }
 
-#dfrps_cpt_schedule_metabox .inside span.req {
-    color: red;
-}
-
 #dfrps_cpt_schedule_metabox .inside .section {
     margin: 0 0 15px 0;
 }
