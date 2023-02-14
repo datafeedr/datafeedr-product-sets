@@ -72,9 +72,9 @@ function dfrps_get_custom_update_time( $schedule ) {
 	$offset   = ( (int) $hour * HOUR_IN_SECONDS ) + ( (int) $minute * MINUTE_IN_SECONDS );
 
 	if ( 'day_of_week' === $interval ) {
-		// Days will be array of values 0 to 7
-		$day_of_week = date_i18n( 'w', time() );
-		$found = false;
+		// Days will be an array of values 0 to 7
+		$day_of_week = date_i18n( 'w' );
+		$found       = false;
 
 		while ( ! $found ) {
 			$day_of_week ++;
@@ -114,7 +114,7 @@ function dfrps_get_custom_update_time( $schedule ) {
 	} elseif ( 'day_of_month' === $interval ) {
 		// Days will be 1 to 28
 		$day_of_month  = (int) date_i18n( 'j' );
-		$current_year  = (int) date_i18n( 'o' ); // Do you know if "o" changes based on user's locale?
+		$current_year  = (int) date_i18n( 'o' );
 		$current_month = (int) date_i18n( 'n' );
 		$found         = false;
 
