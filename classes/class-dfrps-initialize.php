@@ -38,8 +38,8 @@ class Dfrps_Initialize {
 
 			// Load "Configuration" page by default.
 			add_menu_page(
-				__( 'Datafeedr Product Sets', DFRPS_DOMAIN ),
-				__( 'Product Sets', DFRPS_DOMAIN ),
+				__( 'Datafeedr Product Sets', 'datafeedr-product-sets' ),
+				__( 'Product Sets', 'datafeedr-product-sets' ),
 				'manage_options',
 				'dfrps_configuration',
 				'',
@@ -51,8 +51,8 @@ class Dfrps_Initialize {
 
 			// Load list of Product Sets by default.
 			add_menu_page(
-				__( 'Datafeedr Product Sets', DFRPS_DOMAIN ),
-				__( 'Product Sets', DFRPS_DOMAIN ),
+				__( 'Datafeedr Product Sets', 'datafeedr-product-sets' ),
+				__( 'Product Sets', 'datafeedr-product-sets' ),
 				'edit_product_sets',
 				'dfrps',
 				'edit.php?post_type='.DFRPS_CPT,
@@ -97,7 +97,7 @@ class Dfrps_Initialize {
 		return array_merge(
 			$links,
 			array(
-				'config' => '<a href="' . admin_url( 'admin.php?page=dfrps_configuration' ) . '">' . __( 'Configuration', DFRPS_DOMAIN ) . '</a>',
+				'config' => '<a href="' . admin_url( 'admin.php?page=dfrps_configuration' ) . '">' . __( 'Configuration', 'datafeedr-product-sets' ) . '</a>',
 			)
 		);
 	}

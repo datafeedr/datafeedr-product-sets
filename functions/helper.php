@@ -184,7 +184,7 @@ function dfrps_pagination( $data, $context ) {
 
 	// "Showing 1 - 100 of 10,000 total relevant products found."
 	$html .= '<div class="dfrps_pager_info">';
-	$html .= __( 'Showing ', DFRPS_DOMAIN );
+	$html .= __( 'Showing ', 'datafeedr-product-sets' );
 	$html .= '<span class="dfrps_pager_start">';
 	$html .= number_format( ( 1 + $offset ) );
 	$html .= '</span>';
@@ -192,12 +192,12 @@ function dfrps_pagination( $data, $context ) {
 	$html .= '<span class="dfrps_pager_end">';
 	$html .= number_format( $max_num_products );
 	$html .= '</span>';
-	$html .= __( ' of ', DFRPS_DOMAIN );
+	$html .= __( ' of ', 'datafeedr-product-sets' );
 	$html .= '<span class="dfrps_relevant_results">';
 	$html .= number_format( $relevant_results );
 	$html .= '</span>';
-	$html .= __( ' total products.', DFRPS_DOMAIN );
-	$html .= '<span style="float:right"><a class="dfrps_delete_saved_search" href="#">' . __( 'Delete Saved Search', DFRPS_DOMAIN ) . '</a></span>';
+	$html .= __( ' total products.', 'datafeedr-product-sets' );
+	$html .= '<span style="float:right"><a class="dfrps_delete_saved_search" href="#">' . __( 'Delete Saved Search', 'datafeedr-product-sets' ) . '</a></span>';
 	$html .= '</div>';
 
 	// Return nothing if there are less than 2 pages.
@@ -210,7 +210,7 @@ function dfrps_pagination( $data, $context ) {
 
 	// There is more than 1 page. Start pager classes.
 	$html .= '<div class="dfrps_pager_label_wrapper">';
-	$html .= '<div class="dfrps_pager_label">' . __( 'Page', DFRPS_DOMAIN ) . '</div>';
+	$html .= '<div class="dfrps_pager_label">' . __( 'Page', 'datafeedr-product-sets' ) . '</div>';
 	$html .= '</div>'; // .dfrps_pager_label_wrapper
 
 	$html .= '<div class="dfrps_pager_links">';
@@ -254,7 +254,7 @@ function dfrps_format_product_list( $data, $context ) {
 
 		if ( $context == 'div_dfrps_tab_search' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
-			$msg .= __( 'Click the [Search] button to view products that match your search.', DFRPS_DOMAIN );
+			$msg .= __( 'Click the [Search] button to view products that match your search.', 'datafeedr-product-sets' );
 			$msg .= '</div>';
 		}
 
@@ -262,7 +262,7 @@ function dfrps_format_product_list( $data, $context ) {
 
 		if ( $context == 'div_dfrps_tab_search' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
-			$msg .= __( 'No products matched your search.', DFRPS_DOMAIN );
+			$msg .= __( 'No products matched your search.', 'datafeedr-product-sets' );
 			$msg .= '</div>';
 		}
 	}
@@ -271,15 +271,15 @@ function dfrps_format_product_list( $data, $context ) {
 
 		if ( $context == 'div_dfrps_tab_saved_search' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
-			$msg .= __( 'You have not saved a search.', DFRPS_DOMAIN );
+			$msg .= __( 'You have not saved a search.', 'datafeedr-product-sets' );
 			$msg .= '</div>';
 		} elseif ( $context == 'div_dfrps_tab_included' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
-			$msg .= __( 'You have not added any individual products to this Product Set.', DFRPS_DOMAIN );
+			$msg .= __( 'You have not added any individual products to this Product Set.', 'datafeedr-product-sets' );
 			$msg .= '</div>';
 		} elseif ( $context == 'div_dfrps_tab_blocked' ) {
 			$msg .= '<div class="dfrps_alert dfrps_alert-info">';
-			$msg .= __( 'You have not blocked any products from this Product Set.', DFRPS_DOMAIN );
+			$msg .= __( 'You have not blocked any products from this Product Set.', 'datafeedr-product-sets' );
 			$msg .= '</div>';
 		}
 
@@ -308,7 +308,7 @@ function dfrps_format_product_list( $data, $context ) {
 	// Query info
 	if ( isset( $data['params'] ) && ! empty( $data['params'] ) ) { ?>
         <div class="dfrps_api_info" id="dfrps_raw_api_query">
-            <div class="dfrps_head"><?php _e( 'API Request', DFRPS_DOMAIN ); ?></div>
+            <div class="dfrps_head"><?php _e( 'API Request', 'datafeedr-product-sets' ); ?></div>
             <div class="dfrps_query"><span><?php echo dfrapi_display_api_request( $data['params'] ); ?></span></div>
         </div>
 	<?php }
@@ -403,29 +403,29 @@ function dfrps_more_info_rows( $product ) {
 		if ( $k == 'image' || $k == 'thumbnail' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . $v . '" target="_blank" title="' . __( 'Open image in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( $v ) . '</a>
+				<a href="' . $v . '" target="_blank" title="' . __( 'Open image in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
 				<br />
 				<img src="' . $v . '" />
 			</td>';
 		} elseif ( $k == '_wc_url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . $v . '" target="_blank" title="' . __( 'Search for product in store.', DFRPS_DOMAIN ) . '">' . esc_attr( $v ) . '</a>
+				<a href="' . $v . '" target="_blank" title="' . __( 'Search for product in store.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
 			</td>';
 		} elseif ( $k == 'url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
+				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
 			</td>';
 		} elseif ( $k == 'ref_url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
+				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
 			</td>';
 		} elseif ( $k == 'impressionurl' && function_exists( 'dfrapi_impression_url' ) ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . dfrapi_impression_url( $product ) . '" target="_blank" title="' . __( 'Open impression URL in new window.', DFRPS_DOMAIN ) . '">' . esc_attr( dfrapi_impression_url( $product ) ) . '</a>
+				<a href="' . dfrapi_impression_url( $product ) . '" target="_blank" title="' . __( 'Open impression URL in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_impression_url( $product ) ) . '</a>
 			</td>';
 		} else {
 			echo '<td class="value dfrps_force_wrap">' . esc_attr( $v ) . '</td>';
@@ -483,10 +483,10 @@ function dfrps_progress_bar( $percent ) {
 
 		return '
 		<div id="dfrps_dynamic_progress_bar">
-			<div><small>' . $percent . '% ' . __( 'complete', DFRPS_DOMAIN ) . '</small></div>
+			<div><small>' . $percent . '% ' . __( 'complete', 'datafeedr-product-sets' ) . '</small></div>
 			<div class="dfrps_progress">
 				<div class="dfrps_progress-bar dfrps_progress-bar-success" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%">
-					<span class="dfrps_sr-only">' . $percent . '% ' . __( 'complete', DFRPS_DOMAIN ) . '</span>
+					<span class="dfrps_sr-only">' . $percent . '% ' . __( 'complete', 'datafeedr-product-sets' ) . '</span>
 				</div>
 			</div>
 		</div>
@@ -496,7 +496,7 @@ function dfrps_progress_bar( $percent ) {
 
 		return '
 		<div id="dfrps_dynamic_progress_bar">
-			<div><small><em>' . __( 'Unknown % complete', DFRPS_DOMAIN ) . '</em></small></div>
+			<div><small><em>' . __( 'Unknown % complete', 'datafeedr-product-sets' ) . '</em></small></div>
 		</div>
 		';
 
@@ -552,13 +552,13 @@ function dfrps_helper_remove_id_from_postmeta( $product_id, $post_id, $meta_key 
  */
 function dfrps_helper_js_text( $str ) {
 	if ( $str == 'saving' ) {
-		return __( "Saving...", DFRPS_DOMAIN );
+		return __( "Saving...", 'datafeedr-product-sets' );
 	} elseif ( $str == 'searching' ) {
-		return __( "Searching...", DFRPS_DOMAIN );
+		return __( "Searching...", 'datafeedr-product-sets' );
 	} elseif ( $str == 'search' ) {
-		return __( "Search", DFRPS_DOMAIN );
+		return __( "Search", 'datafeedr-product-sets' );
 	} elseif ( $str == 'deleting' ) {
-		return __( "Deleting...", DFRPS_DOMAIN );
+		return __( "Deleting...", 'datafeedr-product-sets' );
 	}
 }
 

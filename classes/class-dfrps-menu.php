@@ -13,8 +13,8 @@ class Dfrps_Menu {
 	function add_admin_menus() {
 
 		add_menu_page( 
-			__( 'Datafeedr Product Sets', DFRPS_DOMAIN ), 
-			__( 'Product Sets', DFRPS_DOMAIN ), 
+			__( 'Datafeedr Product Sets', 'datafeedr-product-sets' ),
+			__( 'Product Sets', 'datafeedr-product-sets' ),
 			'edit_product_sets', 
 			'dfrps',
 			'edit.php?post_type='.DFRPS_CPT, 
@@ -24,8 +24,8 @@ class Dfrps_Menu {
 
 		add_submenu_page(
 			'dfrps',
-			__( 'Add a Product Set', DFRPS_DOMAIN ), 
-			__( 'Add Product Set', DFRPS_DOMAIN ), 
+			__( 'Add a Product Set', 'datafeedr-product-sets' ),
+			__( 'Add Product Set', 'datafeedr-product-sets' ),
 			'edit_product_sets', 
 			'post-new.php?post_type=' . DFRPS_CPT, 
 			'' 
@@ -33,8 +33,8 @@ class Dfrps_Menu {
 
 		add_submenu_page(
 			'dfrps',
-			__( 'Configuration &#8212; Datafeedr Product Sets', DFRPS_DOMAIN ), 
-			__( 'Configuration', DFRPS_DOMAIN ), 
+			__( 'Configuration &#8212; Datafeedr Product Sets', 'datafeedr-product-sets' ),
+			__( 'Configuration', 'datafeedr-product-sets' ),
 			'manage_options', 
 			'dfrps_options',
 			array( 'Dfrps_Configuration_Tab', 'page' ) 

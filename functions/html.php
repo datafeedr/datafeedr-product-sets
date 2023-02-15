@@ -41,13 +41,13 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 			<table class="dfrps_product_table type_<?php echo $type; ?>">
 				<tr class="product">
 					<td class="image" rowspan="2">
-						<a href="<?php echo $image; ?>" title="<?php echo __('View image in new browser window.', DFRPS_DOMAIN ); ?>" target="_blank">
+						<a href="<?php echo $image; ?>" title="<?php echo __('View image in new browser window.', 'datafeedr-product-sets' ); ?>" target="_blank">
 							<img src="<?php echo $image; ?>" />
 						</a>
 					</td>
 					<td class="name">
 						<div>
-							<a href="#" class="more_info" title="<?php echo __('View more information about this product.', DFRPS_DOMAIN ); ?>">
+							<a href="#" class="more_info" title="<?php echo __('View more information about this product.', 'datafeedr-product-sets' ); ?>">
 								<?php echo $product['name']; ?>
 							</a>
 						</div>
@@ -56,31 +56,31 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 						<div class="action_links">
 
 							<?php if ( $already_included ) : ?>
-								<div class="dfrps_product_already_included" title="<?php echo __('This product has already been manually added to this Product Set.', DFRPS_DOMAIN ); ?>">
+								<div class="dfrps_product_already_included" title="<?php echo __('This product has already been manually added to this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/checkmark.png', __DIR__ ); ?>" />
 								</div>
 							<?php else : ?>
 								<div class="dfrps_add_individual_product">
-									<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Add this product to this Product Set.', DFRPS_DOMAIN ); ?>">
+									<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Add this product to this Product Set.', 'datafeedr-product-sets' ); ?>">
 										<img src="<?php echo plugins_url( 'images/icons/plus.png', __DIR__ ); ?>" />
 									</a>
 								</div>
 							<?php endif; ?>
 
 							<div class="dfrps_remove_individual_product">
-								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Remove this product from the individually added list for this Product Set.', DFRPS_DOMAIN ); ?>">
+								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Remove this product from the individually added list for this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/minus.png', __DIR__ ); ?>" />
 								</a>
 							</div>
 
 							<div class="dfrps_unblock_individual_product">
-								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Unblock this product and allow it to show up in product searches for this Product Set.', DFRPS_DOMAIN ); ?>">
+								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Unblock this product and allow it to show up in product searches for this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( "images/icons/unblock.png", __DIR__ ); ?>" />
 								</a>
 							</div>
 
 							<div class="dfrps_block_individual_product">
-								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Block this product from appearing in searches for this Product Set.', DFRPS_DOMAIN ); ?>">
+								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Block this product from appearing in searches for this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/block.png', __DIR__ ); ?>" />
 								</a>
 							</div>
@@ -101,30 +101,30 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 						</div>
 
 						<div class="details">
-							<div class="network" title="<?php echo __('Network', DFRPS_DOMAIN ) . ': ' . esc_attr( $product['source'] ); ?>">
+							<div class="network" title="<?php echo __('Network', 'datafeedr-product-sets' ) . ': ' . esc_attr( $product['source'] ); ?>">
 								<span class="bullet">&bull;</span>
 								<span class="label"><?php echo $product['source']; ?></span>
 							</div>
-							<div class="merchant" title="<?php echo __('Merchant', DFRPS_DOMAIN ) . ': ' . esc_attr( $product['merchant'] ); ?>">
+							<div class="merchant" title="<?php echo __('Merchant', 'datafeedr-product-sets' ) . ': ' . esc_attr( $product['merchant'] ); ?>">
 								<span class="bullet">&bull;</span>
 								<span class="label"><?php echo substr( $product['merchant'], 0, 25 ); ?></span>
 							</div>
 							<?php if ( isset( $product['brand'] ) ) : ?>
-								<div class="brand" title="<?php echo __('Brand', DFRPS_DOMAIN ) . ': ' . esc_attr( $product['brand'] ); ?>">
+								<div class="brand" title="<?php echo __('Brand', 'datafeedr-product-sets' ) . ': ' . esc_attr( $product['brand'] ); ?>">
 									<span class="bullet">&bull;</span>
 									<span class="label"><?php echo $product['brand']; ?></span>
 								</div>
 							<?php endif; ?>
 							<?php if ( isset( $product['price'] ) ) : ?>
                                 <div class="price"
-                                     title="<?php echo __( 'Price', DFRPS_DOMAIN ) . ': ' . esc_attr( $regularprice ) . ' ' . $currency; ?>">
+                                     title="<?php echo __( 'Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $regularprice ) . ' ' . $currency; ?>">
                                     <span class="bullet">&bull;</span>
                                     <span class="label"><?php echo $regularprice; ?></span>
                                 </div>
 							<?php endif; ?>
 							<?php if ( isset( $product['saleprice'] ) ) : ?>
                                 <div class="saleprice"
-                                     title="<?php echo __( 'Sale Price', DFRPS_DOMAIN ) . ': ' . esc_attr( $saleprice ) . ' ' . $currency; ?>">
+                                     title="<?php echo __( 'Sale Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $saleprice ) . ' ' . $currency; ?>">
                                     <span class="bullet">&bull;</span>
                                     <span class="label"><?php echo $saleprice; ?></span>
                                 </div>

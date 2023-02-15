@@ -180,16 +180,16 @@ class Dfrps_Cpt {
 		}
 		$messages[DFRPS_CPT] = array(
 			 0 => '', // Unused. Messages start at index 1.
-			 1 => __( 'Product set updated', DFRPS_DOMAIN ),
-			 2 => __( 'Custom field updated.', DFRPS_DOMAIN ),
-			 3 => __( 'Custom field deleted.', DFRPS_DOMAIN ),
-			 4 => __( 'Product set updated', DFRPS_DOMAIN ),
-			 5 => isset($_GET['revision']) ? sprintf( __( 'Product set restored to revision from %s', DFRPS_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			 6 => __( 'Product set published.', DFRPS_DOMAIN ),
-			 7 => __( 'Product set saved.', DFRPS_DOMAIN ),
-			 8 => __( 'Product set submitted.', DFRPS_DOMAIN ),
-			 9 => __( 'Product set scheduled for: ', DFRPS_DOMAIN ) . '<strong>' . $future_time . '</strong>',
-			10 => __( 'Product set draft updated.', DFRPS_DOMAIN ),
+			 1 => __( 'Product set updated', 'datafeedr-product-sets' ),
+			 2 => __( 'Custom field updated.', 'datafeedr-product-sets' ),
+			 3 => __( 'Custom field deleted.', 'datafeedr-product-sets' ),
+			 4 => __( 'Product set updated', 'datafeedr-product-sets' ),
+			 5 => isset($_GET['revision']) ? sprintf( __( 'Product set restored to revision from %s', 'datafeedr-product-sets' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+			 6 => __( 'Product set published.', 'datafeedr-product-sets' ),
+			 7 => __( 'Product set saved.', 'datafeedr-product-sets' ),
+			 8 => __( 'Product set submitted.', 'datafeedr-product-sets' ),
+			 9 => __( 'Product set scheduled for: ', 'datafeedr-product-sets' ) . '<strong>' . $future_time . '</strong>',
+			10 => __( 'Product set draft updated.', 'datafeedr-product-sets' ),
 		);
 		return $messages;
 	}
@@ -232,8 +232,8 @@ class Dfrps_Cpt {
 	function admin_menu() {
 		add_submenu_page(
 			'dfrps',
-			__( 'Add a Product Set', DFRPS_DOMAIN ), 
-			__( 'Add Product Set', DFRPS_DOMAIN ), 
+			__( 'Add a Product Set', 'datafeedr-product-sets' ),
+			__( 'Add Product Set', 'datafeedr-product-sets' ),
 			'edit_product_sets', 
 			'post-new.php?post_type=' . DFRPS_CPT, 
 			'' 
@@ -288,7 +288,7 @@ class Dfrps_Cpt {
 		// Show Dashboard
 		add_meta_box(
 			'dfrps_cpt_dashboard_metabox', 
-			_x( 'Dashboard', DFRPS_DOMAIN ), 
+			_x( 'Dashboard', 'datafeedr-product-sets' ),
 			array( $this, 'cpt_dashboard_metabox' ), 
 			DFRPS_CPT, 
 			'side', 
@@ -309,7 +309,7 @@ class Dfrps_Cpt {
 		// Show CPT picker (or message if no registered CPTs exist).
 		add_meta_box(
 			'dfrps_cpt_picker_metabox', 
-			_x( 'Import Into', DFRPS_DOMAIN ), 
+			_x( 'Import Into', 'datafeedr-product-sets' ),
 			array( $this, 'cpt_picker_metabox' ), 
 			DFRPS_CPT, 
 			'side', 
@@ -353,8 +353,8 @@ class Dfrps_Cpt {
 			<div id="dfrps_db_loading"></div>
 		</div>
 		<div id="dfrps_dashboard_actions">
-			<p><span class="dashicons dashicons-visibility"></span> <a href="' . add_query_arg( array( 'post_status' => 'publish', 'post_type' => DFRPS_CPT, 'orderby' => 'next_update', 'order' => 'asc' ), admin_url( 'edit.php') ) . '">' . __( 'View the update queue', DFRPS_DOMAIN ) . '</a></p>
-			<p><span class="dashicons dashicons-plus"></span> <a href="' . add_query_arg( array( 'post_type' => DFRPS_CPT ), admin_url( 'post-new.php') ) . '">' . __( 'Add a new Product Set', DFRPS_DOMAIN ) . '</a></p>
+			<p><span class="dashicons dashicons-visibility"></span> <a href="' . add_query_arg( array( 'post_status' => 'publish', 'post_type' => DFRPS_CPT, 'orderby' => 'next_update', 'order' => 'asc' ), admin_url( 'edit.php') ) . '">' . __( 'View the update queue', 'datafeedr-product-sets' ) . '</a></p>
+			<p><span class="dashicons dashicons-plus"></span> <a href="' . add_query_arg( array( 'post_type' => DFRPS_CPT ), admin_url( 'post-new.php') ) . '">' . __( 'Add a new Product Set', 'datafeedr-product-sets' ) . '</a></p>
 		</div>
 		';
 	}
@@ -497,13 +497,13 @@ class Dfrps_Cpt {
 			// There are no registered CPTs, so just return.
 
 			echo '<p class="dfrps_warning">';
-			_e( 'Uh-oh! You haven\'t registered any Custom Post Types to use with the Datafeedr Product Sets plugin.', DFRPS_DOMAIN );
+			_e( 'Uh-oh! You haven\'t registered any Custom Post Types to use with the Datafeedr Product Sets plugin.', 'datafeedr-product-sets' );
 			echo '</p><p class="dfrps_warning">';
-			_e( 'Without a registered Custom Post Type we don\'t know how to import your product information.', DFRPS_DOMAIN );
+			_e( 'Without a registered Custom Post Type we don\'t know how to import your product information.', 'datafeedr-product-sets' );
 			echo '</p><p class="dfrps_warning">';
-			_e( 'Get an Importer Plugin ', DFRPS_DOMAIN );
+			_e( 'Get an Importer Plugin ', 'datafeedr-product-sets' );
 			echo '<a href="' . admin_url('plugins.php') . '" target="_blank">';
-			_e( ' here', DFRPS_DOMAIN );
+			_e( ' here', 'datafeedr-product-sets' );
 			echo '</a>.</p>';
 
 		} elseif ( $num_registered_cpts == 1 ) {
@@ -536,7 +536,7 @@ class Dfrps_Cpt {
 						echo '<input class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" checked="checked" /> ' . $registered_cpts[$cpt]['name'] . '<br />';
 					} else {
 						if ( $has_been_published ) {
-							echo '<input disabled="disabled" class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" /> ' . $registered_cpts[$cpt]['name'] . ' <span class="dfrps_type_disabled">(' . __( 'disabled', DFRPS_DOMAIN ) . ')</span><br />';
+							echo '<input disabled="disabled" class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" /> ' . $registered_cpts[$cpt]['name'] . ' <span class="dfrps_type_disabled">(' . __( 'disabled', 'datafeedr-product-sets' ) . ')</span><br />';
 						} else {
 							echo '<input class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" /> ' . $registered_cpts[$cpt]['name'] . '<br />';
 						}
@@ -547,7 +547,7 @@ class Dfrps_Cpt {
 
 			if ( $num_registered_cpts > 1 ) {
 				echo '<div class="dfrps_type_disabled_explanation"><small>';
-				_e( 'The "Import Into" field cannot be modified after a Product Set has been published.', DFRPS_DOMAIN ); 
+				_e( 'The "Import Into" field cannot be modified after a Product Set has been published.', 'datafeedr-product-sets' );
 				echo '</small></div>';
 			}
 		}
@@ -580,7 +580,7 @@ class Dfrps_Cpt {
 			<div class="dfrps_tax_instructions"><?php echo $tax_instructions; ?></div>
 
 			<div id="<?php echo $taxonomy; ?>-all" class="tabs-panel dfrps_category_selection_panel">
-				<div class="dfrps_saving_taxonomy"><?php _e( 'Saving&hellip;', DFRPS_DOMAIN ); ?></div>
+				<div class="dfrps_saving_taxonomy"><?php _e( 'Saving&hellip;', 'datafeedr-product-sets' ); ?></div>
 				<?php echo "<input type='hidden' name='{$name}[]' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.?>
 				<ul id="<?php echo $taxonomy; ?>checklist" data-wp-lists="list:<?php echo $taxonomy?>" class="categorychecklist form-no-clear" cpt="<?php echo $cpt_type; ?>">
 					<?php wp_terms_checklist(false, array( 'selected_cats' => $selected_cats, 'taxonomy' => $taxonomy ) ) ?>
@@ -653,16 +653,16 @@ class Dfrps_Cpt {
 		unset( $columns['wpseo-metadesc'] );
 		unset( $columns['wpseo-focuskw'] );
 
-		$columns['title'] = __( 'Set Name', DFRPS_DOMAIN );
-		$columns['created'] = __( 'Created', DFRPS_DOMAIN );
-		$columns['modified'] = __( 'Modified', DFRPS_DOMAIN );
-		$columns['post_status'] = __( 'Status', DFRPS_DOMAIN );
-		$columns['_dfrps_cpt_next_update_time'] = __( 'Next Update', DFRPS_DOMAIN );
-		$columns['_dfrps_cpt_last_update_time_started'] = __( 'Started', DFRPS_DOMAIN );
-		$columns['_dfrps_cpt_last_update_time_completed'] = __( 'Completed', DFRPS_DOMAIN );
-		$columns['_dfrps_cpt_last_update_num_products_added'] = __( 'Added', DFRPS_DOMAIN );
-		$columns['_dfrps_cpt_last_update_num_products_deleted'] = __( 'Deleted', DFRPS_DOMAIN );
-		$columns['_dfrps_cpt_last_update_num_api_requests'] = __( 'API Requests', DFRPS_DOMAIN );
+		$columns['title'] = __( 'Set Name', 'datafeedr-product-sets' );
+		$columns['created'] = __( 'Created', 'datafeedr-product-sets' );
+		$columns['modified'] = __( 'Modified', 'datafeedr-product-sets' );
+		$columns['post_status'] = __( 'Status', 'datafeedr-product-sets' );
+		$columns['_dfrps_cpt_next_update_time'] = __( 'Next Update', 'datafeedr-product-sets' );
+		$columns['_dfrps_cpt_last_update_time_started'] = __( 'Started', 'datafeedr-product-sets' );
+		$columns['_dfrps_cpt_last_update_time_completed'] = __( 'Completed', 'datafeedr-product-sets' );
+		$columns['_dfrps_cpt_last_update_num_products_added'] = __( 'Added', 'datafeedr-product-sets' );
+		$columns['_dfrps_cpt_last_update_num_products_deleted'] = __( 'Deleted', 'datafeedr-product-sets' );
+		$columns['_dfrps_cpt_last_update_num_api_requests'] = __( 'API Requests', 'datafeedr-product-sets' );
 
 		return $columns;
 	}
@@ -697,12 +697,12 @@ class Dfrps_Cpt {
 
 			case 'created':
 				$post_date = dfrps_date_in_two_rows( $post->post_date );
-				echo '<abbr title="' . __( 'This Product Set was created on ', DFRPS_DOMAIN ) . $post->post_date . '">' . $post_date . '</abbr>';
+				echo '<abbr title="' . __( 'This Product Set was created on ', 'datafeedr-product-sets' ) . $post->post_date . '">' . $post_date . '</abbr>';
 				break;
 
 			case 'modified':
 				$post_modified = dfrps_date_in_two_rows( $post->post_modified );
-				echo '<abbr title="' . __( 'This Product Set was modified on ', DFRPS_DOMAIN ) . $post->post_modified . '">' . $post_modified . '</abbr>';
+				echo '<abbr title="' . __( 'This Product Set was modified on ', 'datafeedr-product-sets' ) . $post->post_modified . '">' . $post_modified . '</abbr>';
 				break;
 
 			case 'post_status':
@@ -717,14 +717,14 @@ class Dfrps_Cpt {
 
 				echo '<div class="dfrps_post_status">';
 				if ( 'publish' == $post->post_status ) {
-					_e( 'Published', DFRPS_DOMAIN );
+					_e( 'Published', 'datafeedr-product-sets' );
 				} elseif ( 'future' == $post->post_status ) {
 					if ( $time_diff > 0 )
-						echo '<strong class="attention">' . __( 'Missed schedule', DFRPS_DOMAIN ) . '</strong>';
+						echo '<strong class="attention">' . __( 'Missed schedule', 'datafeedr-product-sets' ) . '</strong>';
 					else
-						_e( 'Scheduled', DFRPS_DOMAIN );
+						_e( 'Scheduled', 'datafeedr-product-sets' );
 				} else {
-					_e( 'Unpublished', DFRPS_DOMAIN );
+					_e( 'Unpublished', 'datafeedr-product-sets' );
 				}
 				_e( '</div>');
 
@@ -737,11 +737,11 @@ class Dfrps_Cpt {
 				if ( $post->post_status == 'publish' ) {
 
 					if ( $next_update_time == 0 ) {
-						echo '<abbr title="' . __( 'This Product Set will update as soon as possible.', DFRPS_DOMAIN ) . '">ASAP</abbr>';
+						echo '<abbr title="' . __( 'This Product Set will update as soon as possible.', 'datafeedr-product-sets' ) . '">ASAP</abbr>';
 					} else {
 						//echo date_i18n( 'M d, g:ia', $next_update_time );
 						//$next_update_time = dfrps_date_in_two_rows( $next_update_time );
-						echo '<abbr title="' . __( 'This Product Set will update on (or after) ', DFRPS_DOMAIN ) . date_i18n( 'Y-m-d G:i:s', $next_update_time ) . '">' . dfrps_date_in_two_rows( $next_update_time ) . '</abbr>';
+						echo '<abbr title="' . __( 'This Product Set will update on (or after) ', 'datafeedr-product-sets' ) . date_i18n( 'Y-m-d G:i:s', $next_update_time ) . '">' . dfrps_date_in_two_rows( $next_update_time ) . '</abbr>';
 					}
 				} else {
 					echo '&mdash;';
@@ -750,9 +750,9 @@ class Dfrps_Cpt {
 
 			case '_dfrps_cpt_last_update_time_started':
 				if ( $started > 0 ) {
-					echo '<abbr title="' . __( 'This Product Set\'s last update started on ', DFRPS_DOMAIN ) . date_i18n( 'Y-m-d G:i:s', $started ) . '">' . dfrps_date_in_two_rows( $started ) . '</abbr>';
+					echo '<abbr title="' . __( 'This Product Set\'s last update started on ', 'datafeedr-product-sets' ) . date_i18n( 'Y-m-d G:i:s', $started ) . '">' . dfrps_date_in_two_rows( $started ) . '</abbr>';
 				} else {
-					_e( 'Never', DFRPS_DOMAIN );
+					_e( 'Never', 'datafeedr-product-sets' );
 				}
 				break;
 
@@ -762,13 +762,13 @@ class Dfrps_Cpt {
 				} else {
 					if ( $update_phase == 0 ) {
 						if ( $completed > 0 ) {
-							echo '<abbr title="' . __( 'This Product Set\'s last update completed on ', DFRPS_DOMAIN ) . date_i18n( 'Y-m-d G:i:s', $completed ) . '">' . dfrps_date_in_two_rows( $completed ) . '</abbr>';			
+							echo '<abbr title="' . __( 'This Product Set\'s last update completed on ', 'datafeedr-product-sets' ) . date_i18n( 'Y-m-d G:i:s', $completed ) . '">' . dfrps_date_in_two_rows( $completed ) . '</abbr>';
 						} else {
-							_e( 'Never', DFRPS_DOMAIN );
+							_e( 'Never', 'datafeedr-product-sets' );
 						}
 					} else {
 						$percent_complete = dfrps_percent_complete( $post_id );
-						echo '<span class="dfrps_currently_updating">' . __( 'Updating&hellip;', DFRPS_DOMAIN ) . '</span>';
+						echo '<span class="dfrps_currently_updating">' . __( 'Updating&hellip;', 'datafeedr-product-sets' ) . '</span>';
 						if ( $percent_complete ) {
 							echo dfrps_progress_bar( $percent_complete );
 						}
@@ -777,15 +777,15 @@ class Dfrps_Cpt {
 				break;
 
 			case '_dfrps_cpt_last_update_num_products_added':
-				echo '<div class="dfrps_label dfrps_label-success" title="' . $products_added . __( ' products were added during the last update of this Product Set.', DFRPS_DOMAIN ) . '">' . $products_added . '</div>';
+				echo '<div class="dfrps_label dfrps_label-success" title="' . $products_added . __( ' products were added during the last update of this Product Set.', 'datafeedr-product-sets' ) . '">' . $products_added . '</div>';
 				break;
 
 			case '_dfrps_cpt_last_update_num_products_deleted':
-				echo '<div class="dfrps_label dfrps_label-danger" title="' . $products_deleted . __( '  products were moved to the Trash during the last update of this Product Set.', DFRPS_DOMAIN ) . '">' . $products_deleted . '</div>';
+				echo '<div class="dfrps_label dfrps_label-danger" title="' . $products_deleted . __( '  products were moved to the Trash during the last update of this Product Set.', 'datafeedr-product-sets' ) . '">' . $products_deleted . '</div>';
 				break;
 
 			case '_dfrps_cpt_last_update_num_api_requests':
-				echo '<div class="dfrps_label dfrps_label-warning" title="' . $api_requests . __( ' API requests were required during the last update of this Product Set.', DFRPS_DOMAIN ) . '">' . $api_requests . '</div>';
+				echo '<div class="dfrps_label dfrps_label-warning" title="' . $api_requests . __( ' API requests were required during the last update of this Product Set.', 'datafeedr-product-sets' ) . '">' . $api_requests . '</div>';
 				break;
 		}
 	}
@@ -889,7 +889,7 @@ class Dfrps_Cpt {
 		}
 
 		echo "<select name='_dfrps_cpt_type' id='dfrps_type_filter' class='postform'>";
-		echo "<option value=''>" . __( 'Show all types', DFRPS_DOMAIN ) . "</option>";
+		echo "<option value=''>" . __( 'Show all types', 'datafeedr-product-sets' ) . "</option>";
 		foreach ( $cpts as $cpt ) {
 			echo '<option value="'. $cpt . '" ' . selected( $cpt, $type ) . '>' . $registered_cpts[$cpt]['name'] .'</option>';
 		}
@@ -984,7 +984,7 @@ class Dfrps_Cpt {
 	*/
 	function enter_title_here( $title ){
 		if  ( DFRPS_CPT == get_post_type() ) {
-			 $title = __( 'Enter product set title here', DFRPS_DOMAIN );
+			 $title = __( 'Enter product set title here', 'datafeedr-product-sets' );
 		}
 		return $title;
 	}
@@ -1020,9 +1020,9 @@ class Dfrps_Cpt {
 	function change_publish_button( $translation, $text ) {
 		if  ( DFRPS_CPT == get_post_type() ) {
 			if ( $text == 'Publish' ) {
-				return __( 'Import Products', DFRPS_DOMAIN );
+				return __( 'Import Products', 'datafeedr-product-sets' );
 			} elseif ( $text == 'Update' ) {
-				return __( 'Update Status', DFRPS_DOMAIN );
+				return __( 'Update Status', 'datafeedr-product-sets' );
 			}
 		}
 		return $translation;
@@ -1051,7 +1051,7 @@ class Dfrps_Cpt {
 		if ( !preg_match( "/post-new.php/i", $_SERVER['SCRIPT_NAME'] ) ) {
 			add_meta_box(
 				'div_dfrps_last_update_status', 
-				_x( 'Last Update...', DFRPS_DOMAIN ),
+				_x( 'Last Update...', 'datafeedr-product-sets' ),
 				array( $this, 'last_update_status' ), 
 				DFRPS_CPT, 
 				'normal', 
@@ -1144,7 +1144,7 @@ class Dfrps_Cpt {
 
 		if ( !isset( $meta['_dfrps_cpt_last_update_time_completed'][0] ) ) {
 
-			echo __( 'This Product Set has never been imported.', DFRPS_DOMAIN );
+			echo __( 'This Product Set has never been imported.', 'datafeedr-product-sets' );
 
 		} else {
 
@@ -1160,7 +1160,7 @@ class Dfrps_Cpt {
 			if ( version_compare( phpversion(), '5.3.0', '>=') ) {
 				$elapsed_row = '
 				<tr class="alternate">
-					<td class="row-title">' . __( 'Elapsed Time', DFRPS_DOMAIN ) . '</td>
+					<td class="row-title">' . __( 'Elapsed Time', 'datafeedr-product-sets' ) . '</td>
 					<td class="desc">' . $elapsed. '</td>
 				</tr>
 				';
@@ -1174,24 +1174,24 @@ class Dfrps_Cpt {
 			<table class="widefat last_update_table" cellspacing="0">
 				<tbody>
 					<tr class="alternate">
-						<td class="row-title">' . __( 'Started', DFRPS_DOMAIN ) . '</td>
+						<td class="row-title">' . __( 'Started', 'datafeedr-product-sets' ) . '</td>
 						<td class="desc">' . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ) , $meta['_dfrps_cpt_last_update_time_started'][0] ) . '</td>
 					</tr>
 					<tr>
-						<td class="row-title">' . __( 'Completed', DFRPS_DOMAIN ) . '</td>
+						<td class="row-title">' . __( 'Completed', 'datafeedr-product-sets' ) . '</td>
 						<td class="desc">' . date_i18n( get_option( 'date_format' ) . ' @ ' . get_option( 'time_format' ) , $meta['_dfrps_cpt_last_update_time_completed'][0] ) . '</td>
 					</tr>
 					' . $elapsed_row . '
 					<tr>
-						<td class="row-title">' . __( 'API Requests', DFRPS_DOMAIN ) . '</td>
+						<td class="row-title">' . __( 'API Requests', 'datafeedr-product-sets' ) . '</td>
 						<td class="desc">' . number_format( $meta['_dfrps_cpt_last_update_num_api_requests'][0] ) . '</td>
 					</tr>
 					<tr class="alternate">
-						<td class="row-title">' . __( 'Products Added', DFRPS_DOMAIN ) . '</td>
+						<td class="row-title">' . __( 'Products Added', 'datafeedr-product-sets' ) . '</td>
 						<td class="desc">' . number_format( $meta['_dfrps_cpt_last_update_num_products_added'][0] ) . '</td>
 					</tr>
 					<tr>
-						<td class="row-title">' . __( 'Products Deleted', DFRPS_DOMAIN ) . '</td>
+						<td class="row-title">' . __( 'Products Deleted', 'datafeedr-product-sets' ) . '</td>
 						<td class="desc">' . number_format( isset( $meta['_dfrps_cpt_last_update_num_products_deleted'][0] ) ? $meta['_dfrps_cpt_last_update_num_products_deleted'][0] : 0 ) . '</td>
 					</tr>
 				</tbody>
@@ -1207,22 +1207,22 @@ class Dfrps_Cpt {
 		?>
 		<h2 class="nav-tab-wrapper" id="dfrps_cpt_tabs">
 			<a href="#" class="nav-tab nav-tab-active" id="tab_search">
-				<?php _e( 'Search', DFRPS_DOMAIN ); ?>
+				<?php _e( 'Search', 'datafeedr-product-sets' ); ?>
 			</a>
 			<a href="#" class="nav-tab tab_disabled" id="tab_saved_search">
-				<?php _e( 'Saved Search', DFRPS_DOMAIN ); ?>
+				<?php _e( 'Saved Search', 'datafeedr-product-sets' ); ?>
 				<span class="loading"> ....... </span>
-				<span class="count" title="<?php _e( 'Products added to this Product Set via a Saved Search.', DFRPS_DOMAIN ); ?>">0</span>
+				<span class="count" title="<?php _e( 'Products added to this Product Set via a Saved Search.', 'datafeedr-product-sets' ); ?>">0</span>
 			</a>
 			<a href="#" class="nav-tab tab_disabled" id="tab_included">
-				<?php _e( 'Single Products', DFRPS_DOMAIN ); ?>
+				<?php _e( 'Single Products', 'datafeedr-product-sets' ); ?>
 				<span class="loading"> ....... </span>
-				<span class="count" title="<?php _e( 'Products individually added to this Product Set.', DFRPS_DOMAIN ); ?>">0</span>
+				<span class="count" title="<?php _e( 'Products individually added to this Product Set.', 'datafeedr-product-sets' ); ?>">0</span>
 			</a>
 			<a href="#" class="nav-tab tab_disabled" id="tab_blocked">
-				<?php _e( 'Blocked Products', DFRPS_DOMAIN ); ?>
+				<?php _e( 'Blocked Products', 'datafeedr-product-sets' ); ?>
 				<span class="loading"> ....... </span>
-				<span class="count" title="' . __( 'Products blocked from this Product Set.', DFRPS_DOMAIN ) ); ?>">0</span>
+				<span class="count" title="' . __( 'Products blocked from this Product Set.', 'datafeedr-product-sets' ) ); ?>">0</span>
 			</a>
 		</h2>
 		<?php
@@ -1270,147 +1270,147 @@ class Dfrps_Cpt {
 	function search_form() { ?>	
 		<div id="dfrps_search_form_wrapper" class="stuffbox">
 			<div class="instructions" style="display: none;">
-				<a href="#" id="dfrps_search_instructions_toggle"><?php _e( 'search help...', DFRPS_DOMAIN ); ?></a>
+				<a href="#" id="dfrps_search_instructions_toggle"><?php _e( 'search help...', 'datafeedr-product-sets' ); ?></a>
 				<div style="display:none" id="dfrps_search_instructions">
 					<div id="dfrps_search_instructions_wrapper">
-						<h2><?php _e( 'Search Help', DFRPS_DOMAIN ); ?></h2>
-						<h3><?php _e( 'Filters', DFRPS_DOMAIN ); ?></h3>
-						<p><?php _e( 'Use filters to search and filter lists of products. ', DFRPS_DOMAIN ); ?></p> 
+						<h2><?php _e( 'Search Help', 'datafeedr-product-sets' ); ?></h2>
+						<h3><?php _e( 'Filters', 'datafeedr-product-sets' ); ?></h3>
+						<p><?php _e( 'Use filters to search and filter lists of products. ', 'datafeedr-product-sets' ); ?></p>
 						<table class="widefat" cellspacing="0">
 							<tbody>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Any field', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on "Text" fields.  Generally "Text" fields are: product name, product description, brand, etc...', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Any field', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on "Text" fields.  Generally "Text" fields are: product name, product description, brand, etc...', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Product name', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on the product name.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Product name', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on the product name.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Brand', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on the product\'s brand name. Not every product has a brand name.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Brand', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on the product\'s brand name. Not every product has a brand name.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Description', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on the product description field.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Description', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on the product description field.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Tags', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on the product tags.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Tags', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on the product tags.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Product type', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on type: product or coupon. Note that in order to use this filter, you should have already selected merchants that provide this type of products. For example, if you choose "coupon" but you have not selected any Merchants, your search will return an error.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Product type', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on type: product or coupon. Note that in order to use this filter, you should have already selected merchants that provide this type of products. For example, if you choose "coupon" but you have not selected any Merchants, your search will return an error.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Currency', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on their currency code. Not every product has a currency code.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Currency', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on their currency code. Not every product has a currency code.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Price', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on their price.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Price', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on their price.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Sale Price', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on their sale price.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Sale Price', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on their sale price.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Network', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on the affiliate network they are from.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Network', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on the affiliate network they are from.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Merchant', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products based on the merchant they are from.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Merchant', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products based on the merchant they are from.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'On Sale', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products by whether or not they are on sale.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'On Sale', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products by whether or not they are on sale.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Discount', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products by the percent of discount. For example, if you only want products that are on sale and the discount is greater than 20%, choose the "greater than" operator and type "20".', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Discount', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products by the percent of discount. For example, if you only want products that are on sale and the discount is greater than 20%, choose the "greater than" operator and type "20".', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Has Image', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products by whether or not they have an image. Note that if a merchant provides an image URL in their data feed but that image URL is broken, the product will still be returned in your search results.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Has Image', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products by whether or not they have an image. Note that if a merchant provides an image URL in their data feed but that image URL is broken, the product will still be returned in your search results.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Last updated', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Filter products by the last time they were updated in our database. You can use about any English textual datetime description. For examples, see PHP\'s ', DFRPS_DOMAIN ); ?><a href="http://php.net/strtotime" target="_blank">strtotime()</a> <?php _e( 'function.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Last updated', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Filter products by the last time they were updated in our database. You can use about any English textual datetime description. For examples, see PHP\'s ', 'datafeedr-product-sets' ); ?><a href="http://php.net/strtotime" target="_blank">strtotime()</a> <?php _e( 'function.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Limit', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Return a limited number of products. Note that the maximum number of products that will be returned is 10,000 products.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Limit', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Return a limited number of products. Note that the maximum number of products that will be returned is 10,000 products.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'Sort By', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Sort the search results by various parameters.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Sort By', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Sort the search results by various parameters.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'Exclude Duplicates', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'Exclude Duplicates', 'datafeedr-product-sets' ); ?></td>
 									<td class="desc">
-										<?php _e( 'Exclude products that have duplicate fields. Possible values are: ', DFRPS_DOMAIN ); ?>
+										<?php _e( 'Exclude products that have duplicate fields. Possible values are: ', 'datafeedr-product-sets' ); ?>
 										<br />
 										<tt>name, brand, currency, price, saleprice, source_id, merchant_id, onsale, image, thumbnail</tt>
 										<br /><br />
-										<strong><?php _e( 'Examples:', DFRPS_DOMAIN ); ?></strong>
+										<strong><?php _e( 'Examples:', 'datafeedr-product-sets' ); ?></strong>
 										<br />
-										<tt>name image</tt> - <?php _e( 'Exclude products with the same name AND the same image URL.', DFRPS_DOMAIN ); ?><br />
-										<tt>name|image</tt> - <?php _e( 'Exclude products with the same name OR the same image URL.', DFRPS_DOMAIN ); ?><br />
-										<tt>merchant_id name|image</tt> - <?php _e( 'Exclude products which have the same merchant AND their name OR image URL are the same.', DFRPS_DOMAIN ); ?>
+										<tt>name image</tt> - <?php _e( 'Exclude products with the same name AND the same image URL.', 'datafeedr-product-sets' ); ?><br />
+										<tt>name|image</tt> - <?php _e( 'Exclude products with the same name OR the same image URL.', 'datafeedr-product-sets' ); ?><br />
+										<tt>merchant_id name|image</tt> - <?php _e( 'Exclude products which have the same merchant AND their name OR image URL are the same.', 'datafeedr-product-sets' ); ?>
 									</td>
 								</tr>
 							</tbody>
 						</table>
-						<h3><?php _e( 'Filter Operators', DFRPS_DOMAIN ); ?></h3>
-						<p><?php _e( 'Use these filter operators to modify your search filters. ', DFRPS_DOMAIN ); ?></p> 
+						<h3><?php _e( 'Filter Operators', 'datafeedr-product-sets' ); ?></h3>
+						<p><?php _e( 'Use these filter operators to modify your search filters. ', 'datafeedr-product-sets' ); ?></p>
 						<table class="widefat" cellspacing="0">
 							<thead>
 								<tr>
-									<th><?php _e( 'Filter Operators', DFRPS_DOMAIN ); ?></th>
-									<th><?php _e( 'Description', DFRPS_DOMAIN ); ?></th>
-									<th><?php _e( 'Character Operators', DFRPS_DOMAIN ); ?></th>
+									<th><?php _e( 'Filter Operators', 'datafeedr-product-sets' ); ?></th>
+									<th><?php _e( 'Description', 'datafeedr-product-sets' ); ?></th>
+									<th><?php _e( 'Character Operators', 'datafeedr-product-sets' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'contains', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Return products which have the keyword(s).', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'contains', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Return products which have the keyword(s).', 'datafeedr-product-sets' ); ?></td>
 									<td class="operators">
 										<tt>= |</tt>
 									</td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( "doesn't contain", DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Return products which do not have the keyword(s).', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( "doesn't contain", 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Return products which do not have the keyword(s).', 'datafeedr-product-sets' ); ?></td>
 									<td class="operators">
 										<tt>= |</tt>
 									</td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'starts with', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Return products which keyword(s) start with a specific word.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'starts with', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Return products which keyword(s) start with a specific word.', 'datafeedr-product-sets' ); ?></td>
 									<td class="operators">
 										<tt>= |</tt>
 									</td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'ends with', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Return products which keyword(s) end with a specific word.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'ends with', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Return products which keyword(s) end with a specific word.', 'datafeedr-product-sets' ); ?></td>
 									<td class="operators">
 										<tt>= |</tt>
 									</td>
 								</tr>
 								<tr class="alternate">
-									<td class="row-title"><?php _e( 'matches', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Allows use of all available operators.', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'matches', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Allows use of all available operators.', 'datafeedr-product-sets' ); ?></td>
 									<td class="operators">
 										<tt>= | ^ $ "&hellip;"</tt>
 									</td>
 								</tr>
 								<tr>
-									<td class="row-title"><?php _e( 'is', DFRPS_DOMAIN ); ?></td>
-									<td class="desc"><?php _e( 'Return products that match an exact word (stemming is still in effect).', DFRPS_DOMAIN ); ?></td>
+									<td class="row-title"><?php _e( 'is', 'datafeedr-product-sets' ); ?></td>
+									<td class="desc"><?php _e( 'Return products that match an exact word (stemming is still in effect).', 'datafeedr-product-sets' ); ?></td>
 									<td class="operators">
 										<tt>= |</tt>
 									</td>
@@ -1418,35 +1418,35 @@ class Dfrps_Cpt {
 							</tbody>
 						</table>
 
-						<h3><?php _e( 'Character Operators', DFRPS_DOMAIN ); ?></h3>
-						<p><?php _e( 'Use these filter operators to further modify your filter operators. ', DFRPS_DOMAIN ); ?></p> 
+						<h3><?php _e( 'Character Operators', 'datafeedr-product-sets' ); ?></h3>
+						<p><?php _e( 'Use these filter operators to further modify your filter operators. ', 'datafeedr-product-sets' ); ?></p>
 						<table class="widefat" cellspacing="0">
 							<thead>
 								<tr>
-									<th><?php _e( 'Character', DFRPS_DOMAIN ); ?></th>
-									<th><?php _e( 'Description', DFRPS_DOMAIN ); ?></th>
+									<th><?php _e( 'Character', 'datafeedr-product-sets' ); ?></th>
+									<th><?php _e( 'Description', 'datafeedr-product-sets' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr class="alternate">
 									<td class="operators"><tt>=</tt></td>
-									<td class="desc"><?php _e( 'Perform an exact word search.', DFRPS_DOMAIN ); ?></td>
+									<td class="desc"><?php _e( 'Perform an exact word search.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
 									<td class="operators"><tt>|</tt></td>
-									<td class="desc"><?php _e( 'Perform a search with an OR operator with the pipe symbol.', DFRPS_DOMAIN ); ?></td>
+									<td class="desc"><?php _e( 'Perform a search with an OR operator with the pipe symbol.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
 									<td class="operators"><tt>^</tt></td>
-									<td class="desc"><?php _e( 'Perform a search that begin with a specific word.', DFRPS_DOMAIN ); ?></td>
+									<td class="desc"><?php _e( 'Perform a search that begin with a specific word.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr>
 									<td class="operators"><tt>$</tt></td>
-									<td class="desc"><?php _e( 'Perform a search that ends with a specific word.', DFRPS_DOMAIN ); ?></td>
+									<td class="desc"><?php _e( 'Perform a search that ends with a specific word.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 								<tr class="alternate">
 									<td class="operators"><tt>"&hellip;"</tt></td>
-									<td class="desc"><?php _e( 'Perform a phrasal search by surrounding a phrase in double quotes.', DFRPS_DOMAIN ); ?></td>
+									<td class="desc"><?php _e( 'Perform a phrasal search by surrounding a phrase in double quotes.', 'datafeedr-product-sets' ); ?></td>
 								</tr>
 							</tbody>
 						</table>
@@ -1459,12 +1459,12 @@ class Dfrps_Cpt {
 			echo $sform->render( '_dfrps_cpt_query', $this->get_search_form_defaults ( get_the_ID() ) );
 			?>
 			<div class="actions">
-				<span class="dfrps_raw_query"><a href="#" id="dfrps_view_raw_query"><?php _e( 'view api request', DFRPS_DOMAIN ); ?></a></span>
-				<input name="search" type="submit" class="button" id="dfrps_cpt_search" value="<?php echo __( 'Search', DFRPS_DOMAIN ); ?>" />
+				<span class="dfrps_raw_query"><a href="#" id="dfrps_view_raw_query"><?php _e( 'view api request', 'datafeedr-product-sets' ); ?></a></span>
+				<input name="search" type="submit" class="button" id="dfrps_cpt_search" value="<?php echo __( 'Search', 'datafeedr-product-sets' ); ?>" />
 				<div id="dfrps_save_update_search_actions">
 					<?php
 					$saved_query = get_post_meta( get_the_ID(), '_dfrps_cpt_query', true );
-					$add_update_button_text = ( $saved_query ) ? __( 'Update Saved Search', DFRPS_DOMAIN ) : __( 'Add as Saved Search', DFRPS_DOMAIN );
+					$add_update_button_text = ( $saved_query ) ? __( 'Update Saved Search', 'datafeedr-product-sets' ) : __( 'Add as Saved Search', 'datafeedr-product-sets' );
 					?>
 					<input type="submit" class="button button-primary" id="dfrps_cpt_save_search" value="<?php echo $add_update_button_text; ?>" />
 				</div>
