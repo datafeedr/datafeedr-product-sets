@@ -67,7 +67,6 @@
 
 #dfrps_cpt_dashboard_metabox #dfrps_db_loading
 {
-	
 	display: block;
 	background-color: Transparent;
 	background-image: url('../../../../wp-admin/images/spinner.gif');
@@ -76,6 +75,29 @@
 	height: 20px;
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+
+#dfrps_cpt_schedule_metabox .inside {
+    margin: 15px 0 0 0;
+}
+
+#dfrps_cpt_schedule_metabox .inside label {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    display: block;
+}
+#dfrps_cpt_schedule_metabox .inside label.interval-label {
+    margin: 0;
+    font-weight: normal;
+    display: inline;
+}
+
+#dfrps_cpt_schedule_metabox .inside .section {
+    margin: 0 0 15px 0;
+}
+
+#dfrps_cpt_schedule_metabox .inside select.day {
+    width: 200px;
 }
 
 .dfrps_type_disabled { color: #a00; }

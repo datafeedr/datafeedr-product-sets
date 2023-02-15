@@ -570,7 +570,7 @@ class Dfrps_Update {
 
 		if ( $postprocess_complete ) {
 			$this->delete_first_passes();
-			$next_update_time = dfrps_get_next_update_time();
+			$next_update_time = dfrps_get_next_update_time( $this->set['ID'] );
 			$next_update_time = apply_filters( 'dfrps_cpt_next_update_time', $next_update_time, $this->set );
 			update_post_meta( $this->set['ID'], '_dfrps_cpt_next_update_time', $next_update_time );
 			update_post_meta( $this->set['ID'], '_dfrps_cpt_last_update_time_completed', date_i18n( 'U' ) );

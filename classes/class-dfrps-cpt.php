@@ -296,6 +296,16 @@ class Dfrps_Cpt {
 			array()
 		);
 
+		add_meta_box(
+			'dfrps_cpt_schedule_metabox',
+			_x( 'Custom Update Schedule', DFRPS_DOMAIN ),
+			array( $this, 'cpt_schedule_metabox' ),
+			DFRPS_CPT,
+			'side',
+			'default',
+			array()
+        );
+
 		// Show CPT picker (or message if no registered CPTs exist).
 		add_meta_box(
 			'dfrps_cpt_picker_metabox', 
@@ -347,6 +357,133 @@ class Dfrps_Cpt {
 			<p><span class="dashicons dashicons-plus"></span> <a href="' . add_query_arg( array( 'post_type' => DFRPS_CPT ), admin_url( 'post-new.php') ) . '">' . __( 'Add a new Product Set', 'datafeedr-product-sets' ) . '</a></p>
 		</div>
 		';
+	}
+
+	/**
+	 * Callback for Custom Update Schedule meta box.
+	 *
+	 * @param WP_Post $post
+	 * @param $box
+	 */
+	public function cpt_schedule_metabox( WP_Post $post, $box ): void {
+
+		$settings = get_post_meta( $post->ID, '_dfrps_update_schedule', true );
+
+		if ( empty( $settings ) ) {
+			$settings = [
+				'enabled'  => '',
+				'interval' => 'day_of_week',
+				'days'     => [],
+				'time'     => '00:00',
+			];
+		}
+
+		echo '<div class="section">';
+		echo '<input name="enabled" type="checkbox" ' . checked( 'on', $settings['enabled'], false ) . ' id="enabled">' . __( 'Enabled', 'datafeedr-product-sets' );
+		echo '</div>';
+
+		$show = 'on' === $settings['enabled'] ? '' : 'style="display:none"';
+		echo '<div class="options" ' . $show . '>';
+
+		echo '<div class="section intervals">';
+		echo '<label for="interval">' . __( 'Interval', 'datafeedr-product-sets' ) . '</label>';
+		echo '<input type="radio" class="interval" name="interval" value="day_of_week" id="day-of-week" ' . checked( 'day_of_week', $settings['interval'], false ) . ' >';
+		echo '<label  class="interval-label" for="day-of-week">' . __( 'Day of week', 'datafeedr-product-sets' ) . '</label><br/>';
+		echo '<input type="radio" class="interval" name="interval" value="day_of_month" id="day-of-month" ' . checked( 'day_of_month', $settings['interval'], false ) . ' >';
+		echo '<label class="interval-label" for="day-of-month">' . __( 'Day of month', 'datafeedr-product-sets' ) . '</label><br/>';
+		echo '</div>';
+
+		echo $this->day_of_week( $settings );
+
+		echo $this->day_of_month( $settings );
+
+		$hour   = substr( $settings['time'], 0, 2 );
+		$minute = substr( $settings['time'], 3, 2 );
+		echo '<div class="section time">';
+		echo '<label for="hour">' . __( 'Time (HH:MM)', 'datafeedr-product-sets' ) . '</label>';
+		echo '<select name="hour">';
+		for ( $i = 0; $i <= 23; $i ++ ) {
+			$value = ( 10 <= $i ) ? (string) $i : '0' . $i;
+			echo '<option value="' . $value . '" ' . selected( $value, $hour, false ) . '>' . $value . '</option>';
+		}
+		echo '</select>';
+		echo ":";
+		echo '<select name="minute">';
+		for ( $i = 0; $i <= 59; $i ++ ) {
+			$value = ( 10 <= $i ) ? (string) $i : '0' . $i;
+			echo '<option value="' . $value . '" ' . selected( $value, $minute, false ) . '>' . $value . '</option>';
+		}
+		echo '</select>';
+		echo '</div>';
+
+		echo '</div>';
+	}
+
+	/**
+	 * Build HTML for the "Day of week" multi select.
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private function day_of_week( array $settings ): string {
+		$html = '';
+		$show = 'day_of_week' === $settings['interval'] ? '' : 'style="display:none"';
+		$html .= '<div class="section week" ' . $show . ' >';
+		$html .= '<label for="week">' . __( 'Days', 'datafeedr-product-sets' ) . '</label>';
+		$html .= '<select name="week[]" id="week" class="day" size="7" multiple>';
+
+		$selected = 'day_of_week' === $settings['interval'] && in_array( '1', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="1" ' . $selected . '>' . __( 'Every Monday', 'datafeedr-product-sets' ) . '</option>';
+
+		$selected = 'day_of_week' === $settings['interval'] && in_array( '2', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="2" ' . $selected . '>' . __( 'Every Tuesday', 'datafeedr-product-sets' ) . '</option>';
+
+		$selected = 'day_of_week' === $settings['interval'] && in_array( '3', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="3" ' . $selected . '>' . __( 'Every Wednesday', 'datafeedr-product-sets' ) . '</option>';
+
+		$selected = 'day_of_week' === $settings['interval'] && in_array( '4', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="4" ' . $selected . '>' . __( 'Every Thursday', 'datafeedr-product-sets' ) . '</option>';
+
+		$selected = 'day_of_week' === $settings['interval'] && in_array( '5', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="5" ' . $selected . '>' . __( 'Every Friday', 'datafeedr-product-sets' ) . '</option>';
+
+		$selected = 'day_of_week' === $settings['interval'] && in_array( '6', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="6" ' . $selected . '>' . __( 'Every Saturday', 'datafeedr-product-sets' ) . '</option>';
+
+		$selected = in_array( '0', $settings['days'] ) ? 'selected' : '';
+		$html     .= '<option value="0" ' . $selected . '>' . __( 'Every Sunday', 'datafeedr-product-sets' ) . '</option>';
+		$html     .= '</select>';
+		$html     .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	 * Build HTML for the "Day of month" multi select.
+	 *
+	 * @param $settings array
+	 *
+	 * @return string
+	 */
+	private function day_of_month( array $settings ): string {
+		$html = '';
+
+		$show = 'day_of_month' === $settings['interval'] ? '' : 'style="display:none"';
+		$html .= '<div class="section month" ' . $show . '>';
+		$html .= '<label for="month">' . __( 'Days', 'datafeedr-product-sets' ) . '</label>';
+		$html .= '<select name="month[]" id="month" class="day" size="10" multiple>';
+
+		for ( $i = 1; $i < 29; $i ++ ) {
+			$selected = 'day_of_month' === $settings['interval'] && in_array( $i, $settings['days'] ) ? 'selected' : '';
+			$date     = sprintf( 'January %d, 2000', $i );
+
+			$html .= '<option value="' . $i . '" ' . $selected . ' >' . __( 'Every ', 'datafeedr-product-sets' ) . esc_html( date_i18n( 'jS', strtotime( $date ) ) ) . '</option>';
+		}
+		$html .= '</select>';
+		$html .= '</div>';
+
+		return $html;
 	}
 
 	function cpt_picker_metabox( $post, $box ) {
@@ -803,6 +940,42 @@ class Dfrps_Cpt {
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_api_requests', 0, true );
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_products_added', 0, true );
 
+		$enabled = isset( $_POST['enabled'] ) ? sanitize_key( $_POST['enabled'] ) : '';
+
+        if ( 'on' === $enabled ) {
+
+            $interval = isset( $_POST['interval'] ) ? sanitize_text_field( $_POST['interval'] ) : 'day_of_week';
+            $month    = isset( $_POST['month'] ) ? (array) $_POST['month'] : [];
+    		$month    = array_map( 'strip_tags', $month );
+    		if ( empty( $month ) ) {
+    		    $month = ['1'];
+			}
+            $week     = isset( $_POST['week'] ) ? (array) $_POST['week'] : [];
+            $week     = array_map( 'strip_tags', $week );
+            if ( empty( $week ) ){
+                $week = ['1'];
+			}
+            $hour     = isset( $_POST['hour'] ) ? sanitize_key( $_POST['hour'] ) : '';
+            $minute   = isset( $_POST['minute'] ) ? sanitize_key( $_POST['minute'] ) : '';
+
+            $schedule = [
+                    'enabled' => $enabled,
+                    'interval' => $interval,
+                    'days' => '',
+                    'time' => $hour . ':' . $minute,
+            ];
+
+            if ( 'day_of_week' === $schedule['interval'] ) {
+                $schedule['days'] = $week;
+            } else {
+                $schedule['days'] = $month;
+            }
+
+	        update_post_meta( $post_id, '_dfrps_update_schedule', $schedule );
+	        update_post_meta( $post_id, '_dfrps_cpt_next_update_time', dfrps_get_custom_update_time( $schedule ) );
+		} else {
+			delete_post_meta( $post_id, '_dfrps_update_schedule', );
+		}
 	}
 
 	/**
