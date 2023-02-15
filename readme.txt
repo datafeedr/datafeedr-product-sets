@@ -7,7 +7,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
 Tested up to: 6.1.2-alpha
-Stable tag: 1.3.14
+Stable tag: 1.3.15
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,12 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.15 - 2022/02/16 =
+* Added Custom Update Schedule for Product Sets.
+* Formatted `require_once()` calls differently.
+* Added `dfrps_get_default_update_time()` function.
+* Update parameter requirements for `dfrps_get_next_update_time()`
 
 = 1.3.14 - 2022/02/08 =
 * Fixed spelling and whitespace.
