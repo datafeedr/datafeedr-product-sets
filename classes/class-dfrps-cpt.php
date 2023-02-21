@@ -1140,11 +1140,19 @@ class Dfrps_Cpt {
 			// Is updating now or has never updated.
 			// Show values from '_dfrps_cpt_previous_update_info' meta field if exists.
 			$meta = ( isset( $meta['_dfrps_cpt_previous_update_info'][0] ) ) ? maybe_unserialize( $meta['_dfrps_cpt_previous_update_info'][0] ) : array();
+			$completed = $meta['_dfrps_cpt_last_update_time_completed'][0];
 		}
 
 		if ( !isset( $meta['_dfrps_cpt_last_update_time_completed'][0] ) ) {
 
 			echo __( 'This Product Set has never been imported.', 'datafeedr-product-sets' );
+
+		} elseif( $completed == 0 ) {
+			echo __( 'This Product Set has not finished importing products yet.', 'datafeedr-product-sets' );
+
+			if ( is_array( $update_errors ) && !empty( $update_errors ) ) {
+				echo dfrapi_output_api_error( $update_errors );
+			}
 
 		} else {
 
