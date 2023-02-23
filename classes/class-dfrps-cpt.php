@@ -1132,7 +1132,7 @@ class Dfrps_Cpt {
 
 		$post 				= $GLOBALS['post'];
 		$meta 				= get_post_custom( $post->ID );
-		$completed 			= $meta['_dfrps_cpt_last_update_time_completed'][0];
+		$completed 			= ( isset( $meta['_dfrps_cpt_last_update_time_completed'][0] ) ) ? $meta['_dfrps_cpt_last_update_time_completed'][0] : 0;
 		$update_errors 		= ( isset( $meta['_dfrps_cpt_errors'][0] ) ) ? maybe_unserialize( $meta['_dfrps_cpt_errors'][0] ) : '';
 
 		// Show last update stats
@@ -1140,7 +1140,7 @@ class Dfrps_Cpt {
 			// Is updating now or has never updated.
 			// Show values from '_dfrps_cpt_previous_update_info' meta field if exists.
 			$meta = ( isset( $meta['_dfrps_cpt_previous_update_info'][0] ) ) ? maybe_unserialize( $meta['_dfrps_cpt_previous_update_info'][0] ) : array();
-			$completed = $meta['_dfrps_cpt_last_update_time_completed'][0];
+			$completed = ( isset( $meta['_dfrps_cpt_last_update_time_completed'][0] ) ) ? $meta['_dfrps_cpt_last_update_time_completed'][0] : 0;
 		}
 
 		if ( !isset( $meta['_dfrps_cpt_last_update_time_completed'][0] ) ) {
