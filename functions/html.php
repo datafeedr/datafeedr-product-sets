@@ -37,19 +37,20 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 		$already_included = in_array( $product['_id'], $args['manually_included_ids'] );
 
 		?>
-		<div id="product_<?php echo $product['_id']; ?>_<?php echo $args['context']; ?>" class="product_block product_<?php echo $product['_id']; ?>">
+		<div id="product_<?php echo $product['_id']; ?>_<?php echo $args['context']; ?>" class="product_block product_<?php esc_attr_e( $product['_id'] ); ?>">
 			<table class="dfrps_product_table type_<?php echo $type; ?>">
 				<tr class="product">
 					<td class="image" rowspan="2">
 						<a href="<?php echo $image; ?>" title="<?php echo __('View image in new browser window.', 'datafeedr-product-sets' ); ?>" target="_blank">
-							<img src="<?php echo $image; ?>" />
+							<img src="<?php echo $image; ?>" alt="Product image" />
 						</a>
 					</td>
 					<td class="name">
 						<div>
 							<a href="#" class="more_info" title="<?php echo __('View more information about this product.', 'datafeedr-product-sets' ); ?>">
-								<?php echo $product['name']; ?>
+								<?php esc_html_e( $product['name'] ); ?>
 							</a>
+							<span class="product_id" title="<?php esc_attr_e('Internal Datafeedr Product ID', 'datafeedr-product-sets' ); ?>">(<?php esc_html_e( $product['_id'] ); ?>)</span>
 						</div>
 					</td>
 					<td class="links">
@@ -88,7 +89,7 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 						</div>
 					</td>
 					<td class="product_type" rowspan="3">
-						<img src="<?php echo plugins_url( 'images/icons/' . $type . '-label.png', __DIR__ ); ?>" />
+						<img src="<?php echo plugins_url( 'images/icons/' . $type . '-label.png', __DIR__ ); ?>" alt="Product type" />
 					</td>
 				</tr>
 				<tr>
@@ -96,23 +97,23 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 
 						<div class="description">
 							<?php if ( isset( $product['description'] ) ) : ?>
-								<?php echo strip_tags( $product['description'] ); ?>
+								<?php esc_html_e ( strip_tags( $product['description'] ) ); ?>
 							<?php endif; ?>
 						</div>
 
 						<div class="details">
 							<div class="network" title="<?php echo __('Network', 'datafeedr-product-sets' ) . ': ' . esc_attr( $product['source'] ); ?>">
 								<span class="bullet">&bull;</span>
-								<span class="label"><?php echo $product['source']; ?></span>
+								<span class="label"><?php esc_html_e( $product['source'] ); ?></span>
 							</div>
 							<div class="merchant" title="<?php echo __('Merchant', 'datafeedr-product-sets' ) . ': ' . esc_attr( $product['merchant'] ); ?>">
 								<span class="bullet">&bull;</span>
-								<span class="label"><?php echo substr( $product['merchant'], 0, 25 ); ?></span>
+								<span class="label"><?php esc_html_e ( substr( $product['merchant'], 0, 25 ) ); ?></span>
 							</div>
 							<?php if ( isset( $product['brand'] ) ) : ?>
 								<div class="brand" title="<?php echo __('Brand', 'datafeedr-product-sets' ) . ': ' . esc_attr( $product['brand'] ); ?>">
 									<span class="bullet">&bull;</span>
-									<span class="label"><?php echo $product['brand']; ?></span>
+									<span class="label"><?php esc_html_e( $product['brand'] ); ?></span>
 								</div>
 							<?php endif; ?>
 							<?php if ( isset( $product['price'] ) ) : ?>
@@ -123,11 +124,11 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
                                 </div>
 							<?php endif; ?>
 							<?php if ( isset( $product['saleprice'] ) ) : ?>
-                                <div class="saleprice"
-                                     title="<?php echo __( 'Sale Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $saleprice ) . ' ' . $currency; ?>">
-                                    <span class="bullet">&bull;</span>
-                                    <span class="label"><?php echo $saleprice; ?></span>
-                                </div>
+								<div class="saleprice"
+								     title="<?php echo __( 'Sale Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $saleprice ) . ' ' . $currency; ?>">
+									<span class="bullet">&bull;</span>
+									<span class="label"><?php echo $saleprice; ?></span>
+								</div>
 							<?php endif; ?>
 						</div>
 

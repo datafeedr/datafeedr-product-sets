@@ -405,7 +405,7 @@ function dfrps_more_info_rows( $product ) {
 			<td class="value dfrps_force_wrap">
 				<a href="' . $v . '" target="_blank" title="' . __( 'Open image in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
 				<br />
-				<img src="' . $v . '" />
+				<img src="' . $v . '" style="max-width: 100%;" />
 			</td>';
 		} elseif ( $k == '_wc_url' ) {
 			echo '
@@ -422,13 +422,18 @@ function dfrps_more_info_rows( $product ) {
 			<td class="value dfrps_force_wrap">
 				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
 			</td>';
+		} elseif ( $k == 'direct_url' ) {
+			echo '
+			<td class="value dfrps_force_wrap">
+				<a href="' . esc_url( $product[ $k ] ) . '" target="_blank" title="' . __( 'Open direct URL in new window.', 'datafeedr-product-sets' ) . '">' . esc_html( esc_url( $product[ $k ] ) ) . '</a>
+			</td>';
 		} elseif ( $k == 'impressionurl' && function_exists( 'dfrapi_impression_url' ) ) {
 			echo '
 			<td class="value dfrps_force_wrap">
 				<a href="' . dfrapi_impression_url( $product ) . '" target="_blank" title="' . __( 'Open impression URL in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_impression_url( $product ) ) . '</a>
 			</td>';
 		} else {
-			echo '<td class="value dfrps_force_wrap">' . esc_attr( $v ) . '</td>';
+			echo '<td class="value dfrps_force_wrap">' . esc_html( $v ) . '</td>';
 		}
 		echo '</tr>';
 		$f ++;

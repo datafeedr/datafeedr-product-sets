@@ -439,6 +439,13 @@
 	padding-bottom: 5px;
 }
 
+.datafeedr-productset_admin .dfrps_product_table td.name span.product_id {
+	color: #6C6C6C;
+	font-weight: normal;
+	font-size: 90%;
+	margin-left: 6px;
+}
+
 .datafeedr-productset_admin .dfrps_product_table td.links {
 	min-width: 50px;
 }

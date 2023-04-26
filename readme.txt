@@ -7,7 +7,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
 Tested up to: 6.1.2-alpha
-Stable tag: 1.3.18
+Stable tag: 1.3.19
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,11 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.19 - 2023/04/26 =
+* Added the product ID next to the product name in the search results on a Product Set create page.
+* Added link to `direct_url` field.
+* Prevent `image` field from expanding beyond the width of the browser.
 
 = 1.3.18 - 2023/03/29 =
 * Fixed trailing comma bug

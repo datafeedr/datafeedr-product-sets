@@ -10,7 +10,7 @@ License: GPL v3
 Requires PHP: 7.4
 Requires at least: 3.8
 Tested up to: 6.1.2-alpha
-Version: 1.3.18
+Version: 1.3.19
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2023, Datafeedr - help@datafeedr.com
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.3.18' );
+define( 'DFRPS_VERSION', '1.3.19' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
