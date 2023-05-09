@@ -89,6 +89,111 @@ function dfrps_handle_dfrps_bulk_bump_with_priority( $redirect_to, $doaction, $p
 add_filter( 'handle_bulk_actions-edit-datafeedr-productset', 'dfrps_handle_dfrps_bulk_bump_with_priority', 10, 3 );
 
 /**
+ * Removes the "Delete permanently" option from the "Bulk actions" drop-down menu
+ * on WordPress Admin Area > Product Sets pages.
+ *
+ * It only removes the option when the "delete" key is set on the $actions array.
+ *
+ * Can be bypassed by using this custom code:
+ *
+ * `add_filter( 'dfrps_bypass_premature_delete_check', '__return_true' );`
+ *
+ * @param array $actions
+ *
+ * @return array
+ *
+ * @since 1.3.20
+ */
+function dfrps_remove_bulk_delete_action( array $actions ) {
+
+	if ( ! array_key_exists( 'delete', $actions ) ) {
+		return $actions;
+	}
+
+	/**
+	 * Allow user to bypass the check to always force the "Delete permanently" option to appear in the
+	 * "Bulk actions" menu.
+	 */
+	if ( (bool) apply_filters( 'dfrps_bypass_premature_delete_check', false ) ) {
+		return $actions;
+	}
+
+	unset( $actions['delete'] );
+
+	return $actions;
+}
+
+add_filter( 'bulk_actions-edit-' . DFRPS_CPT, 'dfrps_remove_bulk_delete_action' );
+
+/**
+ * Removes the "Delete permanently" link from a Product Set's "row actions"
+ * on WordPress Admin Area > Product Sets > Trash pages.
+ *
+ * It only removes the option when...
+ *      - the $post->post_type is DFRPS_CPT, and
+ *      - the "delete" key is set on the $actions array, and
+ *      - the time now is more than one week greater than $post->post_modified, and
+ *      - the "dfrps_bypass_premature_delete_check" filter is false
+ *
+ * Can be bypassed by using this custom code:
+ *
+ * `add_filter( 'dfrps_bypass_premature_delete_check', '__return_true' );`
+ *
+ * @param array $actions
+ * @param WP_Post $post
+ *
+ * @return array
+ *
+ * @since 1.3.20
+ */
+function dfrps_remove_delete_row_action( array $actions, WP_Post $post ) {
+
+	if ( $post->post_type !== DFRPS_CPT ) {
+		return $actions;
+	}
+
+	if ( ! array_key_exists( 'delete', $actions ) ) {
+		return $actions;
+	}
+
+	/**
+	 * This is the amount of time in seconds that have elapsed since this Product Set
+	 * was last modified.
+	 */
+	$time_now      = (int) strtotime( date_i18n( 'Y-m-d H:i:s' ) );
+	$last_modified = (int) strtotime( $post->post_modified );
+	$elapsed_time  = $time_now - $last_modified;
+
+	if ( $elapsed_time > WEEK_IN_SECONDS ) {
+		return $actions;
+	}
+
+	/**
+	 * Allow user to bypass the check to always force the "Delete permanently" link to appear in the Product Set
+	 * row action links.
+	 */
+	if ( (bool) apply_filters( 'dfrps_bypass_premature_delete_check', false ) ) {
+		return $actions;
+	}
+
+	/**
+	 * If we made it this far, this means that:
+	 *      - The post_type in question is a Datafeedr Product Set, and
+	 *      - The $actions array contains a "delete" (Permanently Delete) action, and
+	 *      - The $elapsed_time since the last modified date of this Product Set is less than one week, and
+	 *      - The "dfrps_bypass_premature_delete_check" filter is false
+	 *
+	 * Therefore, we should remove the "delete" option from the $actions array.
+	 */
+
+	unset( $actions['delete'] );
+
+	return $actions;
+}
+
+add_filter( 'page_row_actions', 'dfrps_remove_delete_row_action', 10, 2 );
+
+/**
  * Add Datafeedr Product Set Plugin's settings and configuration to the WordPress
  * Site Health Info section (WordPress Admin Area > Tools > Site Health).
  *

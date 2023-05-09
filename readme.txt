@@ -6,8 +6,8 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.1.2-alpha
-Stable tag: 1.3.19
+Tested up to: 6.2.1-alpha
+Stable tag: 1.3.20
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.20 - 2023/05/09 =
+* Disable the "Delete permanently" option for Product Sets in the Trash for less than one week. Can be bypassed using the `dfrps_bypass_premature_delete_check` filter hook and returning `true`.
 
 = 1.3.19 - 2023/04/26 =
 * Added the product ID next to the product name in the search results on a Product Set create page.
