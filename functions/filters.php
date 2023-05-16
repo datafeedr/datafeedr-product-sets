@@ -194,6 +194,22 @@ function dfrps_remove_delete_row_action( array $actions, WP_Post $post ) {
 add_filter( 'page_row_actions', 'dfrps_remove_delete_row_action', 10, 2 );
 
 /**
+ * Adds a "Product Sets" column to the Products Admin Table.
+ *
+ * @param $columns
+ *
+ * @return mixed
+ * @since 1.3.21
+ */
+function dfrps_add_products_sets_column_to_products_table( $columns ) {
+	$columns['dfrps_product_sets'] = esc_html__( 'Product Sets', 'datafeedr-product-sets' );
+
+	return $columns;
+}
+
+add_filter( 'manage_edit-product_columns', 'dfrps_add_products_sets_column_to_products_table', 99 );
+
+/**
  * Add Datafeedr Product Set Plugin's settings and configuration to the WordPress
  * Site Health Info section (WordPress Admin Area > Tools > Site Health).
  *
@@ -279,99 +295,99 @@ add_filter( 'debug_information', function ( $info ) {
 		'label'       => __( 'Datafeedr Product Sets Plugin', 'datafeedr-product-sets' ),
 		'description' => '',
 		'fields'      => [
-			'currently_updating'           => [
+			'currently_updating'                     => [
 				'label' => __( 'Currently Updating', 'datafeedr-product-sets' ),
 				'value' => isset( $currently_updating->title ) ? $currently_updating->title . ' / ID: ' . $currently_updating->id . ' / PHASE: ' . $currently_updating->phase : '—',
 			],
-			'product_sets_publish'         => [
+			'product_sets_publish'                   => [
 				'label' => __( 'Product Sets (publish)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_product_sets->publish,
 			],
-			'product_sets_draft'           => [
+			'product_sets_draft'                     => [
 				'label' => __( 'Product Sets (draft)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_product_sets->draft,
 			],
-			'product_sets_trash'           => [
+			'product_sets_trash'                     => [
 				'label' => __( 'Product Sets (trash)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_product_sets->trash,
 			],
-			'woocommerce_products_publish' => [
+			'woocommerce_products_publish'           => [
 				'label' => __( 'WC Products (publish)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_products->publish,
 			],
-			'woocommerce_products_draft'   => [
+			'woocommerce_products_draft'             => [
 				'label' => __( 'WC Products (draft)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_products->draft,
 			],
-			'woocommerce_products_trash'   => [
+			'woocommerce_products_trash'             => [
 				'label' => __( 'WC Products (trash)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_products->trash,
 			],
-			'dfrps_products_publish'       => [
+			'dfrps_products_publish'                 => [
 				'label' => __( 'DFRPS Products (publish)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_dfrps_products['publish'],
 			],
-			'dfrps_products_draft'         => [
+			'dfrps_products_draft'                   => [
 				'label' => __( 'DFRPS Products (draft)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_dfrps_products['draft'],
 			],
-			'dfrps_products_trash'         => [
+			'dfrps_products_trash'                   => [
 				'label' => __( 'DFRPS Products (trash)', 'datafeedr-product-sets' ),
 				'value' => (string) $total_dfrps_products['trash'],
 			],
-			'num_products_per_search'      => [
+			'num_products_per_search'                => [
 				'label' => __( 'Products per Search', 'datafeedr-product-sets' ),
 				'value' => isset( $options['num_products_per_search'] ) && ! empty( $options['num_products_per_search'] ) ? $options['num_products_per_search'] : '—',
 			],
-			'default_filters'              => [
+			'default_filters'                        => [
 				'label' => __( 'Default Search Setting', 'datafeedr-product-sets' ),
 				'value' => isset( $options['default_filters'] ) && ! empty( $options['default_filters'] ) ? serialize( $options['default_filters'] ) : '—',
 			],
-			'default_cpt'                  => [
+			'default_cpt'                            => [
 				'label' => __( 'Default Custom Post Type', 'datafeedr-product-sets' ),
 				'value' => isset( $options['default_cpt'] ) && ! empty( $options['default_cpt'] ) ? $options['default_cpt'] : '—',
 			],
-			'delete_missing_products'      => [
+			'delete_missing_products'                => [
 				'label' => __( 'Delete Missing Products', 'datafeedr-product-sets' ),
 				'value' => isset( $options['delete_missing_products'] ) && ! empty( $options['delete_missing_products'] ) ? ucfirst( $options['delete_missing_products'] ) : '—',
 				'debug' => isset( $options['delete_missing_products'] ) && ! empty( $options['delete_missing_products'] ) ? $options['delete_missing_products'] : '—',
 			],
-			'updates_enabled'              => [
+			'updates_enabled'                        => [
 				'label' => __( 'Updates', 'datafeedr-product-sets' ),
 				'value' => isset( $options['updates_enabled'] ) && ! empty( $options['updates_enabled'] ) ? ucfirst( $options['updates_enabled'] ) : '—',
 				'debug' => isset( $options['updates_enabled'] ) && ! empty( $options['updates_enabled'] ) ? $options['updates_enabled'] : '—',
 			],
-			'disable_updates_when_missing_merchants'      => [
+			'disable_updates_when_missing_merchants' => [
 				'label' => __( 'Disable Updates When Missing Merchants', 'datafeedr-product-sets' ),
 				'value' => isset( $options['disable_updates_when_missing_merchants'] ) && ! empty( $options['disable_updates_when_missing_merchants'] ) ? ucfirst( $options['disable_updates_when_missing_merchants'] ) : '—',
 				'debug' => isset( $options['disable_updates_when_missing_merchants'] ) && ! empty( $options['disable_updates_when_missing_merchants'] ) ? $options['disable_updates_when_missing_merchants'] : '—',
 			],
-			'update_interval'              => [
+			'update_interval'                        => [
 				'label' => __( 'Update Interval', 'datafeedr-product-sets' ),
 				'value' => $update_interval,
 				'debug' => isset( $options['update_interval'] ) && ! empty( $options['update_interval'] ) ? $options['update_interval'] : '—',
 			],
-			'cron_interval'                => [
+			'cron_interval'                          => [
 				'label' => __( 'Cron Interval', 'datafeedr-product-sets' ),
 				'value' => $cron_interval,
 				'debug' => isset( $options['cron_interval'] ) && ! empty( $options['cron_interval'] ) ? $options['cron_interval'] : '—',
 			],
-			'num_products_per_update'      => [
+			'num_products_per_update'                => [
 				'label' => __( 'Products per Update', 'datafeedr-product-sets' ),
 				'value' => isset( $options['num_products_per_update'] ) && ! empty( $options['num_products_per_update'] ) ? ucfirst( $options['num_products_per_update'] ) : '—',
 				'debug' => isset( $options['num_products_per_update'] ) && ! empty( $options['num_products_per_update'] ) ? $options['num_products_per_update'] : '—',
 			],
-			'num_products_per_api_request' => [
+			'num_products_per_api_request'           => [
 				'label' => __( 'Products per API Request', 'datafeedr-product-sets' ),
 				'value' => isset( $options['num_products_per_api_request'] ) && ! empty( $options['num_products_per_api_request'] ) ? ucfirst( $options['num_products_per_api_request'] ) : '—',
 				'debug' => isset( $options['num_products_per_api_request'] ) && ! empty( $options['num_products_per_api_request'] ) ? $options['num_products_per_api_request'] : '—',
 			],
-			'preprocess_maximum'           => [
+			'preprocess_maximum'                     => [
 				'label' => __( 'Preprocess Maximum', 'datafeedr-product-sets' ),
 				'value' => isset( $options['preprocess_maximum'] ) && ! empty( $options['preprocess_maximum'] ) ? ucfirst( $options['preprocess_maximum'] ) : '—',
 				'debug' => isset( $options['preprocess_maximum'] ) && ! empty( $options['preprocess_maximum'] ) ? $options['preprocess_maximum'] : '—',
 			],
-			'postprocess_maximum'          => [
+			'postprocess_maximum'                    => [
 				'label' => __( 'Postprocess Maximum', 'datafeedr-product-sets' ),
 				'value' => isset( $options['postprocess_maximum'] ) && ! empty( $options['postprocess_maximum'] ) ? ucfirst( $options['postprocess_maximum'] ) : '—',
 				'debug' => isset( $options['postprocess_maximum'] ) && ! empty( $options['postprocess_maximum'] ) ? $options['postprocess_maximum'] : '—',

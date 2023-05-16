@@ -222,3 +222,39 @@ function dfrps_handle_no_merchants_selected_error( $error, $data, $product_set )
 
 add_action( 'dfrps_product_set_updates_disabled', 'dfrps_handle_no_merchants_selected_error', 10, 3 );
 
+/**
+ * If the current column is "dfrps_product_sets", display a link to the various Product Sets
+ * the current Product ($product_id) is associated with.
+ *
+ * @param $column
+ * @param $product_id
+ *
+ * @return void
+ * @since 1.3.21
+ */
+function dfrps_add_products_sets_content_to_products_table_column( $column, $product_id ): void {
+
+	if ( $column !== 'dfrps_product_sets' ) {
+		return;
+	}
+
+	$product         = wc_get_product( $product_id );
+	$product_set_ids = dfrpswc_get_product_set_ids_for_product( $product->get_id() );
+
+	$arr = [];
+
+	foreach ( $product_set_ids as $product_set_id ) {
+		if ( dfrps_product_set_exists( $product_set_id ) ) {
+			$url   = esc_url( get_edit_post_link( $product_set_id ) );
+			$title = esc_html( get_the_title( $product_set_id ) );
+			$arr[] = sprintf( '<a href="%s" title="View Product Set" target="_blank" rel="noopener">%s</a>', $url, $title );
+		} else {
+			$arr[] = sprintf( esc_html__( 'Product Set %d does not exist', 'datafeedr-product-sets' ), $product_set_id );
+		}
+	}
+
+	echo implode( '<br/>', $arr );
+}
+
+add_action( 'manage_product_posts_custom_column', 'dfrps_add_products_sets_content_to_products_table_column', 10, 2 );
+

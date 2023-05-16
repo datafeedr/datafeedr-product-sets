@@ -307,10 +307,10 @@ function dfrps_format_product_list( $data, $context ) {
 
 	// Query info
 	if ( isset( $data['params'] ) && ! empty( $data['params'] ) ) { ?>
-        <div class="dfrps_api_info" id="dfrps_raw_api_query">
-            <div class="dfrps_head"><?php _e( 'API Request', 'datafeedr-product-sets' ); ?></div>
-            <div class="dfrps_query"><span><?php echo dfrapi_display_api_request( $data['params'] ); ?></span></div>
-        </div>
+		<div class="dfrps_api_info" id="dfrps_raw_api_query">
+			<div class="dfrps_head"><?php _e( 'API Request', 'datafeedr-product-sets' ); ?></div>
+			<div class="dfrps_query"><span><?php echo dfrapi_display_api_request( $data['params'] ); ?></span></div>
+		</div>
 	<?php }
 
 	echo dfrps_display_query_complexity_score( $data, $context );
@@ -1275,4 +1275,16 @@ function dfrps_error_log( $message, $message_type = null, $destination = null, $
 	if ( apply_filters( 'dfrps_log_errors', false ) ) {
 		error_log( $message, $message_type, $destination, $additional_headers );
 	}
+}
+
+/**
+ * Determines if a post ID is that of an existing Product Set.
+ *
+ * @param int $product_set_id ID of Product Set to check.
+ *
+ * @return bool True if the Product Set exists; otherwise, false.
+ * @since 1.3.21
+ */
+function dfrps_product_set_exists( int $product_set_id ): bool {
+	return get_post_type( $product_set_id ) === DFRPS_CPT;
 }

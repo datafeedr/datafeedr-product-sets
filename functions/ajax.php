@@ -358,13 +358,18 @@ function dfrps_ajax_dashboard() {
 					$html .= '<p><span class="dashicons dashicons-welcome-view-site"></span> ' . __( 'View category: ', 'datafeedr-product-sets' );
 					$i    = 1;
 					foreach ( $links as $link ) {
-						$html .= '<a href="' . $link['url'] . '" target="_blank">' . $link['name'] . '</a>';
+						$html .= '<br/><a href="' . $link['url'] . '" target="_blank">' . $link['name'] . '</a>';
 						$i ++;
 						if ( $i <= $num_links ) {
 							$html .= ', ';
 						}
 					}
 					$html . '</p>';
+
+					$html .= '<p>
+						<a href="#" class="button" id="dfrps_set_next_update_time_to_now">' . __( 'Bump', 'datafeedr-product-sets' ) . '</a><br />
+						<small><em>' . __( 'Bump Product Set to front of update queue.', 'datafeedr-product-sets' ) . '</em></small>
+					</p>';
 				}
 
 			} elseif ( date_i18n( 'U' ) > $next_update_time ) {
