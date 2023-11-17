@@ -1,0 +1,12 @@
+{
+  "name": "datafeedr/datafeedr-product-sets",
+  "description": "Datafeedr Product Sets Plugin",
+  "type": "wordpress-plugin",
+  "version": "1.3.14",
+  "license": "GPLv3",
+  "homepage": "https://wordpress.org/plugins/datafeedr-product-sets/",
+  "require-dev": {
+    "phpunit/phpunit": "^7.5.20",
+    "yoast/phpunit-polyfills": "^1.0"
+  }
+}
