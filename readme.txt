@@ -1,13 +1,13 @@
 === Datafeedr Product Sets ===
 
 Contributors: datafeedr.com
-Tags: datafeedr, product sets, dfrapi, dfrps, import csv, import datafeed, import data feed, data feed, datafeed, import affiliate products
+Tags: import csv, import datafeed, datafeed, import affiliate products
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.4.2-alpha
-Stable tag: 1.3.22
+Tested up to: 6.6-RC2
+Stable tag: 1.3.23
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,9 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.23 - 2024/07/05 =
+* Updated "tested up to" value
 
 = 1.3.22 - 2023/11/10 =
 * Updated "tested up to" value
