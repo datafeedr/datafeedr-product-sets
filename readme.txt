@@ -6,8 +6,8 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.6-RC2
-Stable tag: 1.3.23
+Tested up to: 6.7
+Stable tag: 1.3.24
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,10 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.24 - 2025/02/04 =
+* Added property declarations to `Dfrps_Update` class.
+* Added new filter hook inside `dfrps_get_existing_post()`` so that the ID key being used to look up a product can be overridden.
 
 = 1.3.23 - 2024/07/05 =
 * Updated "tested up to" value
