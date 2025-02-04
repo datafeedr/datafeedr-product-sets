@@ -12,6 +12,12 @@ class Dfrps_Update {
 	 */
 	private $temp_product_table;
 
+	public $action;
+	public $set;
+	public $config;
+	public $meta;
+	public $phase;
+
 	public function __construct( $post ) {
 		global $wpdb;
 		$this->temp_product_table = $wpdb->prefix . 'dfrps_temp_product_data';

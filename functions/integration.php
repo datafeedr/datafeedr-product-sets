@@ -205,14 +205,31 @@ function dfrps_get_existing_post( $product, $set ) {
 		$post_type = get_post_meta( $set['ID'], '_dfrps_cpt_type', true );
 	}
 
-	$post = dfrps_get_post_by_product_id( $product['_id'], $post_type, true );
+	/**
+	 * Filters the key used to retrieve an existing post ID.
+	 *
+	 * This filter allows modifying the key that is used to check for an existing post (ie. WC_Product)
+	 * associated with a product. By default, it is set to '_id'.
+	 *
+	 * @since 1.3.24
+	 *
+	 * @param string $key The default key used to check for an existing post ID. Default '_id'.
+	 * @param mixed $product The Datafeedr Product array being processed.
+	 * @param mixed $set Product Set array.
+	 *
+	 * @return string The modified key used for retrieving an existing post ID.
+	 */
+	$key = apply_filters( 'dfrps_get_existing_post_id_key', '_id', $product, $set );
+
+	$post = dfrps_get_post_by_product_id( $product[ $key ], $post_type, true );
 
 	// Return "skip" if the product is already in $imported_product_ids AND $post is null/false (which means it was imported but not yet queryable).
-	if ( in_array( $product['_id'], $imported_product_ids ) && ! $post ) {
+	if ( in_array( $product[ $key ], $imported_product_ids ) && ! $post ) {
 		return 'skip';
 	}
 
-	$imported_product_ids[] = $product['_id'];
+	// If a $post was found, use the $key to get the ID otherwise use the default '_id' field.
+	$imported_product_ids[] = ( $post ) ? $product[ $key ] : $product['_id'];
 
 	return $post;
 }
