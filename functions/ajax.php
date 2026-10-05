@@ -26,9 +26,46 @@ if ( is_admin() ) {
 	add_action( 'wp_ajax_dfrps_ajax_stop_batch_image_import', 'dfrps_ajax_stop_batch_image_import' );
 }
 
-function dfrps_ajax_test_loopbacks() {
+/**
+ * Verifies the nonce and that the current user can manage the site-wide
+ * Product Sets tools. Ends the request with a 403 if not.
+ *
+ * @since 1.3.25
+ */
+function dfrps_ajax_verify_tools_request() {
 
 	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+
+	$capability = apply_filters( 'dfrps_manage_tools_capability', 'manage_options' );
+
+	if ( ! current_user_can( $capability ) ) {
+		wp_die( -1, 403 );
+	}
+}
+
+/**
+ * Verifies the nonce, that $_REQUEST['postid'] is a Product Set and that
+ * the current user can edit it. Ends the request with a 403 if not.
+ *
+ * @return int The verified Product Set ID.
+ * @since 1.3.25
+ */
+function dfrps_ajax_verify_product_set_request() {
+
+	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+
+	$postid = isset( $_REQUEST['postid'] ) ? absint( $_REQUEST['postid'] ) : 0;
+
+	if ( ! $postid || DFRPS_CPT !== get_post_type( $postid ) || ! current_user_can( 'edit_post', $postid ) ) {
+		wp_die( -1, 403 );
+	}
+
+	return $postid;
+}
+
+function dfrps_ajax_test_loopbacks() {
+
+	dfrps_ajax_verify_tools_request();
 
 	$wp_cron = site_url( 'wp-cron.php' );
 
@@ -64,7 +101,7 @@ function dfrps_ajax_test_loopbacks() {
 }
 
 function dfrps_ajax_reset_cron() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+	dfrps_ajax_verify_tools_request();
 	wp_clear_scheduled_hook( 'dfrps_cron' );
 	wp_schedule_event( time(), 'dfrps_schedule', 'dfrps_cron' );
 	_e( 'Cron was successfully reset.', 'datafeedr-product-sets' );
@@ -73,7 +110,7 @@ function dfrps_ajax_reset_cron() {
 
 function dfrps_ajax_fix_missing_images() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+	dfrps_ajax_verify_tools_request();
 
 	global $wpdb;
 
@@ -122,13 +159,13 @@ function dfrps_ajax_fix_missing_images() {
 }
 
 function dfrps_ajax_start_batch_image_import() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+	dfrps_ajax_verify_tools_request();
 	update_option( 'dfrps_do_batch_image_import', true );
 	die;
 }
 
 function dfrps_ajax_stop_batch_image_import() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+	dfrps_ajax_verify_tools_request();
 	delete_option( 'dfrps_do_batch_image_import' );
 	sleep( 2 );
 	die;
@@ -136,7 +173,7 @@ function dfrps_ajax_stop_batch_image_import() {
 
 function dfrps_ajax_batch_import_images() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
+	dfrps_ajax_verify_tools_request();
 
 	$do_import = get_option( 'dfrps_do_batch_image_import', false );
 
@@ -244,16 +281,7 @@ function dfrps_ajax_batch_import_images() {
 
 function dfrps_ajax_dashboard() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	$html             = '';
 	$post_title       = get_the_title( $postid );
@@ -397,16 +425,7 @@ function dfrps_ajax_dashboard() {
 
 function dfrps_ajax_update_progress_bar() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	$percent = dfrps_percent_complete( $postid );
 
@@ -421,16 +440,7 @@ function dfrps_ajax_update_progress_bar() {
 
 function dfrps_ajax_delete_saved_search() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	delete_post_meta( $postid, '_dfrps_cpt_query' );
 	_e( 'Saved search successfully deleted!', 'datafeedr-product-sets' );
@@ -440,16 +450,7 @@ function dfrps_ajax_delete_saved_search() {
 
 function dfrps_ajax_update_now() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	update_post_meta( $postid, '_dfrps_cpt_next_update_time', date_i18n( 'U' ) );
 
@@ -465,16 +466,7 @@ function dfrps_ajax_update_now() {
 
 function dfrps_ajax_update_import_into() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	// Set $term_ids variable.
 	$term_ids = ( isset( $_REQUEST['term_ids'] ) && ( ! $_REQUEST['term_ids'] == '' ) ) ? $_REQUEST['term_ids'] : array();
@@ -482,7 +474,7 @@ function dfrps_ajax_update_import_into() {
 
 	// Update 'type' and 'term ids'
 	update_post_meta( $postid, '_dfrps_cpt_terms', $term_ids );
-	update_post_meta( $postid, '_dfrps_cpt_type', $_REQUEST['type'] );
+	update_post_meta( $postid, '_dfrps_cpt_type', sanitize_key( $_REQUEST['type'] ?? '' ) );
 
 	echo '';
 	die;
@@ -490,19 +482,11 @@ function dfrps_ajax_update_import_into() {
 
 function dfrps_ajax_update_taxonomy() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	// Get term ids.
 	$term_ids = ( isset( $_REQUEST['cids'] ) && ! empty( $_REQUEST['cids'] ) ) ? $_REQUEST['cids'] : array();
+	$term_ids = array_map( 'intval', (array) $term_ids );
 
 	// Store $cids
 	update_post_meta( $postid, '_dfrps_cpt_terms', $term_ids );
@@ -517,16 +501,7 @@ function dfrps_ajax_update_taxonomy() {
  */
 function dfrps_ajax_save_query() {
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	// Get most recently stored TEMP query.
 	$temp_query = get_post_meta( $postid, '_dfrps_cpt_temp_query', true );
@@ -556,16 +531,7 @@ function dfrps_ajax_get_products() {
 	 * context    - This will determine how to out put the list of products and pagination.
 	 */
 
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-
-	// Set $postid variable.
-	$postid = ( isset( $_REQUEST['postid'] ) && ( $_REQUEST['postid'] > 0 ) ) ? $_REQUEST['postid'] : false;
-
-	// If $postid doesn't validate, show error.
-	if ( ! $postid ) {
-		_e( 'No post ID provided.  A post ID is required.', 'datafeedr-product-sets' );
-		die;
-	}
+	$postid = dfrps_ajax_verify_product_set_request();
 
 	// Possible contexts.
 	$possible_contexts = array(
@@ -791,8 +757,9 @@ function dfrps_ajax_get_products() {
  * Add individual product to Product Set.
  */
 function dfrps_ajax_add_individual_product() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-	dfrps_helper_add_id_to_postmeta( $_REQUEST['pid'], $_REQUEST['postid'], '_dfrps_cpt_manually_added_ids' );
+	$postid = dfrps_ajax_verify_product_set_request();
+	$pid    = sanitize_text_field( wp_unslash( $_REQUEST['pid'] ?? '' ) );
+	dfrps_helper_add_id_to_postmeta( $pid, $postid, '_dfrps_cpt_manually_added_ids' );
 	echo '<div class="dfrps_product_already_included" title="' . __( 'Product successfully added to this Product Set.', 'datafeedr-product-sets' ) . '"><img src="' . plugins_url( "images/icons/checkmark.png", dirname( __FILE__ ) ) . '" /></div>';
 	die;
 }
@@ -802,9 +769,10 @@ function dfrps_ajax_add_individual_product() {
  * Remove Product ID from manually included post meta.
  */
 function dfrps_ajax_block_individual_product() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-	dfrps_helper_add_id_to_postmeta( $_REQUEST['pid'], $_REQUEST['postid'], '_dfrps_cpt_manually_blocked_ids' );
-	dfrps_helper_remove_id_from_postmeta( $_REQUEST['pid'], $_REQUEST['postid'], '_dfrps_cpt_manually_added_ids' );
+	$postid = dfrps_ajax_verify_product_set_request();
+	$pid    = sanitize_text_field( wp_unslash( $_REQUEST['pid'] ?? '' ) );
+	dfrps_helper_add_id_to_postmeta( $pid, $postid, '_dfrps_cpt_manually_blocked_ids' );
+	dfrps_helper_remove_id_from_postmeta( $pid, $postid, '_dfrps_cpt_manually_added_ids' );
 	echo '';
 	die;
 }
@@ -813,8 +781,9 @@ function dfrps_ajax_block_individual_product() {
  * Remove individual product that was added manually from Product Set.
  */
 function dfrps_ajax_remove_individual_product() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-	dfrps_helper_remove_id_from_postmeta( $_REQUEST['pid'], $_REQUEST['postid'], '_dfrps_cpt_manually_added_ids' );
+	$postid = dfrps_ajax_verify_product_set_request();
+	$pid    = sanitize_text_field( wp_unslash( $_REQUEST['pid'] ?? '' ) );
+	dfrps_helper_remove_id_from_postmeta( $pid, $postid, '_dfrps_cpt_manually_added_ids' );
 	echo '';
 	die;
 }
@@ -823,8 +792,9 @@ function dfrps_ajax_remove_individual_product() {
  * Unblock individual product that already blocked from the Product Set.
  */
 function dfrps_ajax_unblock_individual_product() {
-	check_ajax_referer( 'dfrps_ajax_nonce', 'dfrps_security' );
-	dfrps_helper_remove_id_from_postmeta( $_REQUEST['pid'], $_REQUEST['postid'], '_dfrps_cpt_manually_blocked_ids' );
+	$postid = dfrps_ajax_verify_product_set_request();
+	$pid    = sanitize_text_field( wp_unslash( $_REQUEST['pid'] ?? '' ) );
+	dfrps_helper_remove_id_from_postmeta( $pid, $postid, '_dfrps_cpt_manually_blocked_ids' );
 	echo '';
 	die;
 }
