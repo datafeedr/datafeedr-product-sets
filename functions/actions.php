@@ -131,10 +131,10 @@ function dfrps_import_product_image_action( $post_id ) {
 
 		$message = sprintf(
 			__( 'Image import failed. PRODUCT: "%s" ID: %d URL: %s ERROR: %s', 'datafeedr-product-sets' ),
-			get_the_title( $post_id ),
-			$post_id,
-			$result->url(),
-			$result->wp_error()->get_error_message()
+			esc_html( get_the_title( $post_id ) ),
+			absint( $post_id ),
+			esc_html( $result->url() ),
+			esc_html( $result->wp_error()->get_error_message() )
 		);
 
 		throw new Exception( $message );

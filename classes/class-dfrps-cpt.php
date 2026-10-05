@@ -378,6 +378,8 @@ class Dfrps_Cpt {
 			];
 		}
 
+		wp_nonce_field( 'dfrps_save_schedule_' . $post->ID, 'dfrps_schedule_nonce' );
+
 		echo '<div class="section">';
 		echo '<input name="enabled" type="checkbox" ' . checked( 'on', $settings['enabled'], false ) . ' id="enabled">' . __( 'Enabled', 'datafeedr-product-sets' );
 		echo '</div>';
@@ -514,7 +516,7 @@ class Dfrps_Cpt {
 			// There's just 1 registered CPT so make that the "default".
 			$post_type = array_keys( $registered_cpts );
 			$cpt = $post_type[0];
-			echo '<label><input type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" checked="checked" /> ' . $registered_cpts[$cpt]['name'].'</label>';
+			echo '<label><input type="radio" name="_dfrps_cpt_type" value="' . esc_attr( $cpt ) . '" checked="checked" /> ' . esc_html( $registered_cpts[$cpt]['name'] ) . '</label>';
 
 		} else {
 
@@ -530,15 +532,15 @@ class Dfrps_Cpt {
 				echo '<label>';
 				if ( empty( $import_into ) ) {		
 					dfrps_set_cpt_type_to_default( $post->ID ); // Set _dfrps_cpt_type				
-					echo '<input class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" '.checked( $default_cpt, $cpt, false ).' /> ' . $registered_cpts[$cpt]['name'] . '<br />';
+					echo '<input class="dfrps_cpt_picker" id="' . esc_attr( 'dfrps_' . $cpt . '_' . $registered_cpts[$cpt]['taxonomy'] . '_category' ) . '" type="radio" name="_dfrps_cpt_type" value="' . esc_attr( $cpt ) . '" '.checked( $default_cpt, $cpt, false ).' /> ' . esc_html( $registered_cpts[$cpt]['name'] ) . '<br />';
 				} else {
 					if ( $cpt == $import_into ) {
-						echo '<input class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" checked="checked" /> ' . $registered_cpts[$cpt]['name'] . '<br />';
+						echo '<input class="dfrps_cpt_picker" id="' . esc_attr( 'dfrps_' . $cpt . '_' . $registered_cpts[$cpt]['taxonomy'] . '_category' ) . '" type="radio" name="_dfrps_cpt_type" value="' . esc_attr( $cpt ) . '" checked="checked" /> ' . esc_html( $registered_cpts[$cpt]['name'] ) . '<br />';
 					} else {
 						if ( $has_been_published ) {
-							echo '<input disabled="disabled" class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" /> ' . $registered_cpts[$cpt]['name'] . ' <span class="dfrps_type_disabled">(' . __( 'disabled', 'datafeedr-product-sets' ) . ')</span><br />';
+							echo '<input disabled="disabled" class="dfrps_cpt_picker" id="' . esc_attr( 'dfrps_' . $cpt . '_' . $registered_cpts[$cpt]['taxonomy'] . '_category' ) . '" type="radio" name="_dfrps_cpt_type" value="' . esc_attr( $cpt ) . '" /> ' . esc_html( $registered_cpts[$cpt]['name'] ) . ' <span class="dfrps_type_disabled">(' . __( 'disabled', 'datafeedr-product-sets' ) . ')</span><br />';
 						} else {
-							echo '<input class="dfrps_cpt_picker" id="dfrps_'.$cpt.'_'.$registered_cpts[$cpt]['taxonomy'].'_category" type="radio" name="_dfrps_cpt_type" value="' . $cpt . '" /> ' . $registered_cpts[$cpt]['name'] . '<br />';
+							echo '<input class="dfrps_cpt_picker" id="' . esc_attr( 'dfrps_' . $cpt . '_' . $registered_cpts[$cpt]['taxonomy'] . '_category' ) . '" type="radio" name="_dfrps_cpt_type" value="' . esc_attr( $cpt ) . '" /> ' . esc_html( $registered_cpts[$cpt]['name'] ) . '<br />';
 						}
 					}
 				}
@@ -569,37 +571,37 @@ class Dfrps_Cpt {
         $tax_name = $box['args']['cpt']['tax_name'];
         $tax_instructions = $box['args']['cpt']['tax_instructions'];
 		$tax = get_taxonomy( $taxonomy );
-		$name = ( $taxonomy == 'category' ) ? 'post_category' : 'tax_input[' . $taxonomy . ']';
+		$name = ( $taxonomy == 'category' ) ? 'post_category' : 'tax_input[' . esc_attr( $taxonomy ) . ']';
 
 		$selected_cats = dfrps_get_cpt_terms( $post->ID ); // Ticket: 9167
 
 		?>
 
-		<div id="taxonomy-<?php echo $taxonomy; ?>" class="categorydiv">
+		<div id="taxonomy-<?php echo esc_attr( $taxonomy ); ?>" class="categorydiv">
 
-			<div class="dfrps_tax_instructions"><?php echo $tax_instructions; ?></div>
+			<div class="dfrps_tax_instructions"><?php echo wp_kses_post( $tax_instructions ); ?></div>
 
-			<div id="<?php echo $taxonomy; ?>-all" class="tabs-panel dfrps_category_selection_panel">
+			<div id="<?php echo esc_attr( $taxonomy ); ?>-all" class="tabs-panel dfrps_category_selection_panel">
 				<div class="dfrps_saving_taxonomy"><?php _e( 'Saving&hellip;', 'datafeedr-product-sets' ); ?></div>
 				<?php echo "<input type='hidden' name='{$name}[]' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.?>
-				<ul id="<?php echo $taxonomy; ?>checklist" data-wp-lists="list:<?php echo $taxonomy?>" class="categorychecklist form-no-clear" cpt="<?php echo $cpt_type; ?>">
+				<ul id="<?php echo esc_attr( $taxonomy ); ?>checklist" data-wp-lists="list:<?php echo esc_attr( $taxonomy ); ?>" class="categorychecklist form-no-clear" cpt="<?php echo esc_attr( $cpt_type ); ?>">
 					<?php wp_terms_checklist(false, array( 'selected_cats' => $selected_cats, 'taxonomy' => $taxonomy ) ) ?>
 				</ul>
 			</div>
 
 			<?php if ( current_user_can($tax->cap->edit_terms) ) : ?>
-				<div id="<?php echo $taxonomy; ?>-adder" class="wp-hidden-children">
-					<h4><a id="<?php echo $taxonomy; ?>-add-toggle" href="#<?php echo $taxonomy; ?>-add" class="hide-if-no-js">
-						<?php printf( __( '+ %s' ), $tax->labels->add_new_item ); ?>
+				<div id="<?php echo esc_attr( $taxonomy ); ?>-adder" class="wp-hidden-children">
+					<h4><a id="<?php echo esc_attr( $taxonomy ); ?>-add-toggle" href="#<?php echo esc_attr( $taxonomy ); ?>-add" class="hide-if-no-js">
+						<?php printf( __( '+ %s' ), esc_html( $tax->labels->add_new_item ) ); ?>
 					</a></h4>
-					<p id="<?php echo $taxonomy; ?>-add" class="category-add wp-hidden-child">
-						<label class="screen-reader-text" for="new<?php echo $taxonomy; ?>"><?php echo $tax->labels->add_new_item; ?></label>
-						<input type="text" name="new<?php echo $taxonomy; ?>" id="new<?php echo $taxonomy; ?>" class="form-required form-input-tip" value="<?php echo esc_attr( $tax->labels->new_item_name ); ?>" aria-required="true"/>
-						<label class="screen-reader-text" for="new<?php echo $taxonomy; ?>_parent"><?php echo $tax->labels->parent_item_colon; ?></label>
+					<p id="<?php echo esc_attr( $taxonomy ); ?>-add" class="category-add wp-hidden-child">
+						<label class="screen-reader-text" for="new<?php echo esc_attr( $taxonomy ); ?>"><?php echo esc_html( $tax->labels->add_new_item ); ?></label>
+						<input type="text" name="new<?php echo esc_attr( $taxonomy ); ?>" id="new<?php echo esc_attr( $taxonomy ); ?>" class="form-required form-input-tip" value="<?php echo esc_attr( $tax->labels->new_item_name ); ?>" aria-required="true"/>
+						<label class="screen-reader-text" for="new<?php echo esc_attr( $taxonomy ); ?>_parent"><?php echo esc_html( $tax->labels->parent_item_colon ); ?></label>
 						<?php wp_dropdown_categories( array( 'taxonomy' => $taxonomy, 'hide_empty' => 0, 'name' => 'new'.$taxonomy.'_parent', 'orderby' => 'name', 'hierarchical' => 1, 'show_option_none' => '&mdash; ' . $tax->labels->parent_item . ' &mdash;' ) ); ?>
-						<input type="button" id="<?php echo $taxonomy; ?>-add-submit" data-wp-lists="add:<?php echo $taxonomy ?>checklist:<?php echo $taxonomy ?>-add" class="button category-add-submit" value="<?php echo esc_attr( $tax->labels->add_new_item ); ?>" />
+						<input type="button" id="<?php echo esc_attr( $taxonomy ); ?>-add-submit" data-wp-lists="add:<?php echo $taxonomy ?>checklist:<?php echo $taxonomy ?>-add" class="button category-add-submit" value="<?php echo esc_attr( $tax->labels->add_new_item ); ?>" />
 						<?php wp_nonce_field( 'add-'.$taxonomy, '_ajax_nonce-add-'.$taxonomy, false ); ?>
-						<span id="<?php echo $taxonomy; ?>-ajax-response"></span>
+						<span id="<?php echo esc_attr( $taxonomy ); ?>-ajax-response"></span>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -682,11 +684,11 @@ class Dfrps_Cpt {
 		$products_added 	= ( isset( $meta['_dfrps_cpt_last_update_num_products_added'][0] ) ) ? number_format( intval( $meta['_dfrps_cpt_last_update_num_products_added'][0] ) ) : 0;
 		$api_requests 		= ( isset( $meta['_dfrps_cpt_last_update_num_api_requests'][0] ) ) ? number_format( intval( $meta['_dfrps_cpt_last_update_num_api_requests'][0] ) ) : 0;
 		$products_deleted 	= ( isset( $meta['_dfrps_cpt_last_update_num_products_deleted'][0] ) ) ? number_format( intval( $meta['_dfrps_cpt_last_update_num_products_deleted'][0] ) ) : 0;
-		$update_errors 		= ( isset( $meta['_dfrps_cpt_errors'][0] ) ) ? unserialize( $meta['_dfrps_cpt_errors'][0] ) : '';
+		$update_errors 		= ( isset( $meta['_dfrps_cpt_errors'][0] ) ) ? maybe_unserialize( $meta['_dfrps_cpt_errors'][0] ) : '';
 		$registered_cpts    = get_option( 'dfrps_registered_cpts', array() );
 
 		$type = ( isset( $registered_cpts[$meta['_dfrps_cpt_type'][0]]['name'] ) ) ? $registered_cpts[$meta['_dfrps_cpt_type'][0]]['name'] : $meta['_dfrps_cpt_type'][0];
-		$type = '<div class="dfrps_cpt_type" title="This Product Set imports into the ' . esc_attr( '"' . $meta['_dfrps_cpt_type'][0] . '"' ) . ' post type.">' . $type . '</div>';
+		$type = '<div class="dfrps_cpt_type" title="This Product Set imports into the ' . esc_attr( '"' . $meta['_dfrps_cpt_type'][0] . '"' ) . ' post type.">' . esc_html( $type ) . '</div>';
 
 		// Display 'inactive' message and CSS class for any type that is no longer registered.
 		$active_status = ( dfrps_set_is_active( $meta['_dfrps_cpt_type'][0] ) )
@@ -891,7 +893,7 @@ class Dfrps_Cpt {
 		echo "<select name='_dfrps_cpt_type' id='dfrps_type_filter' class='postform'>";
 		echo "<option value=''>" . __( 'Show all types', 'datafeedr-product-sets' ) . "</option>";
 		foreach ( $cpts as $cpt ) {
-			echo '<option value="'. $cpt . '" ' . selected( $cpt, $type ) . '>' . $registered_cpts[$cpt]['name'] .'</option>';
+			echo '<option value="' . esc_attr( $cpt ) . '" ' . selected( $cpt, $type, false ) . '>' . esc_html( $registered_cpts[$cpt]['name'] ) . '</option>';
 		}
 		echo "</select>";
 	}
@@ -940,36 +942,29 @@ class Dfrps_Cpt {
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_api_requests', 0, true );
 		add_post_meta( $post_id, '_dfrps_cpt_last_update_num_products_added', 0, true );
 
+		// Only update the schedule when the "Update Schedule" meta box was submitted (not on quick edit,
+		// bulk edit, autosave or programmatic updates) by a user who can edit this Product Set.
+		if ( ! isset( $_POST['dfrps_schedule_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['dfrps_schedule_nonce'] ), 'dfrps_save_schedule_' . $post_id ) ) {
+			return;
+		}
+
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
 		$enabled = isset( $_POST['enabled'] ) ? sanitize_key( $_POST['enabled'] ) : '';
 
         if ( 'on' === $enabled ) {
 
-            $interval = isset( $_POST['interval'] ) ? sanitize_text_field( $_POST['interval'] ) : 'day_of_week';
-            $month    = isset( $_POST['month'] ) ? (array) $_POST['month'] : [];
-    		$month    = array_map( 'strip_tags', $month );
-    		if ( empty( $month ) ) {
-    		    $month = ['1'];
-			}
-            $week     = isset( $_POST['week'] ) ? (array) $_POST['week'] : [];
-            $week     = array_map( 'strip_tags', $week );
-            if ( empty( $week ) ){
-                $week = ['1'];
-			}
-            $hour     = isset( $_POST['hour'] ) ? sanitize_key( $_POST['hour'] ) : '';
-            $minute   = isset( $_POST['minute'] ) ? sanitize_key( $_POST['minute'] ) : '';
+            $interval = isset( $_POST['interval'] ) ? sanitize_key( $_POST['interval'] ) : 'day_of_week';
+            $days     = 'day_of_month' === $interval ? ( $_POST['month'] ?? [] ) : ( $_POST['week'] ?? [] );
 
-            $schedule = [
-                    'enabled' => $enabled,
+            $schedule = dfrps_sanitize_schedule( [
                     'interval' => $interval,
-                    'days' => '',
-                    'time' => $hour . ':' . $minute,
-            ];
-
-            if ( 'day_of_week' === $schedule['interval'] ) {
-                $schedule['days'] = $week;
-            } else {
-                $schedule['days'] = $month;
-            }
+                    'days'     => wp_unslash( (array) $days ),
+                    'hour'     => $_POST['hour'] ?? 0,
+                    'minute'   => $_POST['minute'] ?? 0,
+            ] );
 
 	        update_post_meta( $post_id, '_dfrps_update_schedule', $schedule );
 	        update_post_meta( $post_id, '_dfrps_cpt_next_update_time', dfrps_get_custom_update_time( $schedule ) );

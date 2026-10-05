@@ -9,8 +9,8 @@ Text Domain: datafeedr-product-sets
 License: GPL v3
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.7
-Version: 1.3.25
+Tested up to: 7.1
+Version: 1.3.26
 
 Datafeedr Product Sets Plugin
 Copyright (C) 2026, Datafeedr - help@datafeedr.com
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define constants.
  */
-define( 'DFRPS_VERSION', '1.3.25' );
+define( 'DFRPS_VERSION', '1.3.26' );
 define( 'DFRPS_DB_VERSION', '1.2.0' );
 define( 'DFRPS_SET_VERSION', '1.2.0' );
 define( 'DFRPS_URL', plugin_dir_url( __FILE__ ) );
@@ -121,6 +121,10 @@ function dfrps_import_image( $post ) {
  * Notify user that an Importer plugin is missing and is required.
  */
 function dfrps_missing_importer() {
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 	if ( ! dfrps_registered_cpt_exists() ) {
 		echo '<div class="notice notice-error"><p>';
 		echo __( 'The <strong>Datafeedr Product Sets</strong> plugin requires an importer plugin.', 'datafeedr-product-sets' );
@@ -136,6 +140,10 @@ add_action( 'admin_notices', 'dfrps_missing_importer' );
  * Notify user if a default CPT hasn't been selected.
  */
 function dfrps_default_cpt_not_selected() {
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 	if ( ! dfrps_default_cpt_is_selected() ) {
 		echo '<div class="notice notice-error"><p>';
 		echo __( 'The <strong>Datafeedr Product Sets</strong> plugin requires you to', 'datafeedr-product-sets' );
@@ -151,6 +159,10 @@ add_action( 'admin_notices', 'dfrps_default_cpt_not_selected' );
  * Notify user that updates are disabled.
  */
 function dfrps_updates_disabled() {
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 	$options = get_option( 'dfrps_configuration', array() );
 	if ( isset( $options['updates_enabled'] ) && $options['updates_enabled'] == 'disabled' ) {
 		echo '<div class="notice notice-error"><p>';
@@ -171,11 +183,15 @@ add_action( 'admin_notices', 'dfrps_updates_disabled' );
  */
 function dfrps_admin_notice_plugin_dependencies() {
 
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
 	/**
 	 * @var Dfrps_Plugin_Dependency[] $dependencies
 	 */
 	$dependencies = array(
-		new Dfrps_Plugin_Dependency( 'Datafeedr API', 'datafeedr-api/datafeedr-api.php', '1.2.0' ),
+		new Dfrps_Plugin_Dependency( 'Datafeedr API', 'datafeedr-api/datafeedr-api.php', '1.4.3' ),
 		new Dfrps_Plugin_Dependency( 'Datafeedr WooCommerce Importer', 'datafeedr-woocommerce-importer/datafeedr-woocommerce-importer.php', '1.1.17', false ),
 	);
 
@@ -205,6 +221,10 @@ add_action( 'admin_notices', 'dfrps_admin_notice_plugin_dependencies' );
  * @since 1.2.14
  */
 function dfrps_wp_cron_disabled() {
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 
 	if ( ! defined( 'DISABLE_WP_CRON' ) ) {
 		return;

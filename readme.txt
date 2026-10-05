@@ -6,8 +6,8 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
-Tested up to: 6.7
-Stable tag: 1.3.25
+Tested up to: 7.1
+Stable tag: 1.3.26
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,22 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.26 - 2026/10/05 =
+* Security: Product image, affiliate, impression and store URLs in Product Set search results and product details are now escaped. URLs with unsafe protocols (ie. `javascript:`) are removed.
+* Security: Escaped product IDs, prices and currency codes in Product Set search results.
+* Security: Now requires Datafeedr API 1.4.3 or greater, which contains related security fixes.
+* Security: Product Set search queries and the default search filters are now sanitized before they are saved.
+* Security: Product Set update schedules are now validated and require a nonce. Fixed a malformed schedule causing the next update time calculation to never finish.
+* Security: Escaped the Product Set title and API error details in the "Product Set Update Failed" email.
+* Security: Escaped output on the Tools page (loopback test and missing images results), the Product Set dashboard and the Product Set edit and list pages.
+* Security: The Configuration page now always validates submitted settings.
+* Security: The legacy image importer now uses `wp_safe_remote_get()`. Added direct file access protection to the remaining PHP file.
+* Fixed Quick Edit and Bulk Edit removing a Product Set's custom update schedule.
+* Fixed a fatal error when saving a Product Set's categories with an unexpected value.
+* Product Sets admin notices are now only shown to users with the `manage_options` capability.
+* Removed the unused `Dfrps_Tabs` class.
+* Added `dfrps_sanitize_query()` and `dfrps_sanitize_schedule()` helper functions.
 
 = 1.3.25 - 2026/10/05 =
 * Security: Added capability checks to all AJAX handlers. Product Set handlers now require permission to edit the requested Product Set, and Tools handlers require `manage_options` (filterable via `dfrps_manage_tools_capability`).

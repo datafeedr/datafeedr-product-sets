@@ -37,12 +37,12 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 		$already_included = in_array( $product['_id'], $args['manually_included_ids'] );
 
 		?>
-		<div id="product_<?php echo $product['_id']; ?>_<?php echo $args['context']; ?>" class="product_block product_<?php esc_attr_e( $product['_id'] ); ?>">
-			<table class="dfrps_product_table type_<?php echo $type; ?>">
+		<div id="product_<?php echo esc_attr( $product['_id'] ); ?>_<?php echo esc_attr( $args['context'] ); ?>" class="product_block product_<?php esc_attr_e( $product['_id'] ); ?>">
+			<table class="dfrps_product_table type_<?php echo esc_attr( $type ); ?>">
 				<tr class="product">
 					<td class="image" rowspan="2">
-						<a href="<?php echo $image; ?>" title="<?php echo __('View image in new browser window.', 'datafeedr-product-sets' ); ?>" target="_blank">
-							<img src="<?php echo $image; ?>" alt="Product image" />
+						<a href="<?php echo esc_url( $image ); ?>" title="<?php echo __('View image in new browser window.', 'datafeedr-product-sets' ); ?>" target="_blank">
+							<img src="<?php echo esc_url( $image ); ?>" alt="Product image" />
 						</a>
 					</td>
 					<td class="name">
@@ -62,26 +62,26 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 								</div>
 							<?php else : ?>
 								<div class="dfrps_add_individual_product">
-									<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Add this product to this Product Set.', 'datafeedr-product-sets' ); ?>">
+									<a href="#" product-id="<?php echo esc_attr( $product['_id'] ); ?>" title="<?php echo __('Add this product to this Product Set.', 'datafeedr-product-sets' ); ?>">
 										<img src="<?php echo plugins_url( 'images/icons/plus.png', __DIR__ ); ?>" />
 									</a>
 								</div>
 							<?php endif; ?>
 
 							<div class="dfrps_remove_individual_product">
-								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Remove this product from the individually added list for this Product Set.', 'datafeedr-product-sets' ); ?>">
+								<a href="#" product-id="<?php echo esc_attr( $product['_id'] ); ?>" title="<?php echo __('Remove this product from the individually added list for this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/minus.png', __DIR__ ); ?>" />
 								</a>
 							</div>
 
 							<div class="dfrps_unblock_individual_product">
-								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Unblock this product and allow it to show up in product searches for this Product Set.', 'datafeedr-product-sets' ); ?>">
+								<a href="#" product-id="<?php echo esc_attr( $product['_id'] ); ?>" title="<?php echo __('Unblock this product and allow it to show up in product searches for this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( "images/icons/unblock.png", __DIR__ ); ?>" />
 								</a>
 							</div>
 
 							<div class="dfrps_block_individual_product">
-								<a href="#" product-id="<?php echo $product['_id']; ?>" title="<?php echo __('Block this product from appearing in searches for this Product Set.', 'datafeedr-product-sets' ); ?>">
+								<a href="#" product-id="<?php echo esc_attr( $product['_id'] ); ?>" title="<?php echo __('Block this product from appearing in searches for this Product Set.', 'datafeedr-product-sets' ); ?>">
 									<img src="<?php echo plugins_url( 'images/icons/block.png', __DIR__ ); ?>" />
 								</a>
 							</div>
@@ -118,16 +118,16 @@ if ( !function_exists( 'dfrps_html_product_list' ) ) {
 							<?php endif; ?>
 							<?php if ( isset( $product['price'] ) ) : ?>
                                 <div class="price"
-                                     title="<?php echo __( 'Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $regularprice ) . ' ' . $currency; ?>">
+                                     title="<?php echo __( 'Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $regularprice . ' ' . $currency ); ?>">
                                     <span class="bullet">&bull;</span>
-                                    <span class="label"><?php echo $regularprice; ?></span>
+                                    <span class="label"><?php echo esc_html( $regularprice ); ?></span>
                                 </div>
 							<?php endif; ?>
 							<?php if ( isset( $product['saleprice'] ) ) : ?>
 								<div class="saleprice"
-								     title="<?php echo __( 'Sale Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $saleprice ) . ' ' . $currency; ?>">
+								     title="<?php echo __( 'Sale Price', 'datafeedr-product-sets' ) . ': ' . esc_attr( $saleprice . ' ' . $currency ); ?>">
 									<span class="bullet">&bull;</span>
-									<span class="label"><?php echo $saleprice; ?></span>
+									<span class="label"><?php echo esc_html( $saleprice ); ?></span>
 								</div>
 							<?php endif; ?>
 						</div>

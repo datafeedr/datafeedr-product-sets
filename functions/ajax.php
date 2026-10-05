@@ -82,14 +82,16 @@ function dfrps_ajax_test_loopbacks() {
 	}
 
 	if ( '404' == $code ) {
-		$msg = __( sprintf(
-			'The wp-cron.php file is missing. Please ensure that the following URL exists and is publicly accessible: <a href="%1$s" target="_blank">%1$s</a> ',
-			$wp_cron
-		), 'datafeedr-product-sets' );
+		$msg = sprintf(
+			__( 'The wp-cron.php file is missing. Please ensure that the following URL exists and is publicly accessible: <a href="%1$s" target="_blank">%2$s</a> ', 'datafeedr-product-sets' ),
+			esc_url( $wp_cron ),
+			esc_html( $wp_cron )
+		);
 	} elseif ( is_wp_error( $response ) ) {
-		$msg = implode( '<br/>', $response->get_error_messages() );
+		$msg = implode( '<br/>', array_map( 'esc_html', $response->get_error_messages() ) );
 	} else {
-		$msg = $body;
+		// The response body could be any HTML page (ie. a firewall or proxy error page), so display it as text.
+		$msg = '<pre>' . esc_html( substr( $body, 0, 2000 ) ) . '</pre>';
 	}
 
 	echo '<div class="dfrps_alert dfrps_alert-danger">';
@@ -152,7 +154,7 @@ function dfrps_ajax_fix_missing_images() {
 	} else {
 		_e( 'There was an error with your request.', 'datafeedr-product-sets' );
 		echo '<pre>';
-		print_r( $update );
+		echo esc_html( print_r( $update, true ) );
 		echo '</pre>';
 	}
 	die;
@@ -275,7 +277,7 @@ function dfrps_ajax_batch_import_images() {
 
 	new Dfrps_Image_Importer ( $post );
 
-	echo '<li>Image imported for <a href="' . site_url() . '/?p=' . $post->ID . '" target="_blank">' . $post->post_title . '</a></li>';
+	echo '<li>Image imported for <a href="' . esc_url( site_url( '/?p=' . absint( $post->ID ) ) ) . '" target="_blank">' . esc_html( $post->post_title ) . '</a></li>';
 	die;
 }
 
@@ -316,7 +318,7 @@ function dfrps_ajax_dashboard() {
 	if ( ! dfrps_set_is_active( $type ) ) {
 
 		$html .= '<div state="inactive_type"></div>';
-		$html .= '<p><span class="dashicons dashicons-flag"></span> ' . __( 'This Product Set is inactive. To re-activate this Product Set, install and activate the importer plugin responsible for importing products into the "' . $type . '" custom post type.', 'datafeedr-product-sets' ) . '</p>';
+		$html .= '<p><span class="dashicons dashicons-flag"></span> ' . __( 'This Product Set is inactive. To re-activate this Product Set, install and activate the importer plugin responsible for importing products into the "' . esc_html( $type ) . '" custom post type.', 'datafeedr-product-sets' ) . '</p>';
 
 	} else {
 
@@ -386,7 +388,7 @@ function dfrps_ajax_dashboard() {
 					$html .= '<p><span class="dashicons dashicons-welcome-view-site"></span> ' . __( 'View category: ', 'datafeedr-product-sets' );
 					$i    = 1;
 					foreach ( $links as $link ) {
-						$html .= '<br/><a href="' . $link['url'] . '" target="_blank">' . $link['name'] . '</a>';
+						$html .= '<br/><a href="' . $link['url'] . '" target="_blank">' . esc_html( $link['name'] ) . '</a>';
 						$i ++;
 						if ( $i <= $num_links ) {
 							$html .= ', ';
@@ -469,12 +471,16 @@ function dfrps_ajax_update_import_into() {
 	$postid = dfrps_ajax_verify_product_set_request();
 
 	// Set $term_ids variable.
-	$term_ids = ( isset( $_REQUEST['term_ids'] ) && ( ! $_REQUEST['term_ids'] == '' ) ) ? $_REQUEST['term_ids'] : array();
-	$term_ids = array_map( 'intval', $term_ids );
+	$term_ids = ( isset( $_REQUEST['term_ids'] ) && '' !== $_REQUEST['term_ids'] ) ? (array) $_REQUEST['term_ids'] : array();
+	$term_ids = array_values( array_filter( array_map( 'absint', $term_ids ) ) );
 
-	// Update 'type' and 'term ids'
+	// Update 'type' and 'term ids'. Only accept a 'type' that is a registered Custom Post Type.
 	update_post_meta( $postid, '_dfrps_cpt_terms', $term_ids );
-	update_post_meta( $postid, '_dfrps_cpt_type', sanitize_key( $_REQUEST['type'] ?? '' ) );
+
+	$type = sanitize_key( $_REQUEST['type'] ?? '' );
+	if ( array_key_exists( $type, (array) get_option( 'dfrps_registered_cpts', array() ) ) ) {
+		update_post_meta( $postid, '_dfrps_cpt_type', $type );
+	}
 
 	echo '';
 	die;
@@ -486,7 +492,7 @@ function dfrps_ajax_update_taxonomy() {
 
 	// Get term ids.
 	$term_ids = ( isset( $_REQUEST['cids'] ) && ! empty( $_REQUEST['cids'] ) ) ? $_REQUEST['cids'] : array();
-	$term_ids = array_map( 'intval', (array) $term_ids );
+	$term_ids = array_values( array_filter( array_map( 'absint', (array) $term_ids ) ) );
 
 	// Store $cids
 	update_post_meta( $postid, '_dfrps_cpt_terms', $term_ids );
@@ -607,7 +613,7 @@ function dfrps_ajax_get_products() {
 		if ( ! empty( $query['_dfrps_cpt_query'] ) ) {
 
 			// Query exists so save it.
-			$temp_query = $query['_dfrps_cpt_query'];
+			$temp_query = dfrps_sanitize_query( $query['_dfrps_cpt_query'] );
 			update_post_meta( $postid, '_dfrps_cpt_temp_query', $temp_query );
 
 		} else {

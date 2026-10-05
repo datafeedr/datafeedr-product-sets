@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 
 /**
  * Class Dfrps_Plugin_Dependency

@@ -337,7 +337,12 @@ if ( ! class_exists( 'Dfrps_Configuration' ) ) {
 				return $input;
 			}
 
-			if ( ! isset( $_POST['dfrps_configuration_action'] ) || $_POST['dfrps_configuration_action'] != 'update' ) {
+			// Internal update_option() calls (ie. disabling updates) store already-formatted values, so
+			// they bypass validation. Anything submitted through the Configuration form (options.php) is
+			// always validated, even if the "dfrps_configuration_action" field is missing.
+			$is_form_submission = isset( $_POST['option_page'] ) && $this->page === $_POST['option_page'];
+
+			if ( ! $is_form_submission && ( ! isset( $_POST['dfrps_configuration_action'] ) || $_POST['dfrps_configuration_action'] != 'update' ) ) {
 				return $input;
 			}
 
@@ -419,7 +424,10 @@ if ( ! class_exists( 'Dfrps_Configuration' ) ) {
 
 				// Validate "default_cpt"
 				if ( $key == 'default_cpt' ) {
-					$new_input['default_cpt'] = trim( $value );
+					$default_cpt              = sanitize_key( $value );
+					$new_input['default_cpt'] = array_key_exists( $default_cpt, (array) get_option( 'dfrps_registered_cpts', array() ) )
+						? $default_cpt
+						: ( $this->options['default_cpt'] ?? '' );
 				}
 
 				// Validate "delete_missing_products"
@@ -451,7 +459,7 @@ if ( ! class_exists( 'Dfrps_Configuration' ) ) {
 
 				// Validate "default_filters"
 				if ( $key == 'dfrps_query' ) {
-					$new_input['default_filters']['dfrps_query'] = $value;
+					$new_input['default_filters']['dfrps_query'] = dfrps_sanitize_query( $value );
 				}
 
 			} // foreach

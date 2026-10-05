@@ -76,7 +76,9 @@ function dfrps_get_custom_update_time( $schedule ) {
 		$day_of_week = date_i18n( 'w' );
 		$found       = false;
 
-		while ( ! $found ) {
+		$tries = 0; // Guards against a malformed schedule (no valid days) looping forever.
+
+		while ( ! $found && $tries++ < 400 ) {
 			$day_of_week ++;
 			if ( 8 === (int) $day_of_week ) {
 				$day_of_week = 0;
@@ -118,7 +120,9 @@ function dfrps_get_custom_update_time( $schedule ) {
 		$current_month = (int) date_i18n( 'n' );
 		$found         = false;
 
-		while ( ! $found ) {
+		$tries = 0; // Guards against a malformed schedule (no valid days) looping forever.
+
+		while ( ! $found && $tries++ < 400 ) {
 			$day_of_month ++;
 			if ( 29 === $day_of_month ) {
 				$day_of_month = 1;
@@ -403,24 +407,24 @@ function dfrps_more_info_rows( $product ) {
 		if ( $k == 'image' || $k == 'thumbnail' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . $v . '" target="_blank" title="' . __( 'Open image in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
+				<a href="' . esc_url( $v ) . '" target="_blank" title="' . __( 'Open image in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
 				<br />
-				<img src="' . $v . '" style="max-width: 100%;" />
+				<img src="' . esc_url( $v ) . '" style="max-width: 100%;" />
 			</td>';
 		} elseif ( $k == '_wc_url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . $v . '" target="_blank" title="' . __( 'Search for product in store.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
+				<a href="' . esc_url( $v ) . '" target="_blank" title="' . __( 'Search for product in store.', 'datafeedr-product-sets' ) . '">' . esc_attr( $v ) . '</a>
 			</td>';
 		} elseif ( $k == 'url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
+				<a href="' . esc_url( dfrapi_url( $product ) ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
 			</td>';
 		} elseif ( $k == 'ref_url' ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . dfrapi_url( $product ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
+				<a href="' . esc_url( dfrapi_url( $product ) ) . '" target="_blank" title="' . __( 'Open affiliate link in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_url( $product ) ) . '</a>
 			</td>';
 		} elseif ( $k == 'direct_url' ) {
 			echo '
@@ -430,7 +434,7 @@ function dfrps_more_info_rows( $product ) {
 		} elseif ( $k == 'impressionurl' && function_exists( 'dfrapi_impression_url' ) ) {
 			echo '
 			<td class="value dfrps_force_wrap">
-				<a href="' . dfrapi_impression_url( $product ) . '" target="_blank" title="' . __( 'Open impression URL in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_impression_url( $product ) ) . '</a>
+				<a href="' . esc_url( dfrapi_impression_url( $product ) ) . '" target="_blank" title="' . __( 'Open impression URL in new window.', 'datafeedr-product-sets' ) . '">' . esc_attr( dfrapi_impression_url( $product ) ) . '</a>
 			</td>';
 		} else {
 			echo '<td class="value dfrps_force_wrap">' . esc_html( $v ) . '</td>';
@@ -1287,4 +1291,89 @@ function dfrps_error_log( $message, $message_type = null, $destination = null, $
  */
 function dfrps_product_set_exists( int $product_set_id ): bool {
 	return get_post_type( $product_set_id ) === DFRPS_CPT;
+}
+
+/**
+ * Sanitizes a search form query (as submitted by the Datafeedr API search form) before it is stored.
+ *
+ * Only the keys the search form uses are kept: field, operator, value and value2. Values keep
+ * search operators (ie. = | ^ $ "...") but HTML tags and control characters are removed.
+ *
+ * @param mixed $query
+ *
+ * @return array
+ * @since 1.3.26
+ */
+function dfrps_sanitize_query( $query ): array {
+
+	if ( ! is_array( $query ) ) {
+		return [];
+	}
+
+	$clean = [];
+
+	foreach ( array_slice( $query, 0, 100, true ) as $index => $row ) {
+
+		if ( ! is_array( $row ) ) {
+			continue;
+		}
+
+		$clean_row = [];
+
+		foreach ( [ 'field', 'operator' ] as $key ) {
+			if ( isset( $row[ $key ] ) && is_scalar( $row[ $key ] ) ) {
+				$clean_row[ $key ] = sanitize_key( $row[ $key ] );
+			}
+		}
+
+		foreach ( [ 'value', 'value2' ] as $key ) {
+			if ( isset( $row[ $key ] ) && is_scalar( $row[ $key ] ) ) {
+				// Not trimmed: existing saved queries may contain leading/trailing spaces.
+				$value             = strip_tags( (string) $row[ $key ] );
+				$clean_row[ $key ] = preg_replace( '/[\x00-\x1F\x7F]/', '', $value );
+			}
+		}
+
+		if ( ! empty( $clean_row['field'] ) ) {
+			$clean[ absint( $index ) ] = $clean_row;
+		}
+	}
+
+	return $clean;
+}
+
+/**
+ * Sanitizes a Product Set's custom update schedule.
+ *
+ * @param array $schedule Raw values: enabled, interval, days, hour, minute.
+ *
+ * @return array Schedule formatted like: [ 'enabled' => 'on', 'interval' => 'day_of_week', 'days' => [ '1' ], 'time' => '05:30' ]
+ * @since 1.3.26
+ */
+function dfrps_sanitize_schedule( array $schedule ): array {
+
+	$interval = in_array( $schedule['interval'] ?? '', [ 'day_of_week', 'day_of_month' ], true )
+		? $schedule['interval']
+		: 'day_of_week';
+
+	$min_day = 'day_of_week' === $interval ? 0 : 1;
+	$max_day = 'day_of_week' === $interval ? 6 : 28;
+
+	$days = [];
+	foreach ( (array) ( $schedule['days'] ?? [] ) as $day ) {
+		if ( is_scalar( $day ) && ctype_digit( (string) $day ) && (int) $day >= $min_day && (int) $day <= $max_day ) {
+			$days[] = (string) (int) $day;
+		}
+	}
+
+	$days   = empty( $days ) ? [ '1' ] : array_values( array_unique( $days ) );
+	$hour   = min( 23, absint( $schedule['hour'] ?? 0 ) );
+	$minute = min( 59, absint( $schedule['minute'] ?? 0 ) );
+
+	return [
+		'enabled'  => 'on',
+		'interval' => $interval,
+		'days'     => $days,
+		'time'     => sprintf( '%02d:%02d', $hour, $minute ),
+	];
 }

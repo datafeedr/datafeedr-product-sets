@@ -166,12 +166,12 @@ function dfrps_get_all_post_ids_by_set_id( $set_id ) {
 		return array();
 	}
 
-	$posts = $wpdb->get_results( "
+	$posts = $wpdb->get_results( $wpdb->prepare( "
 		SELECT post_id AS ID
 		FROM $wpdb->postmeta
 		WHERE meta_key = '_dfrps_product_set_id'
-		AND meta_value = " . $set_id . "
-	", ARRAY_A );
+		AND meta_value = %d
+	", $set_id ), ARRAY_A );
 
 	if ( $posts == NULL ) {
 		return array();

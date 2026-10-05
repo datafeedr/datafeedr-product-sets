@@ -244,7 +244,7 @@ class Dfrps_Image_Importer {
 		$file_array = array();
 
 		// Get content-type of remote image.
-		$mime = wp_remote_retrieve_header( wp_remote_get( $this->image_url ), 'content-type' );
+		$mime = wp_remote_retrieve_header( wp_safe_remote_get( $this->image_url ), 'content-type' );
 
 		// Generate image file name with extension.
 		$file_array['name'] = $this->post->post_title . '.' . $this->convert_mime_to_ext( $mime );
