@@ -7,7 +7,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
 Requires at least: 3.8
 Tested up to: 6.7
-Stable tag: 1.3.24
+Stable tag: 1.3.25
 
 Build sets of products to import into your website.
 
@@ -81,6 +81,10 @@ Our support area can be found here: [https://datafeedrapi.helpscoutdocs.com/](ht
 6. Configuration: Advanced Update Settings
 
 == Changelog ==
+
+= 1.3.25 - 2026/10/05 =
+* Security: Added capability checks to all AJAX handlers. Product Set handlers now require permission to edit the requested Product Set, and Tools handlers require `manage_options` (filterable via `dfrps_manage_tools_capability`).
+* Security: AJAX handlers now verify that the requested post is a Product Set and sanitize submitted values.
 
 = 1.3.24 - 2025/02/04 =
 * Added property declarations to `Dfrps_Update` class.
