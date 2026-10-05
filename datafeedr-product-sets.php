@@ -13,7 +13,7 @@ Tested up to: 6.7
 Version: 1.3.25
 
 Datafeedr Product Sets Plugin
-Copyright (C) 2025, Datafeedr - help@datafeedr.com
+Copyright (C) 2026, Datafeedr - help@datafeedr.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
